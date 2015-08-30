@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo ""
-echo "=> Install plugins:"
-echo "====================================="
-
 cd /app/wp-content/plugins
 
 while read -r plugin; do
