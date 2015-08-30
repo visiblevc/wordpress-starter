@@ -1,0 +1,11 @@
+{
+  "theme": "my-theme",
+  "productionAssetURL": "//d3ig9cscteacah.cloudfront.net",
+  "aws": {
+    "params": {
+      "Bucket": "visible-website-test"
+    },
+    "accessKeyId": "",
+    "secretAccessKey": ""
+  }
+}
