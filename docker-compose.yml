@@ -3,7 +3,7 @@ data:
   volumes:
     - /var/lib/mysql
 wordpress:
-  image: visiblevc/wordpress
+  image: visiblevc/wordpress:latest
   links:
     - mysql
   ports:
