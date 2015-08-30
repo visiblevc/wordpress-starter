@@ -13,7 +13,6 @@ wordpress:
     - ./data:/data
     - ./wp-content/uploads:/app/wp-content/uploads
     - ./wp-content/plugins:/app/wp-content/plugins
-    - ./wp-content/themes/my-theme:/app/wp-content/themes/my-theme
   environment:
     DB_NAME: wordpress
 mysql:
