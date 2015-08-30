@@ -47,7 +47,7 @@ if [[ $DB_CONNECTABLE -eq 0 ]]; then
     if [ $(mysql -N -s -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT -e \
         "select count(*) from information_schema.tables where \
             table_schema='$DB_NAME' and table_name='wp_posts';") -eq 0 ]; then
-        if [ -f /database.sql ]; then
+        if [ -f /data/database.sql ]; then
             echo "=> Loading initial database data to $DB_NAME"
             RET=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT $DB_NAME < /data/database.sql)
             if [[ RET -ne 0 ]]; then
