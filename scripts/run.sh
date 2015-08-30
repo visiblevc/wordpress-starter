@@ -49,7 +49,7 @@ if [[ $DB_CONNECTABLE -eq 0 ]]; then
             table_schema='$DB_NAME' and table_name='wp_posts';") -eq 0 ]; then
         if [ -f /database.sql ]; then
             echo "=> Loading initial database data to $DB_NAME"
-            RET=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT $DB_NAME < /scripts/database.sql)
+            RET=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT $DB_NAME < /data/database.sql)
             if [[ RET -ne 0 ]]; then
                 echo "Cannot load initial database data for wordpress"
                 exit RET
