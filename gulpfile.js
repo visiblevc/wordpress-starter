@@ -68,7 +68,7 @@ gulp.task('clean', function () {
 
 gulp.task('compile-styles', function () {
   return (
-    sass(assetPath + '/sass/', {
+    sass(assetPath + '/scss/', {
       sourcemap: true
     }).on('error', function (err) { console.error('Error!', err.message); })
     .pipe(autoprefixer({
