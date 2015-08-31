@@ -1,6 +1,6 @@
 # Visible Wordpress Starter
 
-A project to make Wordpress development slightly less frustrating.
+A project to make Wordpress development slightly less frustrating created by the team at [Visible](https://visible.vc/).
 
 ## Requirements
 
