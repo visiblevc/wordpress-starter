@@ -35,8 +35,8 @@ gulp.task(
     'compile-templates'
   ],
   function() {
-    gulp.watch(assetPath + '/sass/**/*.scss',  ['compile-css']);
-    gulp.watch(assetPath + '/scripts/**/*.js', ['compile-js']);
+    gulp.watch(assetPath + '/scss/**/*.scss',  ['compile-styles']);
+    gulp.watch(assetPath + '/js/**/*.js', ['compile-scripts']);
     gulp.watch(assetPath + '/fonts/**/*',      ['compile-fonts']);
     gulp.watch(assetPath + '/images/**/*',     ['compile-images']);
     gulp.watch(assetPath + '/templates/**/*',  ['compile-templates']);
@@ -93,7 +93,7 @@ gulp.task('optimize-styles', function () {
 gulp.task('compile-scripts', function () {
   return (
     gulp.src([
-      assetPath + '/scripts/script.js'
+      assetPath + '/js/script.js'
     ])
     .pipe(concat('script.js'))
     .pipe(gulp.dest(distPath + '/js'))
