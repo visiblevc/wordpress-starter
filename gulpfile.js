@@ -43,7 +43,7 @@ gulp.task(
   }
 );
 
-gulp.task('deploy', function (callback) {
+gulp.task('deploy-assets', function (callback) {
   runSequence(
     'clean',
     ['compile-styles', 'compile-scripts', 'compile-images', 'compile-fonts', 'compile-templates'],
