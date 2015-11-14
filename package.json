@@ -17,7 +17,7 @@
     "gulp-replace-task": "^0.2.3",
     "gulp-rev": "^5.1.0",
     "gulp-rev-collector": "^1.0.0",
-    "gulp-ruby-sass": "^1.0.5",
+    "gulp-sass": "^2.0.4",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.6",
     "imagemin-pngquant": "^4.1.2",

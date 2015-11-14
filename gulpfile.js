@@ -4,7 +4,7 @@ var runSequence = require('run-sequence');
 
 // Project plugins
 var rev          = require('gulp-rev');
-var sass         = require('gulp-ruby-sass');
+var sass         = require('gulp-sass');
 var clean        = require('gulp-clean');
 var concat       = require('gulp-concat');
 var rename       = require('gulp-rename');
@@ -36,7 +36,7 @@ gulp.task(
   ],
   function() {
     gulp.watch(assetPath + '/scss/**/*.scss',  ['compile-styles']);
-    gulp.watch(assetPath + '/js/**/*.js', ['compile-scripts']);
+    gulp.watch(assetPath + '/js/**/*.js',      ['compile-scripts']);
     gulp.watch(assetPath + '/fonts/**/*',      ['compile-fonts']);
     gulp.watch(assetPath + '/images/**/*',     ['compile-images']);
     gulp.watch(assetPath + '/templates/**/*',  ['compile-templates']);
@@ -68,9 +68,10 @@ gulp.task('clean', function () {
 
 gulp.task('compile-styles', function () {
   return (
-    sass(assetPath + '/scss/', {
-      sourcemap: true
-    }).on('error', function (err) { console.error('Error!', err.message); })
+    gulp.src([
+      assetPath + '/scss/style.scss'
+    ])
+    .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer({
         browsers: ['last 2 versions'],
         cascade: false
