@@ -2,7 +2,8 @@ FROM tutum/apache-php
 
 # Install mysql-client
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y mysql-client unzip
+RUN apt-get install -y mysql-client unzip dos2unix
+ENV TERM xterm
 
 # Install wp-cli
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
@@ -18,6 +19,7 @@ RUN chown -R www-data:www-data /app/wp-content /var/www/html
 RUN mkdir -p /scripts
 ADD ./scripts/setup-wordpress.sh /scripts/setup-wordpress.sh
 RUN chmod 755 /scripts/*.sh
+RUN dos2unix -q /scripts/setup-wordpress.sh /scripts/setup-wordpress.sh
 RUN /scripts/setup-wordpress.sh
 
 # Configure Apache
@@ -30,6 +32,7 @@ ADD ./scripts/restore-db.sh /scripts/restore-db.sh
 ADD ./scripts/install-plugins.sh /scripts/install-plugins.sh
 ADD ./scripts/remove-plugins.sh /scripts/remove-plugins.sh
 RUN chmod 755 /scripts/*.sh
+RUN find /scripts -type f -exec dos2unix -q {} \;
 
 # Run the server
 EXPOSE 80 443
