@@ -3,6 +3,7 @@ FROM tutum/apache-php
 # Install mysql-client
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y mysql-client unzip
+ENV TERM xterm
 
 # Install wp-cli
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
