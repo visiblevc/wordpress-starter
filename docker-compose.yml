@@ -7,8 +7,8 @@ wordpress:
   links:
     - mysql
   ports:
-    - 8080:80
-    - 443:443
+    - 127.0.0.1:8080:80
+    - 127.0.0.1:443:443
   volumes:
     - ./data:/data
     - ./wp-content/uploads:/app/wp-content/uploads
@@ -18,7 +18,7 @@ wordpress:
 mysql:
   image: mysql:5.7
   ports:
-    - 3306:3306
+    - 127.0.0.1:3306:3306
   volumes_from:
     - data
   environment:
