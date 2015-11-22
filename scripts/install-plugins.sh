@@ -6,7 +6,7 @@ while read -r plugin; do
   if [ ! -d "/app/wp-content/plugins/${plugin}" ]; then
     echo ""
     echo "Install $plugin"
-    curl -LOk# http://wordpress.org/extend/plugins/download/${plugin}.zip
+    curl -LOk# https://downloads.wordpress.org/plugin/${plugin}.zip
     unzip -q ${plugin}.zip
     rm ${plugin}.zip
   else
