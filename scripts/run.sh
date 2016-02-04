@@ -13,4 +13,6 @@ else
 fi
 
 source /etc/apache2/envvars
+# stops apache complaining about existing pid file
+rm -f $APACHE_PID_FILE
 exec apache2 -D FOREGROUND
