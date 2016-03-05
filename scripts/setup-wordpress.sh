@@ -1,26 +1,26 @@
 #!/bin/bash
 
 cd /app
-wp core download --allow-root
+wp core download --allow-root \
+    --skip-plugins=akismet,hello \
+    --skip-themes=twentyfifteen,twentyfourteen
 chown -R www-data:www-data /app/wp-content /var/www/html
 
 # Configure wp-config.php
-DB_NAME_CONFIG="getenv('DB_NAME')"
-DB_USER_CONFIG="root"
-DB_PASSWORD_CONFIG="getenv('MYSQL_ENV_MYSQL_ROOT_PASSWORD')"
-DB_HOST_CONFIG="getenv('MYSQL_PORT_3306_TCP_ADDR').':'.getenv('MYSQL_PORT_3306_TCP_PORT')"
+[ ! $DB_NAME ] && DB_NAME='wordpress'
+[ ! $DB_PASS ] && DB_PASS='root'
 
 cp /app/wp-config-sample.php /app/wp-config.php
 curl https://api.wordpress.org/secret-key/1.1/salt/ -o /usr/local/src/wp.keys
-sed -i "s/'database_name_here'/$DB_NAME_CONFIG/" /app/wp-config.php
-sed -i "s/username_here/$DB_USER_CONFIG/" /app/wp-config.php
-sed -i "s/'password_here'/$DB_PASSWORD_CONFIG/" /app/wp-config.php
-sed -i "s/'localhost'/$DB_HOST_CONFIG/" /app/wp-config.php
+sed -i "s/database_name_here/$DB_NAME/" /app/wp-config.php
+sed -i "s/username_here/root/" /app/wp-config.php
+sed -i "s/password_here/$DB_PASS/" /app/wp-config.php
+sed -i "s/'localhost'/\"mysql:3306\"/" /app/wp-config.php
 sed -i '/#@-/r /usr/local/src/wp.keys' /app/wp-config.php
 sed -i "/#@+/,/#@-/d" /app/wp-config.php
 
 # .htaccess
-bash -c "cat > /app/.htaccess" <<EOF
+cat > /app/.htaccess <<EOF
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On

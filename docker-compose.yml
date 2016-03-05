@@ -1,28 +1,31 @@
-data:
-  image: busybox
-  volumes:
-    - /app
-    - /var/lib/mysql
-wordpress:
-  image: visiblevc/wordpress:latest
-  links:
-    - mysql
-  ports:
-    - 8080:80
-    - 443:443
-  volumes:
-    - ./data:/data
-    - ./wp-content/uploads:/app/wp-content/uploads
-    - ./wp-content/plugins:/app/wp-content/plugins
-  volumes_from:
-    - data
-  environment:
-    DB_NAME: wordpress
-mysql:
-  image: mysql:5.7
-  ports:
-    - localhost:3306:3306
-  volumes_from:
-    - data
-  environment:
-    MYSQL_ROOT_PASSWORD: root
+version: '2'
+services:
+  data:
+    image: busybox
+    volumes:
+      - /app
+      - /var/lib/mysql
+  wordpress:
+    image: visiblevc/wordpress:latest
+    links:
+      - mysql
+    ports:
+      - 8080:80
+      - 443:443
+    volumes:
+      - ./data:/data
+      - ./wp-content/uploads:/app/wp-content/uploads
+      - ./wp-content/plugins:/app/wp-content/plugins
+    volumes_from:
+      - data
+    environment:
+      DB_NAME: wordpress
+      DB_PASS: root
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes_from:
+      - data
+    environment:
+      MYSQL_ROOT_PASSWORD: root
