@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sleep 10
-mysql -uroot -p$MYSQL_ENV_MYSQL_ROOT_PASSWORD -h$MYSQL_PORT_3306_TCP_ADDR -P$MYSQL_PORT_3306_TCP_PORT -e "DROP DATABASE $DB_NAME"
-mysql -uroot -p$MYSQL_ENV_MYSQL_ROOT_PASSWORD -h$MYSQL_PORT_3306_TCP_ADDR -P$MYSQL_PORT_3306_TCP_PORT -e "CREATE DATABASE $DB_NAME"
-mysql -uroot -p$MYSQL_ENV_MYSQL_ROOT_PASSWORD -h$MYSQL_PORT_3306_TCP_ADDR -P$MYSQL_PORT_3306_TCP_PORT $DB_NAME < /data/database.sql
+mysql --user=root --password=$DB_PASS --host=mysql --port=3306 -e "DROP DATABASE $DB_NAME"
+mysql --user=root --password=$DB_PASS --host=mysql --port=3306 -e "CREATE DATABASE $DB_NAME"
+mysql --user=root --password=$DB_PASS --host=mysql --port=3306 $DB_NAME < /data/database.sql
 echo "Database restored from /data/database.sql"
