@@ -8,7 +8,7 @@ services:
   wordpress:
     image: visiblevc/wordpress:latest
     links:
-      - mysql
+      - db
     ports:
       - 8080:80
       - 443:443
@@ -20,8 +20,9 @@ services:
     environment:
       DB_NAME: wordpress
       DB_PASS: root
-  mysql:
-    image: mysql:5.7
+      PLUGINS: academic-bloggers-toolkit,co-authors-plus
+  db:
+    image: mysql:5.7 # or mariadb
     ports:
       - 3306:3306
     volumes:
