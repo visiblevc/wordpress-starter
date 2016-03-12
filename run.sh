@@ -6,13 +6,17 @@
 [ "$ADMIN_EMAIL" ] || ADMIN_EMAIL="admin@${DB_NAME}.com"
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
-  AFTER_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 2) \
-|| SEARCH_REPLACE=false
+  AFTER_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 2) || \
+  SEARCH_REPLACE=false
 
-# Error handling
-ERROR () { echo -e "\n=> $(tput setaf 1)$(tput bold)ERROR$(tput sgr 0) (Line $1): $2."; exit 1; }
+ERROR () {
+  echo -e "\n=> $(tput -T xterm setaf 1)$(tput -T xterm bold)ERROR$(tput -T xterm sgr 0) (Line $1): $2.";
+  exit 1;
+}
+
 
 # Configure wp-cli
+# ----------------
 if [ ! -f /app/wp-cli.yml ]; then
 cat > /app/wp-cli.yml <<EOF
 quiet: true
@@ -35,88 +39,105 @@ core install:
 EOF
 fi
 
-# Pause until MySQL is available for connections
+
+# Download WordPress
+# ------------------
+if [ ! -f /app/index.php ]; then
+  printf "=> Downloading wordpress... "
+  chown -R www-data:www-data /app /var/www/html
+  sudo -u www-data wp core download >/dev/null 2>&1 && \
+    chown -R www-data:www-data /app /var/www/html || \
+    ERROR $LINENO "Failed to download wordpress"
+  printf "Done!\n"
+fi
+
+
+# Wait for MySQL
+# --------------
 printf "=> Waiting for MySQL to initialize... \n"
 while ! mysqladmin ping --host=db --password=$DB_PASS --silent; do
   sleep 1
 done
 
-# Configure WordPress
+
 printf "\t%s\n" \
   "=======================================" \
   "    Begin WordPress Configuration" \
   "======================================="
 
+
+# wp-config.php
+# -------------
+printf "=> Generating wp.config.php file... "
 if [ ! -f /app/wp-config.php ]; then
-
-  # wp.config.php
-  printf "=> Generating wp.config.php file... "
-  sudo -u www-data wp core config >/dev/null 2>&1 || ERROR $LINENO "Could not generate wp-config.php file"
+  sudo -u www-data wp core config >/dev/null 2>&1 || \
+    ERROR $LINENO "Could not generate wp-config.php file"
   printf "Done!\n"
-
 else
-    printf "=> wp-config.php exists. SKIPPING...\n"
+  printf "Already exists!\n"
 fi
 
-# Install Database
-if [ ! "$(wp core is-installed --allow-root >/dev/null 2>&1 && echo $?)" ]; then
 
-  printf "=> Creating database '%s'... " "$DB_NAME"
-  sudo -u www-data wp db create >/dev/null 2>&1 || ERROR $LINENO "Database creation failed"
+# Setup database
+# --------------
+printf "=> Create database '%s'... " "$DB_NAME"
+if [ ! "$(wp core is-installed --allow-root >/dev/null 2>&1 && echo $?)" ]; then
+  sudo -u www-data wp db create >/dev/null 2>&1 || \
+    ERROR $LINENO "Database creation failed"
   printf "Done!\n"
 
   # If an SQL file exists in /data => load it
   if [ "$(stat -t /data/*.sql >/dev/null 2>&1 && echo $?)" ]; then
-
     DATA_PATH=$(find /data/*.sql | head -n 1)
     printf "=> Loading data backup from %s... " "$DATA_PATH"
-    sudo -u www-data wp db import "$DATA_PATH" >/dev/null 2>&1 || ERROR $LINENO "Could not import database"
+    sudo -u www-data wp db import "$DATA_PATH" >/dev/null 2>&1 || \
+      ERROR $LINENO "Could not import database"
     printf "Done!\n"
 
     # If SEARCH_REPLACE is set => Replace URLs
     if [ "$SEARCH_REPLACE" != false ]; then
-
       printf "=> Replacing URLs... "
       REPLACEMENTS=$(sudo -u www-data wp search-replace "$BEFORE_URL" "$AFTER_URL" \
         --no-quiet --skip-columns=guid | grep replacement) || \
         ERROR $((LINENO-2)) "Could not execute SEARCH_REPLACE on database"
       echo -ne "$REPLACEMENTS\n"
-
     fi
-
   else
     printf "=> No database backup found. Initializing new database... "
-    sudo -u www-data wp core install >/dev/null 2>&1 || ERROR $LINENO "WordPress Install Failed"
+    sudo -u www-data wp core install >/dev/null 2>&1 || \
+      ERROR $LINENO "WordPress Install Failed"
     printf "Done!\n"
   fi
-
-  printf "=> Database initialization completed sucessfully!\n"
-
 else
-  printf "=> Database '%s' exists. SKIPPING...\n" "$DB_NAME"
+  printf "Already exists!\n"
 fi
 
 
 # .htaccess
+# ---------
 if [ ! -f /app/.htaccess ]; then
   printf "=> Generating .htaccess file... "
-  sudo -u www-data wp rewrite flush --hard >/dev/null 2>&1 || ERROR $LINENO "Could not generate .htaccess file"
+  sudo -u www-data wp rewrite flush --hard >/dev/null 2>&1 || \
+    ERROR $LINENO "Could not generate .htaccess file"
   printf "Done!\n"
 else
   printf "=> .htaccess exists. SKIPPING...\n"
 fi
 
 
-# Adjust Filesystem Permissions
+# Filesystem Permissions
+# ----------------------
 printf "=> Adjusting filesystem permissions... "
 groupadd -f docker && usermod -aG docker www-data
 find /app -type d -exec chmod 755 {} \;
 find /app -type f -exec chmod 644 {} \;
-chmod -R 775 /app/wp-content/uploads \
-    && chown -R :docker /app/wp-content/uploads
+chmod -R 775 /app/wp-content/uploads && \
+  chown -R :docker /app/wp-content/uploads
 printf "Done!\n"
 
+
 # Install Plugins
+# ---------------
 if [ "$PLUGINS" ]; then
   printf "=> Checking plugins...\n"
   while IFS=',' read -ra plugin; do
@@ -134,17 +155,17 @@ else
   printf "=> No plugin dependencies listed. SKIPPING...\n"
 fi
 
+
 # Operations to perform on first build
+# ------------------------------------
 if [ -d /app/wp-content/plugins/akismet ]; then
   printf "=> Removing default plugins... "
   sudo -u www-data wp plugin uninstall akismet hello --deactivate
   printf "Done!\n"
 
   printf "=> Removing unneeded themes... "
-
   REMOVE_LIST=(twentyfourteen twentyfifteen twentysixteen)
   THEME_LIST=()
-
   while IFS=',' read -ra theme; do
     for i in "${!theme[@]}"; do
       REMOVE_LIST=( "${REMOVE_LIST[@]/${theme[$i]}}" )
@@ -157,13 +178,16 @@ if [ -d /app/wp-content/plugins/akismet ]; then
   printf "=> Installing needed themes... "
   sudo -u www-data wp theme install "${THEME_LIST[@]}"
   printf "Done!\n"
-
 fi
+
 
 printf "\t%s\n" \
   "=======================================" \
   "   WordPress Configuration Complete!" \
   "======================================="
 
+
+# Start apache
+# ------------
 source /etc/apache2/envvars
 exec apache2 -D FOREGROUND
