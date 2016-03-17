@@ -15,7 +15,6 @@ ERROR () {
   exit 1;
 }
 
-
 # Configure wp-cli
 # ----------------
 if [ ! -f /app/wp-cli.yml ]; then
