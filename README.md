@@ -62,6 +62,7 @@ services:
       DB_PASS: root # must match below
       PLUGINS: academic-bloggers-toolkit,co-authors-plus
       SEARCH_REPLACE: yoursite.com,localhost:8080
+      WP_DEBUG: true
   db:
     image: mysql:5.7
     ports:
@@ -86,6 +87,7 @@ volumes:
 - `DB_PASS` (required): Must match `MYSQL_ROOT_PASSWORD` of the mysql container
 - `DB_NAME` (optional): Defaults to `wordpress`
 - `ADMIN_EMAIL` (optional): Defaults to `admin@${DB_NAME}.com`
+- `WP_DEBUG` (optional): Defaults to `false`
 - `THEMES` (optional): Comma-separated list of themes you want to install.
 - `PLUGINS` (optional): Comma-separated list of plugins you want to install.
 - `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
