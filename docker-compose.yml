@@ -9,8 +9,6 @@ services:
       - 443:443
     volumes:
       - ./data:/data
-      - ./wp-content/uploads:/app/wp-content/uploads
-      - ./wp-content/plugins:/app/wp-content/plugins
     environment:
       DB_NAME: wordpress
       DB_PASS: root

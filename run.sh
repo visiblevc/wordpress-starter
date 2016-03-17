@@ -42,11 +42,10 @@ fi
 
 # Download WordPress
 # ------------------
-if [ ! -f /app/index.php ]; then
+if [ ! -f /app/wp-settings.php ]; then
   printf "=> Downloading wordpress... "
   chown -R www-data:www-data /app /var/www/html
-  sudo -u www-data wp core download >/dev/null 2>&1 && \
-    chown -R www-data:www-data /app /var/www/html || \
+  sudo -u www-data wp core download >/dev/null 2>&1 || \
     ERROR $LINENO "Failed to download wordpress"
   printf "Done!\n"
 fi
@@ -131,6 +130,7 @@ printf "=> Adjusting filesystem permissions... "
 groupadd -f docker && usermod -aG docker www-data
 find /app -type d -exec chmod 755 {} \;
 find /app -type f -exec chmod 644 {} \;
+mkdir -p /app/wp-content/uploads
 chmod -R 775 /app/wp-content/uploads && \
   chown -R :docker /app/wp-content/uploads
 printf "Done!\n"
