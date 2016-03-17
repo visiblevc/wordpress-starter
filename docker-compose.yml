@@ -1,10 +1,5 @@
 version: '2'
 services:
-  data:
-    image: busybox
-    volumes:
-      - /app
-      - /var/lib/mysql
   wordpress:
     image: visiblevc/wordpress:latest
     links:
@@ -13,14 +8,13 @@ services:
       - 8080:80
       - 443:443
     volumes:
-      - data:/app
       - ./data:/data
       - ./wp-content/uploads:/app/wp-content/uploads
       - ./wp-content/plugins:/app/wp-content/plugins
     environment:
       DB_NAME: wordpress
       DB_PASS: root
-      PLUGINS: academic-bloggers-toolkit,co-authors-plus
+      PLUGINS: akismet
   db:
     image: mysql:5.7 # or mariadb
     ports:
