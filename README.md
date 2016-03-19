@@ -60,7 +60,9 @@ services:
     environment:
       DB_NAME: wordpress
       DB_PASS: root # must match below
-      PLUGINS: academic-bloggers-toolkit,co-authors-plus
+      PLUGINS: >-
+        academic-bloggers-toolkit,
+        co-authors-plus
       SEARCH_REPLACE: yoursite.com,localhost:8080
   db:
     image: mysql:5.7

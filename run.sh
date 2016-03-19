@@ -142,12 +142,13 @@ if [ "$PLUGINS" ]; then
   printf "=> Checking plugins...\n"
   while IFS=',' read -ra plugin; do
     for i in "${!plugin[@]}"; do
-      sudo -u www-data wp plugin is-installed "${plugin[$i]}"
+      plugin_name=$(echo "${plugin[$i]}" | xargs)
+      sudo -u www-data wp plugin is-installed "${plugin_name}"
       if [ $? -eq 0 ]; then
-        printf "=> ($((i+1))/${#plugin[@]}) Plugin '%s' found. SKIPPING...\n" "${plugin[$i]}"
+        printf "=> ($((i+1))/${#plugin[@]}) Plugin '%s' found. SKIPPING...\n" "${plugin_name}"
       else
-        printf "=> ($((i+1))/${#plugin[@]}) Plugin '%s' not found. Installing...\n" "${plugin[$i]}"
-        sudo -u www-data wp plugin install "${plugin[$i]}"
+        printf "=> ($((i+1))/${#plugin[@]}) Plugin '%s' not found. Installing...\n" "${plugin_name}"
+        sudo -u www-data wp plugin install "${plugin_name}"
       fi
     done
   done <<< "$PLUGINS"
