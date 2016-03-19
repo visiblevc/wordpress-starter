@@ -1,8 +1,9 @@
 #!/bin/bash
 
-[ "$DB_NAME" ] || DB_NAME='wordpress'
-[ "$DB_PASS" ] || DB_PASS='root'
-[ "$THEMES" ]  || THEMES='twentysixteen'
+[ "$DB_NAME" ]  || DB_NAME='wordpress'
+[ "$DB_PASS" ]  || DB_PASS='root'
+[ "$THEMES" ]   || THEMES='twentysixteen'
+[ "$WP_DEBUG" ] || WP_DEBUG='false'
 [ "$ADMIN_EMAIL" ] || ADMIN_EMAIL="admin@${DB_NAME}.com"
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
@@ -28,6 +29,8 @@ core config:
   dbpass: $DB_PASS
   dbname: $DB_NAME
   dbhost: db:3306
+  extra-php: |
+    define('WP_DEBUG', ${WP_DEBUG,,});
 
 core install:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
@@ -75,6 +78,9 @@ if [ ! -f /app/wp-config.php ]; then
 else
   printf "Already exists!\n"
 fi
+
+# Enable or Disable debug mode
+sed -i "s/define('WP_DEBUG', \(true\|false\))/define('WP_DEBUG', ${WP_DEBUG,,})/g" /app/wp-config.php
 
 
 # Setup database
