@@ -2,15 +2,7 @@
   "name": "visible-wordpress",
   "version": "1.0.0",
   "scripts": {
-    "export-db": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp db export /data/database.sql\"",
-    "import-db": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp db import /data/database.sql\" && npm run search-replace",
-    "update-plugins": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp plugin update --all\"",
-    "update-themes": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp theme update --all\"",
-    "plugin-install": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp plugin install $PLUGIN\"",
-    "plugin-update": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp plugin update $PLUGIN\"",
-    "theme-update": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp theme update $THEME\"",
-    "theme-install": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp theme install $THEME\"",
-    "search-replace": "docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp search-replace 'http://www.oldurl.com' 'http://localhost:8080' --skip-columns=guid\""
+    "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd "
   },
   "dependencies": {},
   "devDependencies": {
