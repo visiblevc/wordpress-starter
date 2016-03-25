@@ -118,9 +118,14 @@ docker-compose run wordpress wp db export /data --allow-root
 
 Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `SEARCH_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
 
-### Working with plugins
+### Use `wp-cli`
 
-TODO
+You can access wp-cli by running `npm run wp ...`. Here are some examples:
+
+```
+npm run wp plugin install <some-plugin>
+npm run wp db import /data/database.sql
+```
 
 ---
 
