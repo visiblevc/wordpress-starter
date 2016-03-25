@@ -15,10 +15,8 @@ ERROR () {
   exit 1;
 }
 
-
 # Configure wp-cli
 # ----------------
-if [ ! -f /app/wp-cli.yml ]; then
 cat > /app/wp-cli.yml <<EOF
 quiet: true
 apache_modules:
@@ -40,7 +38,6 @@ core install:
   admin_email: $ADMIN_EMAIL
   skip-email: true
 EOF
-fi
 
 
 # Download WordPress
@@ -71,17 +68,10 @@ printf "\t%s\n" \
 # wp-config.php
 # -------------
 printf "=> Generating wp.config.php file... "
-if [ ! -f /app/wp-config.php ]; then
-  sudo -u www-data wp core config >/dev/null 2>&1 || \
-    ERROR $LINENO "Could not generate wp-config.php file"
-  printf "Done!\n"
-else
-  printf "Already exists!\n"
-fi
-
-# Enable or Disable debug mode
-sed -i "s/define('WP_DEBUG', \(true\|false\))/define('WP_DEBUG', ${WP_DEBUG,,})/g" /app/wp-config.php
-
+rm -f /app/wp-config.php
+sudo -u www-data wp core config >/dev/null 2>&1 || \
+  ERROR $LINENO "Could not generate wp-config.php file"
+printf "Done!\n"
 
 # Setup database
 # --------------

@@ -1,6 +1,9 @@
 {
-  "name": "visible-website",
+  "name": "visible-wordpress",
   "version": "1.0.0",
+  "scripts": {
+    "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd "
+  },
   "dependencies": {},
   "devDependencies": {
     "chalk": "^1.1.0",
