@@ -15,11 +15,20 @@ This project has 2 parts: the Docker environment and a set of tools for theme de
 ```
 # copy the files
 git clone https://github.com/visiblevc/wordpress-starter.git
-rm -rf .git Dockerfile run.sh
+rm -rf .git Dockerfile run.sh README.md CHANGELOG.md
 
 # start the website at localhost:8080
 docker-compose up
 ```
+
+This repository does 2 things:
+
+1. Include the files to create a wordpress Docker image (visiblevc/wordpress)
+2. Include build tools to develop wordpress themes (gulp)
+
+If you don't plan to build the Docker image yourself, you shouldn't care for 1. We publish the image on Docker Hub and you can grab it directly from there. That's why you can safely remove the Dockerfile and run.sh.
+
+The reason we remove `.git`, `REAMDE.md` and `CHANGELOG.md` is because we assume you will start your own repository, named after your project. There is virtually no benefit keeping ties with our remote git repository.
 
 ---
 
