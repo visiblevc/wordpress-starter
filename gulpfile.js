@@ -16,6 +16,8 @@ var uglify       = require('gulp-uglify');
 var minifyCss    = require('gulp-minify-css');
 var awspublish   = require('gulp-awspublish');
 var autoprefixer = require('gulp-autoprefixer');
+var glob = require('glob');
+var del = require('del');
 
 // Configuration
 var config = JSON.parse(fs.readFileSync('./gulp.json'));
@@ -57,10 +59,25 @@ gulp.task('deploy-assets', function (callback) {
 });
 
 gulp.task('clean', function () {
+  runSequence(
+    ['clean-dist', 'clean-templates']
+  );
+});
+
+gulp.task('clean-dist', function () {
   return gulp.src(distPath, {read: false})
     .pipe(clean({force: true}));
 });
 
+gulp.task('clean-templates', function () {
+  var generatedTemplateFor = function(file) {
+    return file.replace(assetPath + '/templates/', themePath + '/');
+  }
+
+  return glob(assetPath + '/templates/**/*', function(err, files) {
+    del(files.map(generatedTemplateFor));
+  });
+});
 
 
 // Styles
