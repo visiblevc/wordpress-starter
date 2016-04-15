@@ -21,9 +21,8 @@ var autoprefixer = require('gulp-autoprefixer');
 var config = JSON.parse(fs.readFileSync('./gulp.json'));
 var themePath = 'wp-content/themes/' + config.theme;
 var distPath  = themePath + '/dist';
+var distPathAbsolute = '/' + distPath;
 var assetPath = themePath + '/assets';
-var revision = Math.floor(Date.now() / 1000);
-
 
 gulp.task(
   'default',
@@ -49,7 +48,7 @@ gulp.task('deploy-assets', function (callback) {
     ['compile-styles', 'compile-scripts', 'compile-images', 'compile-fonts', 'compile-templates'],
     ['optimize-styles', 'optimize-scripts', 'optimize-images'],
     'version-assets',
-    ['replace-versisonned-assets-in-assets', 'replace-versisonned-assets-in-templates'],
+    ['replace-versioned-assets-in-assets', 'replace-versioned-assets-in-templates'],
     'gzip-assets',
     'publish-to-s3',
     callback
@@ -148,8 +147,7 @@ gulp.task('compile-templates', function () {
 });
 
 
-
-// Versionning
+// versioning
 // -----------
 
 gulp.task('version-assets', function () {
@@ -160,32 +158,28 @@ gulp.task('version-assets', function () {
     .pipe(gulp.dest(themePath));
 });
 
-gulp.task('replace-versionned-assets-in-assets', function () {
+gulp.task('replace-versioned-assets-in-assets', function () {
+  var dirReplacements = {};
+  dirReplacements[distPathAbsolute] = config.productionAssetURL;
+
   return gulp.src([
       themePath + '/**/*.json',
       distPath + '/**/*.css',
       distPath + '/**/*.js'
     ])
-    .pipe(collect({
-      replaceReved: true,
-      dirReplacements: {
-        '/wp-content/themes/visible/dist': config.productionAssetURL
-      }
-    }))
+    .pipe(collect({ replaceReved: true, dirReplacements: dirReplacements }))
     .pipe(gulp.dest(distPath));
 });
 
-gulp.task('replace-versisonned-assets-in-templates', function () {
+gulp.task('replace-versioned-assets-in-templates', function () {
+  var dirReplacements = {};
+  dirReplacements[distPathAbsolute] = config.productionAssetURL;
+
   return gulp.src([
       themePath + '/**/*.json',
       themePath + '/*.php'
     ])
-    .pipe(collect({
-      replaceReved: true,
-      dirReplacements: {
-        '/wp-content/themes/visible/dist': config.productionAssetURL
-      }
-    }))
+    .pipe(collect({ replaceReved: true, dirReplacements: dirReplacements }))
     .pipe(gulp.dest(themePath));
 });
 
