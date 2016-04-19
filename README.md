@@ -73,7 +73,7 @@ services:
         academic-bloggers-toolkit,
         co-authors-plus
       SEARCH_REPLACE: yoursite.com,localhost:8080
-      WP_DEBUG: true
+      WP_DEBUG: 'true'
   db:
     image: mysql:5.7
     ports:
