@@ -4,6 +4,8 @@
 [ "$DB_PASS" ]  || DB_PASS='root'
 [ "$THEMES" ]   || THEMES='twentysixteen'
 [ "$WP_DEBUG" ] || WP_DEBUG='false'
+[ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
+[ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='false'
 [ "$ADMIN_EMAIL" ] || ADMIN_EMAIL="admin@${DB_NAME}.com"
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
@@ -29,6 +31,8 @@ core config:
   dbhost: db:3306
   extra-php: |
     define('WP_DEBUG', ${WP_DEBUG,,});
+    define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,})
+    define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,})
 
 core install:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
