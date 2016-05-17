@@ -4,8 +4,8 @@
 [ "$DB_PASS" ]  || DB_PASS='root'
 [ "$THEMES" ]   || THEMES='twentysixteen'
 [ "$WP_DEBUG" ] || WP_DEBUG='false'
-[ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='true'
-[ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='false'
+[ "$WP_DEBUG_LOG" ] || WP_DEBUG_LOG='false'
+[ "$WP_DEBUG_DISPLAY" ] || WP_DEBUG_DISPLAY='true'
 [ "$ADMIN_EMAIL" ] || ADMIN_EMAIL="admin@${DB_NAME}.com"
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
