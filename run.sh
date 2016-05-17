@@ -31,8 +31,8 @@ core config:
   dbhost: db:3306
   extra-php: |
     define('WP_DEBUG', ${WP_DEBUG,,});
-    define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,})
-    define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,})
+    define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,});
+    define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});
 
 core install:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
