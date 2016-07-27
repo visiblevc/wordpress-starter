@@ -16,8 +16,7 @@ RUN curl \
     && chmod +x /usr/local/bin/wp /run.sh \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
     && a2enmod rewrite \
-    && service apache2 restart \
-    && wp cli update --nightly --yes --allow-root
+    && service apache2 restart
 
 # Run the server
 EXPOSE 80 443

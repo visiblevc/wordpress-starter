@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.5.0 - latest
+## 0.6.0 - latest
+
+- Update wp-cli
+- `gulp clean` now also clears generated templates
+- Support for `WP_DEBUG_LOG` and `WP_DEBUG_DISPLAY` options
+
+## 0.5.0
 
 - Clear any apache pid file before starting apache
 
