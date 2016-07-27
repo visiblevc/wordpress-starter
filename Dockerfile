@@ -15,7 +15,9 @@ RUN curl \
         -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
     && chmod +x /usr/local/bin/wp /run.sh \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
-    && a2enmod rewrite
+    && a2enmod rewrite \
+    && service apache2 restart \
+    && wp cli update --nightly --yes --allow-root
 
 # Run the server
 EXPOSE 80 443
