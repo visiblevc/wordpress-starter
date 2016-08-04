@@ -1,8 +1,11 @@
 # Changelog
 
+This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
+
 ## 0.7.0 - latest
 
 - Support Wordpress Multisite - Fix #33
+- Fix a typo in the gulpfile
 
 ## 0.6.0
 

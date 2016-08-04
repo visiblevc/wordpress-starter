@@ -58,7 +58,7 @@ gulp.task('deploy-assets', function (callback) {
 gulp.task('clean', function () {
   return gulp.src([
     distPath,
-    'themePath/*.php'
+    themePath + '/*.php'
   ], {read: false})
     .pipe(clean({force: true}));
 });
@@ -148,7 +148,7 @@ gulp.task('compile-templates', function () {
 });
 
 
-// Versioning
+// versioning
 // -----------
 
 gulp.task('version-assets', function () {
