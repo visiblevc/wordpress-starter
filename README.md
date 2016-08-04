@@ -99,8 +99,11 @@ volumes:
 - `DB_NAME` (optional): Defaults to `wordpress`
 - `ADMIN_EMAIL` (optional): Defaults to `admin@${DB_NAME}.com`
 - `WP_DEBUG` (optional): Defaults to `false`
+- `WP_DEBUG_DISPLAY` (optional): Defaults to `false`
+- `WP_DEBUG_LOG` (optional): Defaults to `false`
 - `THEMES` (optional): Comma-separated list of themes you want to install.
 - `PLUGINS` (optional): Comma-separated list of plugins you want to install.
+- `MULTISITE` (optional): Set to `'true'` to enable multisite
 - `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
     - When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site).
     - **IMPORTANT NOTE:** If you are running Docker on Mac or PC (using Docker Machine), your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`

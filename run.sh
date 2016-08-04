@@ -157,6 +157,18 @@ else
 fi
 
 
+# Make multisite
+# ---------------
+printf "=> Turn wordpress multisite on... "
+if [ "$MULTISITE" = "true" ]; then
+  sudo -u www-data wp core multisite-convert --allow-root >/dev/null 2>&1 || \
+    ERROR $LINENO "Failed to turn on wordpress multisite"
+  printf "Done!\n"
+else
+  printf "Skip!\n"
+fi
+
+
 # Operations to perform on first build
 # ------------------------------------
 if [ -d /app/wp-content/plugins/akismet ]; then
