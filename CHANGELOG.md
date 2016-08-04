@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.6.0 - latest
+## 0.7.0 - latest
+
+- Support Wordpress Multisite - Fix #33
+
+## 0.6.0
 
 - Update wp-cli
 - `gulp clean` now also clears generated templates
