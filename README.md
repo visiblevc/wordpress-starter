@@ -49,11 +49,6 @@ The only thing you need to get started is a `docker-compose.yml` file:
 ```yml
 version: '2'
 services:
-  data:
-    image: busybox
-    volumes:
-      - /app
-      - /var/lib/mysql
   wordpress:
     image: visiblevc/wordpress:latest
     links:
