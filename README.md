@@ -92,6 +92,7 @@ volumes:
 
 - `DB_PASS` (required): Must match `MYSQL_ROOT_PASSWORD` of the mysql container
 - `DB_NAME` (optional): Defaults to `wordpress`
+- `DB_PREFIX` (optional): Defauts to `wp_`
 - `ADMIN_EMAIL` (optional): Defaults to `admin@${DB_NAME}.com`
 - `WP_DEBUG` (optional): Defaults to `false`
 - `WP_DEBUG_DISPLAY` (optional): Defaults to `false`
