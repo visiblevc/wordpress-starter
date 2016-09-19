@@ -18,7 +18,7 @@ git clone https://github.com/visiblevc/wordpress-starter.git
 rm -rf .git Dockerfile run.sh README.md CHANGELOG.md
 
 # start the website at localhost:8080
-docker-compose up
+docker-compose up -d
 ```
 
 This repository does 2 things:
