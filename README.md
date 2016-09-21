@@ -67,11 +67,12 @@ services:
       DB_PASS: root # must match below
       PLUGINS: >-
         academic-bloggers-toolkit,
-        co-authors-plus
+        co-authors-plus,
+        [WP-API-master]https://github.com/WP-API/WP-API/archive/master.zip,
       SEARCH_REPLACE: yoursite.com,localhost:8080
       WP_DEBUG: 'true'
   db:
-    image: mysql:5.7
+    image: mysql:5.7 # or mariadb:10
     ports:
       - 3306:3306
     volumes:
@@ -100,34 +101,21 @@ volumes:
 - `WP_DEBUG` (optional): Defaults to `false`
 - `WP_DEBUG_DISPLAY` (optional): Defaults to `false`
 - `WP_DEBUG_LOG` (optional): Defaults to `false`
-- `THEMES` (optional): Comma-separated list of themes you want to install.
-- `PLUGINS` (optional): Comma-separated list of plugins you want to install.
+- `THEMES` (optional): Comma-separated list of themes you want to install in either of the following forms:
+  - `theme-slug`: Used when installing theme direct from WordPress.org.
+  - `[theme-slug]http://themesite.com/theme.zip`: Used when installing theme from URL.
+- `PLUGINS` (optional): Comma-separated list of plugins you want to install in either of the following forms:
+  - `plugin-slug`: Used when installing plugin direct from WordPress.org.
+  - `[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.
 - `MULTISITE` (optional): Set to `'true'` to enable multisite
 - `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
     - When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site).
     - **IMPORTANT NOTE:** If you are running Docker on Mac or PC (using Docker Machine), your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`
+- `VERBOSE` (optional): Set to `true` to run build with verbose logging.
 
 ##### DB Container Environment variables
 
 - `MYSQL_ROOT_PASSWORD` (required): Must match `DB_PASS` of the wordpress container
-
-### Working with databases
-
-If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder. The first time you run the container, it will detect the SQL dump and use it as a database. If it doesn't find one, it will create a fresh database.
-
-If the SQL dump changes for some reason, you can reload the database by running:
-
-```
-docker-compose run wordpress wp db import "$(find /data/*.sql | head -n 1)" --allow-root
-```
-
-If you want to create a dump of your development database, you can run:
-
-```
-docker-compose run wordpress wp db export /data --allow-root
-```
-
-Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `SEARCH_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
 
 ### Use `wp-cli`
 
@@ -137,6 +125,24 @@ You can access wp-cli by running `npm run wp ...`. Here are some examples:
 npm run wp plugin install <some-plugin>
 npm run wp db import /data/database.sql
 ```
+
+### Working with databases
+
+If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder. The first time you run the container, it will detect the SQL dump and use it as a database. If it doesn't find one, it will create a fresh database.
+
+If the SQL dump changes for some reason, you can reload the database by running:
+
+```sh
+docker exec wordpress /bin/bash "wp db import $(find /data/*.sql | head -n 1) --allow-root"
+```
+
+If you want to create a dump of your development database, you can run:
+
+```sh
+npm run wp db export /data --allow-root
+```
+
+Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `SEARCH_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
 
 ---
 

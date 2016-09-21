@@ -18,7 +18,7 @@ var awspublish   = require('gulp-awspublish');
 var autoprefixer = require('gulp-autoprefixer');
 
 // Configuration
-var config = JSON.parse(fs.readFileSync('./gulp.json'));
+var config = require('./package.json').gulp;
 var themePath = 'wp-content/themes/' + config.theme;
 var distPath  = themePath + '/dist';
 var distPathAbsolute = '/' + distPath;
