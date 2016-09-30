@@ -28,7 +28,7 @@ This repository does 2 things:
 
 If you don't plan to build the Docker image yourself, you shouldn't care for 1. We publish the image on Docker Hub and you can grab it directly from there. That's why you can safely remove the Dockerfile and run.sh.
 
-The reason we remove `.git`, `REAMDE.md` and `CHANGELOG.md` is because we assume you will start your own repository, named after your project. There is virtually no benefit keeping ties with our remote git repository.
+The reason we remove `.git`, `README.md` and `CHANGELOG.md` is because we assume you will start your own repository, named after your project. There is virtually no benefit keeping ties with our remote git repository.
 
 ---
 
@@ -62,6 +62,7 @@ services:
       - ./yourplugin:/app/wp-content/plugins/yourplugin # Plugin development
       - ./yourtheme:/app/wp-content/themes/yourtheme   # Theme development
     environment:
+      DB_HOST: db
       DB_NAME: wordpress
       DB_PASS: root # must match below
       PLUGINS: >-
@@ -83,6 +84,7 @@ volumes:
 
 ##### MySQL Credentials
 
+- hostname: `db` (can be changed with the `DB_HOST` environment variable)
 - username: `root`
 - password: `root` (can be changed with the `MYSQL_ROOT_PASSWORD` and `DB_PASS` environment variables)
 - database: `wordpress` (can be changed with the `DB_NAME` environment variable)
@@ -90,6 +92,7 @@ volumes:
 
 ##### WordPress Container Environment variables
 
+- `DB_HOST` (optional): Defaults to `db`
 - `DB_PASS` (required): Must match `MYSQL_ROOT_PASSWORD` of the mysql container
 - `DB_NAME` (optional): Defaults to `wordpress`
 - `DB_PREFIX` (optional): Defauts to `wp_`
