@@ -1,10 +1,10 @@
 #!/bin/bash
 
-ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME}.com"}
 DB_HOST=${DB_HOST:-'db'}
 DB_NAME=${DB_NAME:-'wordpress'}
 DB_PASS=${DB_PASS:-'root'}
 DB_PREFIX=${DB_PREFIX:-'wp_'}
+ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME}.com"}
 THEMES=${THEMES:-'twentysixteen'}
 WP_DEBUG_DISPLAY=${WP_DEBUG_DISPLAY:-'true'}
 WP_DEBUG_LOG=${WB_DEBUG_LOG:-'false'}
