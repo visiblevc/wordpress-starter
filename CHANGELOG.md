@@ -2,7 +2,18 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.7.0 - latest
+## 0.9.0 - latest
+
+- Add `DB_HOST` environment variable - Fix #46
+- Various bug fixes and improvements
+
+## 0.8.0
+
+- Add `DB_PREFIX` optional param - Fix #37
+- Only create .htaccess for non-multisite installations - Fix #32
+- Various bug fixes and improvements
+
+## 0.7.0
 
 - Support Wordpress Multisite - Fix #33
 - Fix a typo in the gulpfile
