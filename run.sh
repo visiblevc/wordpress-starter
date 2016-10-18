@@ -47,11 +47,13 @@ core install:
 EOF
 
 main() {
+  h1 "Begin WordPress Installation"
 
   # Download WordPress
   # ------------------
   if [ ! -f /app/wp-settings.php ]; then
-    h3 "Downloading wordpress"
+    h2 "Installing wordpress"
+    h3 "Downloading..."
     chown -R www-data:www-data /app /var/www/html
     WP core download |& loglevel
     STATUS "${PIPESTATUS[0]}"
@@ -60,13 +62,13 @@ main() {
   # Wait for MySQL
   # --------------
   h2 "Waiting for MySQL to initialize..."
+  printf "%b " "${CYAN}${BOLD}  ->${NC} "
   while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --silent; do
     sleep 1
   done
 
-  h1 "Begin WordPress Configuration"
-
-  h3 "Generating wp.config.php file"
+  h2 "Configuring wordpress"
+  h3 "Generating wp-config.php file..."
   rm -f /app/wp-config.php
   WP core config |& loglevel
   STATUS "${PIPESTATUS[0]}"
