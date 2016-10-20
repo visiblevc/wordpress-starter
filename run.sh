@@ -52,7 +52,7 @@ main() {
   # Download WordPress
   # ------------------
   if [ ! -f /app/wp-settings.php ]; then
-    h2 "Installing wordpress"
+    h2 "Installing WordPress"
     h3 "Downloading..."
     chown -R www-data:www-data /app /var/www/html
     WP core download |& loglevel
@@ -67,7 +67,7 @@ main() {
     sleep 1
   done
 
-  h2 "Configuring wordpress"
+  h2 "Configuring WordPress"
   h3 "Generating wp-config.php file..."
   rm -f /app/wp-config.php
   WP core config |& loglevel
