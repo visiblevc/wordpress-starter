@@ -15,7 +15,7 @@ This project has 2 parts: the Docker environment and a set of tools for theme de
 ```
 # copy the files
 git clone https://github.com/visiblevc/wordpress-starter.git
-rm -rf .git Dockerfile run.sh README.md CHANGELOG.md
+rm -rf .git Dockerfile run.sh README.md CHANGELOG.md ISSUE_TEMPLATE.md
 
 # start the website at localhost:8080
 docker-compose up
