@@ -12,9 +12,8 @@ services:
     environment:
       DB_NAME: wordpress
       DB_PASS: root
-      PLUGINS: akismet
   db:
-    image: mysql:5.7 # or mariadb
+    image: mysql:5.7 # or mariadb:10
     ports:
       - 3306:3306
     volumes:
