@@ -1,4 +1,6 @@
-This is a template to make sure you provide us with all the information we will be to help you out. Please take the time to fill detailed issues, it will be faster for us to provide solutions! In the following section, replace with what is relevant to the setup you are having issue with.
+PLEASE READ THIS BEFORE POSTING AN ISSUE!
+
+This is a template to make sure you provide us with all the information we will be to help you out. Please take the time to fill detailed issues, it will be faster for us to provide solutions! In the following sections, you should replace the content with your own. The content that is there is just presented as an example.
 
 ## Overview
 

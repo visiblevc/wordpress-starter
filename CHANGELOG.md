@@ -2,7 +2,18 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.9.0 - latest
+## 0.10.0 - latest
+
+- BREAKING CHANGE: Explicitly listing all plugin/theme requirements (including those located in volumed directories) required.
+- Refactor run.sh into functions
+- Add new URL plugin format to better check existence after initial build.
+- Add new URL theme format to better check existence after initial build.
+- Add `VERBOSE` environment variable option which allows the build to run verbosely if one chooses.
+- Prettier logging.
+- Add `--activate` after plugin installs so that all plugins start out activated.
+- Many other improvements
+
+## 0.9.0
 
 - Add `DB_HOST` environment variable - Fix #46
 - Various bug fixes and improvements
