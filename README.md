@@ -108,6 +108,7 @@ volumes:
   - `plugin-slug`: Used when installing plugin direct from WordPress.org.
   - `[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.
 - `MULTISITE` (optional): Set to `'true'` to enable multisite
+- `PERMALINKS` (optional): String which will resolve to a valid WordPress permalink structure using [structure tags](https://codex.wordpress.org/Using_Permalinks#Structure_Tags). Defaults to `/%year%/%monthnum%/%postname%/`
 - `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
     - When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site).
     - **IMPORTANT NOTE:** If you are running Docker on Mac or PC (using Docker Machine), your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`

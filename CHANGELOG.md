@@ -2,7 +2,10 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.10.0 - latest
+## 0.10.1 - latest
+- fix: Add default permalink structure (`/%year%/%monthnum%/%postname%/`). Closes #42.
+
+## 0.10.0
 
 - BREAKING CHANGE: Explicitly listing all plugin/theme requirements (including those located in volumed directories) required.
 - Refactor run.sh into functions

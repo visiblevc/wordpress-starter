@@ -12,6 +12,7 @@ DB_NAME=${DB_NAME:-'wordpress'}
 DB_PASS=${DB_PASS:-'root'}
 DB_PREFIX=${DB_PREFIX:-'wp_'}
 ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME}.com"}
+PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 WP_DEBUG_DISPLAY=${WP_DEBUG_DISPLAY:-'true'}
 WP_DEBUG_LOG=${WB_DEBUG_LOG:-'false'}
 WP_DEBUG=${WP_DEBUG:-'false'}
@@ -103,6 +104,7 @@ main() {
       STATUS 1
       h3warn "Cannot generate .htaccess for multisite!"
     else
+      WP rewrite structure "$PERMALINKS" |& loglevel
       WP rewrite flush --hard |& loglevel
       STATUS "${PIPESTATUS[0]}"
     fi
