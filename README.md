@@ -21,6 +21,8 @@ rm -rf .git Dockerfile run.sh README.md CHANGELOG.md ISSUE_TEMPLATE.md
 docker-compose up
 ```
 
+NOTE: If you run on MacOS with Docker in VirtualBox, you will want to forward the port by running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use another port than `8080`, change it in the command.
+
 This repository does 2 things:
 
 1. Include the files to create a wordpress Docker image (visiblevc/wordpress)
