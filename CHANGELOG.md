@@ -2,7 +2,10 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.10.1 - latest
+## 0.11.0 - latest
+- Add `WP_VERSION` environment variable which allows users to specify which version of WordPress is installed.
+
+## 0.10.1
 - fix: Add default permalink structure (`/%year%/%monthnum%/%postname%/`). Closes #42.
 
 ## 0.10.0
