@@ -16,6 +16,7 @@ PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 WP_DEBUG_DISPLAY=${WP_DEBUG_DISPLAY:-'true'}
 WP_DEBUG_LOG=${WB_DEBUG_LOG:-'false'}
 WP_DEBUG=${WP_DEBUG:-'false'}
+WP_VERSION=${WP_VERSION:-'latest'}
 [ "$SEARCH_REPLACE" ] && \
   BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
   AFTER_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 2) || \
@@ -56,7 +57,7 @@ main() {
     h2 "Installing WordPress"
     h3 "Downloading..."
     chown -R www-data:www-data /app /var/www/html
-    WP core download |& loglevel
+    WP core download --version="$WP_VERSION" |& loglevel
     STATUS "${PIPESTATUS[0]}"
   fi
 
@@ -225,8 +226,7 @@ check_themes() {
 
     theme_url=${theme_url:-$theme_name}
 
-    WP theme is-installed "$theme_name"
-    if [ $? -eq 0 ]; then
+    if WP theme is-installed "$theme_name"; then
       h3 "($i/$theme_count) '$theme_name' found. SKIPPING..."
       STATUS SKIP
     else
@@ -317,8 +317,7 @@ check_plugins() {
 
     plugin_url=${plugin_url:-$plugin_name}
 
-    WP plugin is-installed "$plugin_name"
-    if [ $? -eq 0 ]; then
+    if WP plugin is-installed "$plugin_name"; then
       h3 "($i/$plugin_count) '$plugin_name' found. SKIPPING..."
       STATUS SKIP
     else

@@ -70,7 +70,7 @@ services:
       PLUGINS: >-
         academic-bloggers-toolkit,
         co-authors-plus,
-        [WP-API-master]https://github.com/WP-API/WP-API/archive/master.zip,
+        [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
       SEARCH_REPLACE: yoursite.com,localhost:8080
       WP_DEBUG: 'true'
   db:
@@ -103,6 +103,7 @@ volumes:
 - `WP_DEBUG` (optional): Defaults to `false`
 - `WP_DEBUG_DISPLAY` (optional): Defaults to `false`
 - `WP_DEBUG_LOG` (optional): Defaults to `false`
+- `WP_VERSION` (optional): Defaults to `latest`. Use semver to specify earlier build or `nightly` for beta.
 - `THEMES` (optional): Comma-separated list of themes you want to install in either of the following forms:
   - `theme-slug`: Used when installing theme direct from WordPress.org.
   - `[theme-slug]http://themesite.com/theme.zip`: Used when installing theme from URL.
