@@ -71,6 +71,9 @@ services:
         academic-bloggers-toolkit,
         co-authors-plus,
         [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
+        [local]my-local-plugin
+      THEMES: >-
+        [local]my-local-theme
       SEARCH_REPLACE: yoursite.com,localhost:8080
       WP_DEBUG: 'true'
   db:
@@ -107,9 +110,11 @@ volumes:
 - `THEMES` (optional): Comma-separated list of themes you want to install in either of the following forms:
   - `theme-slug`: Used when installing theme direct from WordPress.org.
   - `[theme-slug]http://themesite.com/theme.zip`: Used when installing theme from URL.
+  - `[local]theme-slug`: Used when you have the theme downloaded to a local folder that you have volumed to the `./wp-content/themes` directory.
 - `PLUGINS` (optional): Comma-separated list of plugins you want to install in either of the following forms:
   - `plugin-slug`: Used when installing plugin direct from WordPress.org.
   - `[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.
+  - `[local]plugin-slug`: Used when you have the plugin downloaded to a local folder that you have volumed to the `./wp-content/plugins` directory.
 - `MULTISITE` (optional): Set to `'true'` to enable multisite
 - `PERMALINKS` (optional): String which will resolve to a valid WordPress permalink structure using [structure tags](https://codex.wordpress.org/Using_Permalinks#Structure_Tags). Defaults to `/%year%/%monthnum%/%postname%/`
 - `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
