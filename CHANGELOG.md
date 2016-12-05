@@ -3,14 +3,14 @@
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
 ## 0.12.0 - latest
-- This project now maintains 3 separate Dockerfiles, depending on the version of PHP you'd like to have installed.
+- This project now maintains 2 separate `Dockerfile`, depending on the version of PHP you'd like to have installed.
 
 **Available Dockerfiles**:
-PHP Version | Tags
----:|---
-**7.0** | `latest` `php7.0`
-**5.6** | `php5.6`
-**5.5.9** | `legacy` (kept for historic purposes)
+
+| PHP Version | Tags |
+| ----------- | ---- |
+| **7.0**     | `latest` `latest-php7.0` `0.12.0` `0.12.0-php7.0` |
+| **5.6**     | `latest-php5.6` `0.12.0-php5.6` |
 
 ## 0.11.0
 - Add `WP_VERSION` environment variable which allows users to specify which version of WordPress is installed.

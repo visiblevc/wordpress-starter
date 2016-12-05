@@ -88,6 +88,15 @@ volumes:
   data: {}
 ```
 
+##### Available images
+
+| PHP Version | Tags |
+| ----------- | ---- |
+| **7.0**     | `latest` `latest-php7.0` |
+| **5.6**     | `latest-php5.6` |
+
+If you need a specific version, look at the [Changelog](CHANGELOG.md)
+
 ##### MySQL Credentials
 
 - hostname: `db` (can be changed with the `DB_HOST` environment variable)
