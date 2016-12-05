@@ -87,8 +87,6 @@ services:
       WP_DEBUG: 'true'
   db:
     image: mysql:5.7 # or mariadb:10
-    ports:
-      - 3306:3306
     volumes:
       - data:/var/lib/mysql
     environment:
@@ -96,8 +94,6 @@ services:
 volumes:
   data: {}
 ```
-
-
 
 ### Default Database Credentials
 
