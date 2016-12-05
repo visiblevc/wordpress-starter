@@ -130,7 +130,7 @@ Variable | Default Value | Description
 `MULTISITE` | `'false'` | Set to `'true'` to enable multisite
 `PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags) 
 `SEARCH_REPLACE` | | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul>
-`VERBOSE` | `'false'` | Set to `true` to run build with verbose logging
+`VERBOSE` | `'false'` | Set to `'true'` to run build with verbose logging
 
 #### `db`
 Variable | Default Value | Description
