@@ -44,6 +44,15 @@ We wrote a series of articles explaining in depth the philosophy behind this pro
 - [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
 - Part 4: Auto deploy your site on your server (coming)
 
+### Available Images
+
+| PHP Version | Tags |
+| ----------- | ---- |
+| **7.0**     | `latest` `latest-php7.0` |
+| **5.6**     | `latest-php5.6` |
+
+If you need a specific version, look at the [Changelog](CHANGELOG.md)
+
 ### The Docker environment
 
 The only thing you need to get started is a `docker-compose.yml` file:
@@ -78,8 +87,6 @@ services:
       WP_DEBUG: 'true'
   db:
     image: mysql:5.7 # or mariadb:10
-    ports:
-      - 3306:3306
     volumes:
       - data:/var/lib/mysql
     environment:
@@ -88,16 +95,7 @@ volumes:
   data: {}
 ```
 
-##### Available images
-
-| PHP Version | Tags |
-| ----------- | ---- |
-| **7.0**     | `latest` `latest-php7.0` |
-| **5.6**     | `latest-php5.6` |
-
-If you need a specific version, look at the [Changelog](CHANGELOG.md)
-
-##### MySQL Credentials
+### Default Database Credentials
 
 - hostname: `db` (can be changed with the `DB_HOST` environment variable)
 - username: `root`
@@ -105,35 +103,35 @@ If you need a specific version, look at the [Changelog](CHANGELOG.md)
 - database: `wordpress` (can be changed with the `DB_NAME` environment variable)
 - admin email: `admin@${DB_NAME}.com`
 
-##### WordPress Container Environment variables
+### Service Environment Variables
+**Notes:**
+- Variables marked with ✅ are required
+- Single quotes must surround `boolean` environment variables
 
-- `DB_HOST` (optional): Defaults to `db`
-- `DB_PASS` (required): Must match `MYSQL_ROOT_PASSWORD` of the mysql container
-- `DB_NAME` (optional): Defaults to `wordpress`
-- `DB_PREFIX` (optional): Defauts to `wp_`
-- `ADMIN_EMAIL` (optional): Defaults to `admin@${DB_NAME}.com`
-- `WP_DEBUG` (optional): Defaults to `false`
-- `WP_DEBUG_DISPLAY` (optional): Defaults to `false`
-- `WP_DEBUG_LOG` (optional): Defaults to `false`
-- `WP_VERSION` (optional): Defaults to `latest`. Use semver to specify earlier build or `nightly` for beta.
-- `THEMES` (optional): Comma-separated list of themes you want to install in either of the following forms:
-  - `theme-slug`: Used when installing theme direct from WordPress.org.
-  - `[theme-slug]http://themesite.com/theme.zip`: Used when installing theme from URL.
-  - `[local]theme-slug`: Used when you have the theme downloaded to a local folder that you have volumed to the `./wp-content/themes` directory.
-- `PLUGINS` (optional): Comma-separated list of plugins you want to install in either of the following forms:
-  - `plugin-slug`: Used when installing plugin direct from WordPress.org.
-  - `[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.
-  - `[local]plugin-slug`: Used when you have the plugin downloaded to a local folder that you have volumed to the `./wp-content/plugins` directory.
-- `MULTISITE` (optional): Set to `'true'` to enable multisite
-- `PERMALINKS` (optional): String which will resolve to a valid WordPress permalink structure using [structure tags](https://codex.wordpress.org/Using_Permalinks#Structure_Tags). Defaults to `/%year%/%monthnum%/%postname%/`
-- `SEARCH_REPLACE` (optional): Comma-separated string in the form of `current-url,replacement-url`.
-    - When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site).
-    - **IMPORTANT NOTE:** If you are running Docker on Mac or PC (using Docker Machine), your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`
-- `VERBOSE` (optional): Set to `true` to run build with verbose logging.
+#### `wordpress`
 
-##### DB Container Environment variables
+Variable | Default Value | Description
+---|---|---
+`DB_PASS`✅ | | Password for the database. Value must match `MYSQL_ROOT_PASSWORD` set in the `db` service
+`DB_HOST` | `db` | Hostname for the database
+`DB_NAME` | `wordpress` | Name of the database
+`DB_PREFIX` | `wp_` | Prefix for the database
+`ADMIN_EMAIL` | `admin@${DB_NAME}.com` | Administrator email address
+`WP_DEBUG` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG) for more information
+`WP_DEBUG_DISPLAY` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_DISPLAY) for more information
+`WP_DEBUG_LOG` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_LOG) for more information
+`WP_VERSION` | `latest` | Specify the WordPress version to install. Accepts any valid semver number, `latest`, or `nightly` for beta builds.
+`THEMES` | | Comma-separated list of themes you want to install in either of the following forms<ul><li>`theme-slug`: Used when installing theme direct from WordPress.org</li><li>`[theme-slug]https://themesite.com/theme.zip`: Used when installing theme from URL</li><li>`[local]theme-slug`: Used when you have the theme downloaded to a local folder that you have volumed to the `./wp-content/themes` directory.</li></ul>
+`PLUGINS` | | Comma-separated list of plugins you want to install in either of the following forms:<ul><li>`plugin-slug`: Used when installing plugin direct from WordPress.org.</li><li>`[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.</li><li>`[local]plugin-slug`: Used when you have the plugin downloaded to a local folder that you have volumed to the `./wp-content/plugins` directory.</li></ul>
+`MULTISITE` | `'false'` | Set to `'true'` to enable multisite
+`PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags) 
+`SEARCH_REPLACE` | | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul>
+`VERBOSE` | `'false'` | Set to `'true'` to run build with verbose logging
 
-- `MYSQL_ROOT_PASSWORD` (required): Must match `DB_PASS` of the wordpress container
+#### `db`
+Variable | Default Value | Description
+---|---|---
+`MYSQL_ROOT_PASSWORD`✅ | | Must match `DB_PASS` of the `wordpress` service
 
 ### Use `wp-cli`
 
