@@ -1,7 +1,7 @@
 version: '2'
 services:
   wordpress:
-    image: visiblevc/wordpress:php7.0
+    image: visiblevc/wordpress:latest
     ports:
       - 8080:80
       - 443:443
