@@ -1,6 +1,6 @@
 FROM php:5.6-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
-LABEL version 0.12.1-php5.6
+LABEL version 0.12.2-php5.6
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN apt-get update \
@@ -15,7 +15,12 @@ RUN apt-get update \
         zip \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-    && docker-php-ext-install gd mysqli opcache zip
+    && docker-php-ext-install \
+        exif \
+        gd \
+        mysqli \
+        opcache \
+        zip
 
 # Set recommended PHP.ini settings (see https://secure.php.net/manual/en/opcache.installation.php)
 RUN { \
