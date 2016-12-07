@@ -1,5 +1,6 @@
 FROM php:5.6-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
+LABEL version 0.12.1-php5.6
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN apt-get update \

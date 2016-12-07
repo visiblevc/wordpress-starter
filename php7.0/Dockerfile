@@ -1,5 +1,6 @@
 FROM php:7.0-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
+LABEL version 0.12.1-php7.0
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN apt-get update \
