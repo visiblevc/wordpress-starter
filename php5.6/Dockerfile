@@ -8,6 +8,7 @@ RUN apt-get update \
         less \
         libpng12-dev \
         libjpeg-dev \
+        libxml2-dev \
         mariadb-client \
         unzip \
         sudo \
@@ -20,6 +21,7 @@ RUN apt-get update \
         gd \
         mysqli \
         opcache \
+        soap \
         zip
 
 # Set recommended PHP.ini settings (see https://secure.php.net/manual/en/opcache.installation.php)
