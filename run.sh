@@ -179,7 +179,7 @@ check_themes() {
     STATUS SKIP
     h2 "Checking for orphaned themes"
     while read -r theme_name; do
-      if [[ "$theme_name" == 'twentysixteen' ]]; then continue; fi
+      if [[ "$theme_name" == 'twentyseventeen' ]]; then continue; fi
       h3 "'$theme_name' no longer needed. Pruning"
       WP theme delete --quiet "$theme_name"
       STATUS $?

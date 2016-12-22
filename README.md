@@ -48,8 +48,8 @@ We wrote a series of articles explaining in depth the philosophy behind this pro
 
 | PHP Version | Tags |
 | ----------- | ---- |
-| **7.0**     | `latest` `latest-php7.0` |
-| **5.6**     | `latest-php5.6` |
+| **7.0**     | `latest` `latest-php7.0` `<version>-php7.0` |
+| **5.6**     | `latest-php5.6` `<version>-php5.6`|
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
 
@@ -62,8 +62,6 @@ version: '2'
 services:
   wordpress:
     image: visiblevc/wordpress:latest
-    links:
-      - db
     ports:
       - 8080:80
       - 443:443
@@ -93,6 +91,25 @@ services:
       MYSQL_ROOT_PASSWORD: root
 volumes:
   data: {}
+```
+
+**Need PHPMyAdmin? Add it as a service**
+
+```yml
+version: '2'
+services:
+  wordpress:
+    # same as above
+  db:
+    # same as above
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 22222:80
+volumes:
+  data:
 ```
 
 ### Default Database Credentials

@@ -2,7 +2,11 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.12.1 - latest
+## 0.12.2 - latest
+- Add missing `exif` php extension to handle WordPress media upload metadata parsing.
+- Bump default base theme to `twentyseventeen`
+
+## 0.12.1
 - This project now maintains 2 separate `Dockerfile`, depending on the version of PHP you'd like to have installed.
 
 **Available Dockerfiles**:

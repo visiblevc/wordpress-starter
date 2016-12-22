@@ -1,5 +1,6 @@
 FROM php:7.0-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
+LABEL version 0.12.2-php7.0
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN apt-get update \
@@ -7,6 +8,7 @@ RUN apt-get update \
         less \
         libpng12-dev \
         libjpeg-dev \
+        libxml2-dev \
         mariadb-client \
         unzip \
         sudo \
@@ -14,17 +16,24 @@ RUN apt-get update \
         zip \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-    && docker-php-ext-install gd mysqli opcache zip
+    && docker-php-ext-install \
+        exif \
+        gd \
+        mysqli \
+        opcache \
+        soap \
+        zip
 
 # Set recommended PHP.ini settings (see https://secure.php.net/manual/en/opcache.installation.php)
-RUN { \
-  echo 'opcache.memory_consumption=128'; \
-  echo 'opcache.interned_strings_buffer=8'; \
-  echo 'opcache.max_accelerated_files=4000'; \
-  echo 'opcache.revalidate_freq=2'; \
-  echo 'opcache.fast_shutdown=1'; \
-  echo 'opcache.enable_cli=1'; \
-} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
+    && { \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.interned_strings_buffer=8'; \
+        echo 'opcache.max_accelerated_files=4000'; \
+        echo 'opcache.revalidate_freq=2'; \
+        echo 'opcache.fast_shutdown=1'; \
+        echo 'opcache.enable_cli=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 # Install wp-cli, configure apache, & add scripts
 RUN curl \
