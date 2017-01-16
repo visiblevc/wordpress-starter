@@ -3,7 +3,8 @@ MAINTAINER Derek P Sifford <dereksifford@gmail.com>
 LABEL version 0.12.2-php7.0
 
 # Install base requirements & sensible defaults + required PHP extensions
-RUN apt-get update \
+RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         less \
         libpng12-dev \
@@ -14,6 +15,8 @@ RUN apt-get update \
         sudo \
         vim \
         zip \
+    && DEBIAN_FRONTEND=noninteractive apt-get -t jessie-backports install -y \
+        python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
     && docker-php-ext-install \
