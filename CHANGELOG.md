@@ -2,7 +2,10 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.12.2 - latest
+## 0.13.0 - latest
+- Add `certbot` into the image to allow for easily obtaining and renewing SSL certificates
+
+## 0.12.2
 - Add missing `exif` php extension to handle WordPress media upload metadata parsing.
 - Bump default base theme to `twentyseventeen`
 

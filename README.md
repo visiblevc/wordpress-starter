@@ -2,13 +2,26 @@
 
 A Docker Wordpress development environment by the team at [Visible](https://visible.vc/) and some awesome [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors). Our goal is to make Wordpress development slightly less frustrating.
 
-## Requirements
+- [Requirements](#requirements)
+- [Getting Started](#getting-started)
+- [Available Images](#available-images)
+- [Introduction](#introduction)
+- [Example](#example)
+- [Default Database Credentials](#default-database-credentials)
+- [Service Environment Variables](#service-environment-variables)
+  - [`wordpress`](#wordpress)
+  - [`db`](#db)
+- [Workflow Tips](#workflow-tips)
+  - [Using `wp-cli`](#using-wp-cli)
+  - [Working with Databases](#working-with-databases)
+  - [Using in Production](#using-in-production)
+- [Contributing](#contributing)
 
-Well, to run a Docker environment, you will need Docker. The Dockerfile is only for an Apache+PHP+Wordpress container, you will need a MySQL container to run a website. We use Docker Compose 1.6+ for the orchestration.
+### Requirements
 
----
+Well, to run a Docker environment, you will need Docker. The Dockerfile is only for an Apache+PHP+Wordpress container, you will need a `MySQL` or `MariaDB` container to run a website. We use Docker Compose 1.6+ for the orchestration.
 
-## Getting started
+### Getting started
 
 This project has 2 parts: the Docker environment and a set of tools for theme development. To quickly get started, you can simply run the following:
 
@@ -21,9 +34,9 @@ rm -rf .git Dockerfile run.sh README.md CHANGELOG.md ISSUE_TEMPLATE.md
 docker-compose up
 ```
 
-NOTE: If you run on MacOS with Docker in VirtualBox, you will want to forward the port by running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use another port than `8080`, change it in the command.
+**NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to forward the port by running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use another port than `8080`, change it in the command.
 
-This repository does 2 things:
+##### This repository does 2 things:
 
 1. Include the files to create a wordpress Docker image (visiblevc/wordpress)
 2. Include build tools to develop wordpress themes (gulp)
@@ -31,18 +44,6 @@ This repository does 2 things:
 If you don't plan to build the Docker image yourself, you shouldn't care for 1. We publish the image on Docker Hub and you can grab it directly from there. That's why you can safely remove the Dockerfile and run.sh.
 
 The reason we remove `.git`, `README.md` and `CHANGELOG.md` is because we assume you will start your own repository, named after your project. There is virtually no benefit keeping ties with our remote git repository.
-
----
-
-### Documentation
-
-We wrote a series of articles explaining in depth the philosophy behind this project:
-
-- [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
-- [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
-- [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
-- [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
-- Part 4: Auto deploy your site on your server (coming)
 
 ### Available Images
 
@@ -53,7 +54,17 @@ We wrote a series of articles explaining in depth the philosophy behind this pro
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
 
-### The Docker environment
+### Introduction
+
+We wrote a series of articles explaining in depth the philosophy behind this project:
+
+- [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
+- [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
+- [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
+- [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
+- Part 4: Auto deploy your site on your server (coming)
+
+### Example
 
 The only thing you need to get started is a `docker-compose.yml` file:
 
@@ -115,11 +126,13 @@ volumes:
 
 ### Default Database Credentials
 
-- hostname: `db` (can be changed with the `DB_HOST` environment variable)
-- username: `root`
-- password: `root` (can be changed with the `MYSQL_ROOT_PASSWORD` and `DB_PASS` environment variables)
-- database: `wordpress` (can be changed with the `DB_NAME` environment variable)
-- admin email: `admin@${DB_NAME}.com`
+Credential | Value | Notes
+--- | --- | ---
+**Hostname** | `db` | Can be changed with the `DB_HOST` environment variable
+**Username** | `root` | |
+**Password** |  | Must be set using the `DB_PASS` environment variable
+**Database Name** | `wordpress` | Can be changed with the `DB_NAME` environment variable
+**Admin Email** | `admin@${DB_NAME}.com` | |
 
 ### Service Environment Variables
 **Notes:**
@@ -151,7 +164,9 @@ Variable | Default Value | Description
 ---|---|---
 `MYSQL_ROOT_PASSWORD`✅ | | Must match `DB_PASS` of the `wordpress` service
 
-### Use `wp-cli`
+## Workflow Tips
+
+### Using `wp-cli`
 
 You can access wp-cli by running `npm run wp ...`. Here are some examples:
 
@@ -160,7 +175,7 @@ npm run wp plugin install <some-plugin>
 npm run wp db import /data/database.sql
 ```
 
-### Working with databases
+### Working with Databases
 
 If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder. The first time you run the container, it will detect the SQL dump and use it as a database. If it doesn't find one, it will create a fresh database.
 
@@ -178,8 +193,40 @@ npm run wp db export /data --allow-root
 
 Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `SEARCH_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
 
----
+### Using in Production
 
-## Development
+#### SSL Certificates
+
+We highly recommend securing your site with SSL encryption. The Let's Encrypt and Certbot projects have made doing this both free (as in beer) and painless. We've incorporated these projects into this project.
+
+Assuming your site is running on your production host, follow the below steps to obtain and renew SSL certificates.
+
+##### Obtaining Certificates
+
+```sh
+$ docker-compose ps
+Name                   Command                        State
+---------------------------------------------------------
+project_db_1           docker-entrypoint.sh mysqld     Up
+project_wordpress_1    docker-php-entrypoint /run.sh   Up
+
+$ docker exec -it project_wordpress_1  /bin/bash
+root@4e16c7fe4a10:/app# certbot --apache
+```
+
+##### Renewing Certificates
+
+```sh
+$ docker-compose ps
+Name                   Command                        State
+---------------------------------------------------------
+project_db_1           docker-entrypoint.sh mysqld     Up
+project_wordpress_1    docker-php-entrypoint /run.sh   Up
+
+$ docker exec -it project_wordpress_1  /bin/bash
+root@4e16c7fe4a10:/app# certbot renew
+```
+
+## Contributing
 
 You can find Development instructions in the [Wiki](https://github.com/visiblevc/wordpress-starter/wiki/Development).
