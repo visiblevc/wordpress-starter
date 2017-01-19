@@ -361,10 +361,7 @@ check_packages() {
   echo "{\"require\":{" > /app/composer.json
   echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n' >> /app/composer.json
   echo "}}" >> /app/composer.json
-
-  cd /app || exit
   composer install
-  rm -f /app/composer.json
 }
 
 # Helpers
