@@ -54,6 +54,9 @@ RUN curl \
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
 
+# Add Composer's vendor/bin/ to the PATH
+ENV PATH "$PATH:/app/vendor/bin"
+
 # Run the server
 EXPOSE 80 443
 CMD ["/run.sh"]
