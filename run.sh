@@ -367,7 +367,7 @@ check_packages() {
   rm -f /app/composer.json
 
   h3 "Adding vendor/bin to path"
-  PATH=$PATH:/app/vendor/bin
+  export PATH=$PATH:/app/vendor/bin
 }
 
 # Helpers
