@@ -44,7 +44,7 @@ RUN curl \
         -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/master/run.sh \
         -o /composer-installer.php https://getcomposer.org/installer \
     && chmod +x /usr/local/bin/wp /run.sh \
-    && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer
+    && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite expires \
