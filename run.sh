@@ -356,15 +356,18 @@ check_packages() {
     return
   fi
 
+  h3 "Installing composer packages"
   touch /app/composer.json
   echo "{\"require\":{" > /app/composer.json
   cmd $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n') >> /app/composer.json
   echo "}}" >> /app/composer.json
 
-  h3 "Installing composer packages"
-  cd /app || exit
+  cd /app || exit
   composer install
   rm -f /app/composer.json
+
+  h3 "Adding vendor/bin to path"
+  PATH=$PATH:/app/vendor/bin
 }
 
 # Helpers

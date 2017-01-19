@@ -42,8 +42,9 @@ RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
 RUN curl \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
         -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
-    && wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php -- --quiet
+        -o /composer-installer.php https://getcomposer.org/installer \
     && chmod +x /usr/local/bin/wp /run.sh \
+    && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite expires \
