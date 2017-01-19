@@ -10,6 +10,8 @@ services:
     environment:
       DB_NAME: wordpress
       DB_PASS: root
+      REQUIRE: >-
+        phpunit/phpunit:4.8.*
   db:
     image: mariadb:10 # or mysql:5.7
     volumes:

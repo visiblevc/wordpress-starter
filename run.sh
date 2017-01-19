@@ -346,6 +346,22 @@ check_plugins() {
   done <<< "$(WP plugin list --field=name)"
 }
 
+check_packages() {
+  if [[ ! "${REQUIRE-}" ]]; then
+    h3 "No package dependencies listed"
+    STATUS SKIP
+    return
+  fi
+
+  touch /app/composer.json
+  echo "{\"require\":{" > /app/composer.json
+  echo $(echo $REQUIRE |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n') >> /app/composer.json
+  echo "}}" >> /app/composer.json
+
+  h3 "Installing composer packages"
+  composer install
+  rm -f /app/composer.json
+}
 
 # Helpers
 # --------------
