@@ -359,7 +359,7 @@ check_packages() {
   h3 "Installing composer packages"
   touch /app/composer.json
   echo "{\"require\":{" > /app/composer.json
-  cmd $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n') >> /app/composer.json
+  echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n' >> /app/composer.json
   echo "}}" >> /app/composer.json
 
   cd /app || exit
