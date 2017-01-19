@@ -92,6 +92,9 @@ main() {
     STATUS SKIP
   fi
 
+  h2 "Cheking packages"
+  check_packages
+
   h2 "Checking themes"
   check_themes
 
@@ -359,6 +362,7 @@ check_packages() {
   echo "}}" >> /app/composer.json
 
   h3 "Installing composer packages"
+  cd /app
   composer install
   rm -f /app/composer.json
 }
