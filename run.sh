@@ -92,7 +92,7 @@ main() {
     STATUS SKIP
   fi
 
-  h2 "Cheking packages"
+  h2 "Cheking composer packages"
   check_packages
 
   h2 "Checking themes"
@@ -350,18 +350,23 @@ check_plugins() {
 }
 
 check_packages() {
-  if [[ ! "${REQUIRE-}" ]]; then
-    h3 "No package dependencies listed"
-    STATUS SKIP
+  # If a composer.json file exists in /app => install it
+  if [[ -f "/app/composer.json" ]]; then
+    h3 "Installing packages listed in composer.json"
+    composer install
     return
   fi
 
-  h3 "Installing composer packages"
-  touch /app/composer.json
-  echo "{\"require\":{" > /app/composer.json
-  echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/(^\s*|,?\s*$)/"/g' |sed -r 's/\s*(:|,)\s*/"\1"/g' |tr ',' ',\n' >> /app/composer.json
-  echo "}}" >> /app/composer.json
-  composer install
+  if [[ "${REQUIRE-}" ]]; then
+    h3 "Installing packages listed in REQUIRE"
+    composer require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
+    composer install
+    return
+  fi
+
+  h3 "No package dependencies listed"
+  STATUS SKIP
+  return
 }
 
 # Helpers
