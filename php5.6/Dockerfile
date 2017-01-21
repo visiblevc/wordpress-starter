@@ -1,6 +1,6 @@
 FROM php:5.6-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
-LABEL version="0.13.0-php5.6"
+LABEL version="0.14.0-php5.6"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
@@ -44,7 +44,6 @@ RUN curl \
         -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
     && chmod +x /usr/local/bin/wp /run.sh \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
-    && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite expires \
     && service apache2 restart
 

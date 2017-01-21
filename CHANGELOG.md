@@ -2,7 +2,10 @@
 
 This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
 
-## 0.13.0 - latest
+## 0.14.0 - latest
+- Add `SERVER_NAME` variable to allow for quickly setting that directive in the apache config for users interested in running in production.
+
+## 0.13.0
 - Add `certbot` into the image to allow for easily obtaining and renewing SSL certificates
 
 ## 0.12.2

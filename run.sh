@@ -11,6 +11,7 @@ DB_HOST=${DB_HOST:-'db'}
 DB_NAME=${DB_NAME:-'wordpress'}
 DB_PASS=${DB_PASS:-'root'}
 DB_PREFIX=${DB_PREFIX:-'wp_'}
+SERVER_NAME=${SERVER_NAME:-'localhost'}
 ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME}.com"}
 PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 WP_DEBUG_DISPLAY=${WP_DEBUG_DISPLAY:-'true'}
@@ -47,6 +48,10 @@ core install:
   admin_email: $ADMIN_EMAIL
   skip-email: true
 EOF
+
+# Apache configuration
+# --------------------
+sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME/" /etc/apache2/sites-available/000-default.conf
 
 main() {
   h1 "Begin WordPress Installation"
