@@ -350,23 +350,21 @@ check_plugins() {
 }
 
 check_packages() {
-  if [[ ! (-f "/app/composer.json") && ! ("${REQUIRE-}") ]]; then
-    h3 "No package dependencies listed"
-    STATUS SKIP
-    return
+  # REQUIRE was defined in ENV, require those packages
+  if [[ "${REQUIRE-}" ]]; then
+    h3 "Adding packages listed in REQUIRE"
+    COMPOSER require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
   fi
 
   # If a composer.json file exists in /app => install it
   if [[ -f "/app/composer.json" ]]; then
     h3 "Installing packages listed in composer.json"
-    composer install
+    COMPOSER install
+    return
   fi
 
-  # REQUIRE was defined in ENV, require those packages
-  if [[ "${REQUIRE-}" ]]; then
-    h3 "Installing packages listed in REQUIRE"
-    composer require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
-  fi
+  h3 "No package dependencies listed"
+  STATUS SKIP
 }
 
 # Helpers
@@ -422,6 +420,10 @@ ERROR() {
 
 WP() {
   sudo -u www-data wp "$@"
+}
+
+COMPOSER() {
+  sudo -u www-data composer "$@"
 }
 
 loglevel() {

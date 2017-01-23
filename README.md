@@ -79,6 +79,7 @@ services:
     volumes:
       - ./data:/data # Required if importing an existing database
       - ./tweaks.ini:/usr/local/etc/php/conf.d/tweaks.ini # Optional tweaks to the php.ini config
+      - ./composer.json:/app/composer.json # Packages to be installed
       - ./wp-content/uploads:/app/wp-content/uploads
       - ./yourplugin:/app/wp-content/plugins/yourplugin # Plugin development
       - ./yourtheme:/app/wp-content/themes/yourtheme   # Theme development
