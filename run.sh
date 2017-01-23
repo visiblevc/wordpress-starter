@@ -353,13 +353,13 @@ check_packages() {
   # REQUIRE was defined in ENV, require those packages
   if [[ "${REQUIRE-}" ]]; then
     h3 "Adding packages listed in REQUIRE"
-    COMPOSER require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
+    composer require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
   fi
 
   # If a composer.json file exists in /app => install it
   if [[ -f "/app/composer.json" ]]; then
     h3 "Installing packages listed in composer.json"
-    COMPOSER install
+    composer install
     return
   fi
 
