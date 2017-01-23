@@ -95,7 +95,7 @@ services:
       THEMES: >-
         [local]my-local-theme
       REQUIRE: >-
-        phpunit/phpunit: 4.8.*
+        phpunit/phpunit:4.8.*
       SEARCH_REPLACE: yoursite.com,localhost:8080
       WP_DEBUG: 'true'
   db:
