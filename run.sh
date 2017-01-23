@@ -119,8 +119,8 @@ main() {
 
   h3 "Adjusting file permissions"
   groupadd -f docker && usermod -aG docker www-data
-  find /app -type d -exec chmod 755 {} \;
-  find /app -type f -exec chmod 644 {} \;
+  find /app -type d ! -path "/app/vendor/*" -exec chmod 755 {} \;
+  find /app -type f ! -path "/app/vendor/*" -exec chmod 644 {} \;
   mkdir -p /app/wp-content/uploads
   chmod -R 775 /app/wp-content/uploads && \
     chown -R :docker /app/wp-content/uploads
@@ -353,13 +353,13 @@ check_packages() {
   # REQUIRE was defined in ENV, require those packages
   if [[ "${REQUIRE-}" ]]; then
     h3 "Adding packages listed in REQUIRE"
-    composer require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
+    COMPOSER require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
   fi
 
   # If a composer.json file exists in /app => install it
   if [[ -f "/app/composer.json" ]]; then
     h3 "Installing packages listed in composer.json"
-    composer install
+    COMPOSER install
     return
   fi
 
