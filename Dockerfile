@@ -1,4 +1,3 @@
-FROM php:7.0-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
 
 # Install base requirements & sensible defaults + required PHP extensions
