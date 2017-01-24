@@ -1,6 +1,5 @@
 FROM php:5.6-apache
 MAINTAINER Derek P Sifford <dereksifford@gmail.com>
-LABEL version="0.13.0-php5.6"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
