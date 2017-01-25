@@ -39,8 +39,10 @@ RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
 # Install wp-cli, configure apache, & add scripts
 RUN curl \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-        -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/dev/run.sh \
+        -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/feat/composer/run.sh \
+        -o /composer-installer.php https://getcomposer.org/installer \
     && chmod +x /usr/local/bin/wp /run.sh \
+    && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite expires \
@@ -49,6 +51,9 @@ RUN curl \
 # Create install directory and symlink /var/www/html to it
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
+
+# Add Composer's vendor/bin/ to the PATH
+ENV PATH "$PATH:/app/vendor/bin"
 
 # Run the server
 EXPOSE 80 443 9000
