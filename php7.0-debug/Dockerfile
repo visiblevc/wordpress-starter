@@ -52,8 +52,9 @@ RUN curl \
 RUN pecl install xdebug-stable \
     && pecl install apcu-stable
 
-# configure xdebug
-RUN { \
+# Configure xdebug
+RUN echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/opcache.so" >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
+    { \
         echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so"; \
         echo "xdebug.default_enable=1"; \
         echo "xdebug.remote_enable=1"; \
