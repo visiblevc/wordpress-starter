@@ -1,4 +1,4 @@
-FROM milk/php-xdebug:7.0
+FROM php:7.0-apache
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
@@ -39,7 +39,7 @@ RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
 # Install wp-cli, configure apache, & add scripts
 RUN curl \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-        -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/feat/composer/run.sh \
+        -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/dev/run.sh \
         -o /composer-installer.php https://getcomposer.org/installer \
     && chmod +x /usr/local/bin/wp /run.sh \
     && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer \
@@ -47,6 +47,29 @@ RUN curl \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite expires \
     && service apache2 restart
+
+# # Install xdebug
+# RUN pecl install xdebug-stable \
+#     && pecl install apcu-stable
+#
+# # configure xdebug
+# RUN { \
+#         echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so"; \
+#         echo "xdebug.default_enable=1"; \
+#         echo "xdebug.remote_enable=1"; \
+#         echo "xdebug.remote_handler=dbgp"; \
+#         echo "xdebug.remote_autostart=0"; \
+#         echo "xdebug.remote_connect_back=1"; \
+#         echo "xdebug.remote_port=9000"; \
+#         echo "xdebug.remote_host=172.17.42.1"; \
+#         echo "xdebug.profiler_enable=0"; \
+#         echo "xdebug.profiler_enable_trigger=1"; \
+#         echo "xdebug.profiler_output_dir=\"/tmp\""; \
+#     } > /usr/local/etc/php/conf.d/xdebug.ini \
+#     && { \
+#         echo "extension=apcu.so"; \
+#         echo "apc.enable_cli=1"; \
+#     } > /usr/local/etc/php/conf.d/apcu.ini
 
 # Create install directory and symlink /var/www/html to it
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
