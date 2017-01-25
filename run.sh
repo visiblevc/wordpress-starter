@@ -73,7 +73,6 @@ main() {
   h3 "Generating wp-config.php file..."
   rm -f /app/wp-config.php
   WP core config |& loglevel
-  cat /app/wp-config.php
   STATUS "${PIPESTATUS[0]}"
 
   h2 "Checking database"
