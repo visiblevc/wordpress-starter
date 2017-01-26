@@ -119,8 +119,8 @@ main() {
 
   h3 "Adjusting file permissions"
   groupadd -f docker && usermod -aG docker www-data
-  find /app -type d ! -path "/app/vendor/*" -exec chmod 755 {} \;
-  find /app -type f ! -path "/app/vendor/*" -exec chmod 644 {} \;
+  find /app -type d ! -path "/app/vendor/*" ! -path "/app/.composer/*" -exec chmod 755 {} \;
+  find /app -type f ! -path "/app/vendor/*" ! -path "/app/.composer/*" -exec chmod 644 {} \;
   mkdir -p /app/wp-content/uploads
   chmod -R 775 /app/wp-content/uploads && \
     chown -R :docker /app/wp-content/uploads
