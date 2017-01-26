@@ -54,15 +54,15 @@ RUN pecl install xdebug-stable \
     && docker-php-ext-enable xdebug apcu
 
 # Configure xdebug
-# remote host can be found using `ip ro get 8.8.8.8 | grep -oP '(?<=via )([\d\.]+)'`
+# remote host must be determined by using `ip ro get 8.8.8.8 | grep -oP '(?<=via )([\d\.]+)'`
 RUN { \
+        echo "xdebug.remote_host=172.22.0.1"; \
         echo "xdebug.default_enable=1"; \
         echo "xdebug.remote_enable=1"; \
         echo "xdebug.remote_handler=dbgp"; \
         echo "xdebug.remote_autostart=0"; \
         echo "xdebug.remote_connect_back=1"; \
         echo "xdebug.remote_port=9000"; \
-        echo "xdebug.remote_host=172.22.0.1"; \
         echo "xdebug.profiler_enable=0"; \
         echo "xdebug.profiler_enable_trigger=1"; \
         echo "xdebug.profiler_output_dir=\"/tmp\""; \
