@@ -350,6 +350,9 @@ check_plugins() {
 }
 
 check_packages() {
+  mkdir -p /var/www/.composer/
+  chown www-data:www-data /var/www/.composer
+
   # REQUIRE was defined in ENV, require those packages
   if [[ "${REQUIRE-}" ]]; then
     h3 "Adding packages listed in REQUIRE"
