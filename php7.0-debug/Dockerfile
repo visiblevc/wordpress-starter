@@ -56,12 +56,10 @@ RUN pecl install xdebug-stable \
 # remote host must be determined by using `ip ro get 8.8.8.8 | grep -oP '(?<=via )([\d\.]+)'`
 RUN { \
         echo "xdebug.remote_host=172.22.0.1"; \
+        echo "xdebug.remote_port=9000"; \
         echo "xdebug.default_enable=1"; \
         echo "xdebug.remote_enable=1"; \
-        echo "xdebug.remote_handler=dbgp"; \
-        echo "xdebug.remote_autostart=0"; \
         echo "xdebug.remote_connect_back=1"; \
-        echo "xdebug.remote_port=9000"; \
         echo "xdebug.profiler_enable=0"; \
         echo "xdebug.profiler_enable_trigger=1"; \
         echo "xdebug.profiler_output_dir=\"/tmp\""; \
@@ -75,5 +73,5 @@ WORKDIR /app
 ENV PATH="$PATH:/app/vendor/bin"
 
 # Run the server
-EXPOSE 80 443 9000
+EXPOSE 80 443
 CMD ["/run.sh"]
