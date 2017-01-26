@@ -48,10 +48,9 @@ RUN curl \
     && a2enmod rewrite expires \
     && service apache2 restart
 
-# Install and enable xdebug + apcu
+# Install and enable xdebug
 RUN pecl install xdebug-stable \
-    && pecl install apcu-stable \
-    && docker-php-ext-enable xdebug apcu
+    && docker-php-ext-enable xdebug
 
 # Configure xdebug
 # remote host must be determined by using `ip ro get 8.8.8.8 | grep -oP '(?<=via )([\d\.]+)'`
