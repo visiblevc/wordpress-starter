@@ -39,7 +39,7 @@ RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
 # Install wp-cli, configure apache, & add scripts
 RUN curl \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-        -o /run.sh https://raw.githubusercontent.com/louisremi/wordpress-starter/dev/run.sh \
+        -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
         -o /composer-installer.php https://getcomposer.org/installer \
     && chmod +x /usr/local/bin/wp /run.sh \
     && php /composer-installer.php --install-dir=/usr/local/bin --filename=composer \
@@ -48,36 +48,32 @@ RUN curl \
     && a2enmod rewrite expires \
     && service apache2 restart
 
-# Install xdebug
+# Install and enable xdebug + apcu
 RUN pecl install xdebug-stable \
-    && pecl install apcu-stable
+    && pecl install apcu-stable \
+    && docker-php-ext-enable xdebug apcu
 
 # Configure xdebug
-RUN echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20160303/opcache.so" >> /usr/local/etc/php/conf.d/opcache-recommended.ini \
-    { \
-        echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so"; \
+# remote host can be found using `ip ro get 8.8.8.8 | grep -oP '(?<=via )([\d\.]+)'`
+RUN { \
         echo "xdebug.default_enable=1"; \
         echo "xdebug.remote_enable=1"; \
         echo "xdebug.remote_handler=dbgp"; \
         echo "xdebug.remote_autostart=0"; \
         echo "xdebug.remote_connect_back=1"; \
         echo "xdebug.remote_port=9000"; \
-        echo "xdebug.remote_host=172.17.42.1"; \
+        echo "xdebug.remote_host=172.22.0.1"; \
         echo "xdebug.profiler_enable=0"; \
         echo "xdebug.profiler_enable_trigger=1"; \
         echo "xdebug.profiler_output_dir=\"/tmp\""; \
-    } > /usr/local/etc/php/conf.d/xdebug.ini \
-    && { \
-        echo "extension=apcu.so"; \
-        echo "apc.enable_cli=1"; \
-    } > /usr/local/etc/php/conf.d/apcu.ini
+    } > /usr/local/etc/php/conf.d/xdebug.ini
 
 # Create install directory and symlink /var/www/html to it
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
 
 # Add Composer's vendor/bin/ to the PATH
-ENV PATH "$PATH:/app/vendor/bin"
+ENV PATH="$PATH:/app/vendor/bin"
 
 # Run the server
 EXPOSE 80 443 9000
