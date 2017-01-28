@@ -14,7 +14,7 @@ A Docker Wordpress development environment by the team at [Visible](https://visi
 - [Workflow Tips](#workflow-tips)
   - [Using `wp-cli`](#using-wp-cli)
   - [Working with Databases](#working-with-databases)
-  - [Using in Production](#using-in-production)
+- [Using in Production](#using-in-production)
 - [Contributing](#contributing)
 
 ### Requirements
@@ -147,6 +147,7 @@ Variable | Default Value | Description
 `DB_HOST` | `db` | Hostname for the database
 `DB_NAME` | `wordpress` | Name of the database
 `DB_PREFIX` | `wp_` | Prefix for the database
+`SERVER_NAME` | `localhost` | Set this to `<your-domain-name>.<your-domain-extension>` if you plan on obtaining SSL certificates
 `ADMIN_EMAIL` | `admin@${DB_NAME}.com` | Administrator email address
 `WP_DEBUG` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG) for more information
 `WP_DEBUG_DISPLAY` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_DISPLAY) for more information
@@ -193,15 +194,39 @@ npm run wp db export /data --allow-root
 
 Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `SEARCH_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
 
-### Using in Production
+## Using in Production
 
-#### SSL Certificates
+### Adjustments to `docker-compose.yml`
+
+```yml
+# If something isn't shown, assume it's the same as the examples above
+version: '2'
+services:
+  wordpress:
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    environment:
+      SERVER_NAME: mysite.com
+      DB_PASS: ${SECURE_PASSWORD} # Stored in .env file
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - ./data:/data
+      # anything else you'd like to be able to back up
+  db:
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SECURE_PASSWORD} # Stored in .env file
+```
+
+### SSL Certificates
 
 We highly recommend securing your site with SSL encryption. The Let's Encrypt and Certbot projects have made doing this both free (as in beer) and painless. We've incorporated these projects into this project.
 
 Assuming your site is running on your production host, follow the below steps to obtain and renew SSL certificates.
 
-##### Obtaining Certificates
+#### Obtaining Certificates
 
 ```sh
 $ docker-compose ps
@@ -214,7 +239,7 @@ $ docker exec -it project_wordpress_1  /bin/bash
 root@4e16c7fe4a10:/app# certbot --apache
 ```
 
-##### Renewing Certificates
+#### Renewing Certificates
 
 ```sh
 $ docker-compose ps
