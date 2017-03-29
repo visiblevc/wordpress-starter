@@ -165,7 +165,7 @@ check_database() {
       STATUS "${PIPESTATUS[0]}"
     fi
   else
-    h3 "Database exists. SKIPPING..."
+    h3 "Database exists (hell). SKIPPING..."
     STATUS SKIP
   fi
 }
