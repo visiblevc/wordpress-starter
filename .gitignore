@@ -17,6 +17,8 @@ Thumbs.db
 # Wordpress
 wp-content/*
 !wp-content/themes/
+!wp-content/plugins/
+!wp-content/uploads/
 
 # WordPress Starter Dev Files
 Dockerfile-test
