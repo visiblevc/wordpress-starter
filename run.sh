@@ -41,7 +41,7 @@ core config:
     define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});
 
 core install:
-  url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
+  url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo $WP_URL)
   title: $DB_NAME
   admin_user: root
   admin_password: $DB_PASS

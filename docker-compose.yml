@@ -11,6 +11,7 @@ services:
       - ./wp-content/plugins:/app/wp-content/plugins # All of the plugins folder
       - ./wp-content/themes:/app/wp-content/themes   # All of the themes folder      
     environment:
+      WP_URL: localhost:8000 #must match port above, if localhost
       DB_HOST: db
       DB_NAME: wordpress
       DB_PASS: root

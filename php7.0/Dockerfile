@@ -15,6 +15,8 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/so
         sudo \
         vim \
         zip \
+        nano \
+        mlocate \
     && DEBIAN_FRONTEND=noninteractive apt-get -t jessie-backports install -y \
         python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
@@ -50,6 +52,8 @@ RUN curl \
 # Create install directory and symlink /var/www/html to it
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
+
+RUN updatedb
 
 # Run the server
 EXPOSE 80 443
