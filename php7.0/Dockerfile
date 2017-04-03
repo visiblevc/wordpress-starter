@@ -1,6 +1,6 @@
 FROM php:7.0-apache
-MAINTAINER Derek P Sifford <dereksifford@gmail.com>
-LABEL version="0.14.0-php7.0"
+MAINTAINER Ed Verillo <ed@0xed.io>
+LABEL version="0.15.0-php7.0"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
