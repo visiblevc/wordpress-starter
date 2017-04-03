@@ -153,9 +153,9 @@ check_database() {
 
       # If SEARCH_REPLACE is set => Replace URLs
       if [ "$SEARCH_REPLACE" != false ]; then
-        h3 "Replacing URLs"
+        h3 "Replacing URLs on all tables"
         REPLACEMENTS=$(WP search-replace "$BEFORE_URL" "$AFTER_URL" \
-          --skip-columns=guid --all-tables | grep replacement) || \
+          --all-tables | grep replacement) || \
           ERROR $((LINENO-2)) "Could not execute SEARCH_REPLACE on database"
         echo -ne "$REPLACEMENTS\n"
       fi
@@ -165,7 +165,7 @@ check_database() {
       STATUS "${PIPESTATUS[0]}"
     fi
   else
-    h3 "Database exists (hell). SKIPPING..."
+    h3 "Database exists. SKIPPING..."
     STATUS SKIP
   fi
 }
