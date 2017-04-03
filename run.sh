@@ -56,7 +56,7 @@ EOF
 sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME/" /etc/apache2/sites-available/000-default.conf
 
 main() {
-  h1 "Begin WordPress Installation"
+  h1 "Begin WordPress 0xED Installation"
 
   # Download WordPress
   # ------------------
