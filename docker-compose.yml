@@ -21,13 +21,16 @@ services:
         [wp-sync-db]https://github.com/edverillo/wp-sync-db/archive/master.zip,
         [wp-sync-db-media-files]https://github.com/edverillo/wp-sync-db-media-files/archive/master.zip,
         [wp-mail-smtp]https://github.com/edverillo/wp-mail-smtp/archive/master.zip
+      #THEMES: >- 
+        #[local]theme-name
+      #SEARCH_REPLACE: yoursite.com,localhost:8080
   db:
     image: mariadb:10 # or mysql:5.7
     volumes:
       - data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-  phpmyadmin:
+  phpmyadmin: #not to be used in production!
     image: phpmyadmin/phpmyadmin
     environment:
       MYSQL_ROOT_PASSWORD: root
