@@ -1,7 +1,7 @@
 version: '2'
 services:
   wordpress:
-    image: edverillo/wordpress-starter
+    image: edverillo/wordpress-starter:latest
     ports:
       - 8000:80 #please ensure this doesn't conflict with other projects
       - 443:443

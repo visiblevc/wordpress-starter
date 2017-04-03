@@ -36,14 +36,12 @@ core config:
   dbprefix: $DB_PREFIX
   dbhost: $DB_HOST:3306
   extra-php: |
-  	define('WP_HOME','$WP_URL');
-	define('WP_SITEURL','$WP_URL');
     define('WP_DEBUG', ${WP_DEBUG,,});
     define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,});
     define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});
 
 core install:
-  url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo $WP_URL)
+  url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo "$WP_URL")
   title: $DB_NAME
   admin_user: root
   admin_password: $DB_PASS
@@ -56,7 +54,7 @@ EOF
 sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME/" /etc/apache2/sites-available/000-default.conf
 
 main() {
-  h1 "Begin WordPress 0xED Installation"
+  h1 "Begin WordPress Installation"
 
   # Download WordPress
   # ------------------
