@@ -155,7 +155,7 @@ check_database() {
       if [ "$SEARCH_REPLACE" != false ]; then
         h3 "Replacing URLs"
         REPLACEMENTS=$(WP search-replace "$BEFORE_URL" "$AFTER_URL" \
-          --skip-columns=guid | grep replacement) || \
+          --skip-columns=guid --all-tables | grep replacement) || \
           ERROR $((LINENO-2)) "Could not execute SEARCH_REPLACE on database"
         echo -ne "$REPLACEMENTS\n"
       fi
