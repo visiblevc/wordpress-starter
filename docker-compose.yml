@@ -7,11 +7,13 @@ services:
       - 443:443
     volumes:
       - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
       - ./wp-content/uploads:/app/wp-content/uploads
       - ./wp-content/plugins:/app/wp-content/plugins # All of the plugins folder
       - ./wp-content/themes:/app/wp-content/themes   # All of the themes folder      
     environment:
       WP_URL: localhost:8000 #must match port above, if localhost
+      SERVER_NAME: localhost #sitename.com
       DB_HOST: db
       DB_NAME: wordpress
       DB_PASS: root
