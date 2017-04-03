@@ -1,4 +1,4 @@
-# Visible Wordpress Starter
+# 0xED Wordpress Starter
 
 This is a fork of the Docker Wordpress development environment by the team at [Visible](https://visible.vc/) and some awesome [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors). Our goal is to make Wordpress development slightly less frustrating.
 

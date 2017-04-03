@@ -36,6 +36,8 @@ core config:
   dbprefix: $DB_PREFIX
   dbhost: $DB_HOST:3306
   extra-php: |
+  	define('WP_HOME','$WP_URL');
+	define('WP_SITEURL','$WP_URL');
     define('WP_DEBUG', ${WP_DEBUG,,});
     define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,});
     define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});

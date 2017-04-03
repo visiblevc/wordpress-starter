@@ -3,7 +3,7 @@ services:
   wordpress:
     image: edverillo/wordpress-starter
     ports:
-      - 8080:80 #please ensure this doesn't conflict with other projects
+      - 8000:80 #please ensure this doesn't conflict with other projects
       - 443:443
     volumes:
       - ./data:/data
@@ -15,11 +15,21 @@ services:
       DB_HOST: db
       DB_NAME: wordpress
       DB_PASS: root
+      PLUGINS: >-
+        [wp-sync-db]https://github.com/edverillo/wp-sync-db/archive/master.zip,
+        [wp-sync-db-media-files]https://github.com/edverillo/wp-sync-db-media-files/archive/master.zip,
+        [wp-mail-smtp]https://github.com/edverillo/wp-mail-smtp/archive/master.zip
   db:
     image: mariadb:10 # or mysql:5.7
     volumes:
       - data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 22222:80
 volumes:
   data: {}
