@@ -83,7 +83,7 @@ services:
       - ./yourplugin:/app/wp-content/plugins/yourplugin # Plugin development
       - ./yourtheme:/app/wp-content/themes/yourtheme   # Theme development
     environment:
-      DB_HOST: db
+      DB_HOST: db # must match db service name below
       DB_NAME: wordpress
       DB_PASS: root # must match below
       PLUGINS: >-
@@ -128,7 +128,7 @@ volumes:
 
 Credential | Value | Notes
 --- | --- | ---
-**Hostname** | `db` | Can be changed with the `DB_HOST` environment variable
+**Hostname** | `db` | Can be changed with the `DB_HOST` environment variable  **NOTE:**: Must match database service name
 **Username** | `root` | |
 **Password** |  | Must be set using the `DB_PASS` environment variable
 **Database Name** | `wordpress` | Can be changed with the `DB_NAME` environment variable
@@ -156,7 +156,7 @@ Variable | Default Value | Description
 `THEMES` | | Comma-separated list of themes you want to install in either of the following forms<ul><li>`theme-slug`: Used when installing theme direct from WordPress.org</li><li>`[theme-slug]https://themesite.com/theme.zip`: Used when installing theme from URL</li><li>`[local]theme-slug`: Used when you have the theme downloaded to a local folder that you have volumed to the `./wp-content/themes` directory.</li></ul>
 `PLUGINS` | | Comma-separated list of plugins you want to install in either of the following forms:<ul><li>`plugin-slug`: Used when installing plugin direct from WordPress.org.</li><li>`[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.</li><li>`[local]plugin-slug`: Used when you have the plugin downloaded to a local folder that you have volumed to the `./wp-content/plugins` directory.</li></ul>
 `MULTISITE` | `'false'` | Set to `'true'` to enable multisite
-`PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags) 
+`PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags)
 `SEARCH_REPLACE` | | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul>
 `VERBOSE` | `'false'` | Set to `'true'` to run build with verbose logging
 
