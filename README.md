@@ -7,6 +7,7 @@ A Docker Wordpress development environment by the team at [Visible](https://visi
 - [Available Images](#available-images)
 - [Introduction](#introduction)
 - [Example](#example)
+- [Default Wordpress Admin Credentials](#default-wordpress-admin-credentials)
 - [Default Database Credentials](#default-database-credentials)
 - [Service Environment Variables](#service-environment-variables)
   - [`wordpress`](#wordpress)
@@ -123,6 +124,15 @@ services:
 volumes:
   data:
 ```
+
+### Default Wordpress Admin Credentials
+
+To access the Wordpress Admin at `/wp-admin`, the default values are as follows:
+
+Credential | Value | Notes
+--- | --- | ---
+**Username or Email** | `root` or `admin@wordpress.com` | Can be changed with the `ADMIN_EMAIL` environment variable
+**Password** | `root` | Uses the same value as the `DB_PASS` environment variable |
 
 ### Default Database Credentials
 
