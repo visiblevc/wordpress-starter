@@ -97,6 +97,9 @@ main() {
     STATUS SKIP
   fi
 
+  h2 "Cheking composer packages"
+  check_packages
+
   h2 "Checking themes"
   check_themes
 
@@ -121,8 +124,8 @@ main() {
 
   h3 "Adjusting file permissions"
   groupadd -f docker && usermod -aG docker www-data
-  find /app -type d -exec chmod 755 {} \;
-  find /app -type f -exec chmod 644 {} \;
+  find /app -type d ! -path "/app/vendor/*" ! -path "/app/.composer/*" -exec chmod 755 {} \;
+  find /app -type f ! -path "/app/vendor/*" ! -path "/app/.composer/*" -exec chmod 644 {} \;
   mkdir -p /app/wp-content/uploads
   chmod -R 775 /app/wp-content/uploads && \
     chown -R :docker /app/wp-content/uploads
@@ -351,6 +354,26 @@ check_plugins() {
   done <<< "$(WP plugin list --field=name)"
 }
 
+check_packages() {
+  mkdir -p /var/www/.composer/
+  chown www-data:www-data /var/www/.composer
+
+  # REQUIRE was defined in ENV, require those packages
+  if [[ "${REQUIRE-}" ]]; then
+    h3 "Adding packages listed in REQUIRE"
+    COMPOSER require $(echo "$REQUIRE" |tr '\n' '\r' |sed -r 's/\s*,\s*/ /g')
+  fi
+
+  # If a composer.json file exists in /app => install it
+  if [[ -f "/app/composer.json" ]]; then
+    h3 "Installing packages listed in composer.json"
+    COMPOSER install
+    return
+  fi
+
+  h3 "No package dependencies listed"
+  STATUS SKIP
+}
 
 # Helpers
 # --------------
@@ -405,6 +428,10 @@ ERROR() {
 
 WP() {
   sudo -u www-data wp "$@"
+}
+
+COMPOSER() {
+  sudo -u www-data composer "$@"
 }
 
 loglevel() {
