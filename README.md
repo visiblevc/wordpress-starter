@@ -80,6 +80,7 @@ services:
     volumes:
       - ./data:/data # Required if importing an existing database
       - ./tweaks.ini:/usr/local/etc/php/conf.d/tweaks.ini # Optional tweaks to the php.ini config
+      - ./composer.json:/app/composer.json # Packages to be installed
       - ./wp-content/uploads:/app/wp-content/uploads
       - ./yourplugin:/app/wp-content/plugins/yourplugin # Plugin development
       - ./yourtheme:/app/wp-content/themes/yourtheme   # Theme development
@@ -94,6 +95,8 @@ services:
         [local]my-local-plugin
       THEMES: >-
         [local]my-local-theme
+      REQUIRE: >-
+        phpunit/phpunit:4.8.*
       SEARCH_REPLACE: yoursite.com,localhost:8080
       WP_DEBUG: 'true'
   db:
@@ -165,6 +168,7 @@ Variable | Default Value | Description
 `WP_VERSION` | `latest` | Specify the WordPress version to install. Accepts any valid semver number, `latest`, or `nightly` for beta builds.
 `THEMES` | | Comma-separated list of themes you want to install in either of the following forms<ul><li>`theme-slug`: Used when installing theme direct from WordPress.org</li><li>`[theme-slug]https://themesite.com/theme.zip`: Used when installing theme from URL</li><li>`[local]theme-slug`: Used when you have the theme downloaded to a local folder that you have volumed to the `./wp-content/themes` directory.</li></ul>
 `PLUGINS` | | Comma-separated list of plugins you want to install in either of the following forms:<ul><li>`plugin-slug`: Used when installing plugin direct from WordPress.org.</li><li>`[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.</li><li>`[local]plugin-slug`: Used when you have the plugin downloaded to a local folder that you have volumed to the `./wp-content/plugins` directory.</li></ul>
+`REQUIRE` | | Comma-separated list of composer packages you want to install. To use those packages, simply add `require ABSPATH . '/vendor/autoload.php';` at the top of a php file.
 `MULTISITE` | `'false'` | Set to `'true'` to enable multisite
 `PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags)
 `SEARCH_REPLACE` | | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul>
