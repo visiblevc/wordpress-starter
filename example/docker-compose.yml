@@ -1,0 +1,30 @@
+version: '3'
+services:
+  wordpress:
+    image: visiblevc/wordpress:0.15.0-php7.0
+    ports:
+      - 8080:80
+      - 443:443
+    volumes:
+      - ./data:/data
+    environment:
+      DB_NAME: wordpress
+      DB_PASS: root
+      PLUGINS: >-
+        academic-bloggers-toolkit,
+        co-authors-plus,
+        [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
+  db:
+    image: mariadb:10 # or mysql:5.7
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 22222:80
+volumes:
+  data:

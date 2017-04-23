@@ -1,8 +1,39 @@
 # Changelog
 
-This changelog is for the Docker image. There might be changes to the gulpfile that are not listed here.
+## 0.15.0 - latest
 
-## 0.14.0 - latest
+### Deprecations
+
+**Note:** Both deprecations will still work as usual until the next release cycle.
+
+#### `[local]plugin-name` & `[local]theme-name` syntax
+
+The build process is now aware of locally-volumed plugins and themes automatically.
+
+Additionally, listing locally-volumed plugins and themes in your `docker-compose.yml` file is optional; you may list them if you'd like to keep your compose file declarative, or you may skip listing them completely. The build will complete the same either way.
+
+#### `SEARCH_REPLACE` has been renamed to `URL_REPLACE`
+
+We chose to rename this because, although you may search and replace strings that are not URLs, the build process requires them to be.
+
+This name reflects that requirement better and will lead to less confusion down the road.
+
+### `VERBOSE` environement variable
+
+Logging has been changed to show necessary information by default.
+
+### Improvements
+- Widespread efficiency improvements to build process.
+- Reduce the number of Dockerfile layers.
+- If `SERVER_NAME` is specified (eg. `example.com`), create a `ServerAlias` in the apache configs for `www.example.com`.
+
+### Fixes
+- Plugins and themes are only pruned if they meet the following criteria (Closes #51):
+  - Not listed in `docker-compose.yml`.
+  - Not added as a local volume.
+- Adjust permissions of volumed files and directories so that they remain editable outside the container, and remain secure. (Closes #12)
+
+## 0.14.0
 - Add `SERVER_NAME` variable to allow for quickly setting that directive in the apache config for users interested in running in production.
 
 ## 0.13.0

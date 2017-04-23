@@ -1,27 +1,29 @@
 #!/bin/bash
-
-# Runtime
-# --------
-export TERM=${TERM:-xterm}
-VERBOSE=${VERBOSE:-false}
+# shellcheck disable=SC1091
 
 # Environment
 # ------------
-DB_HOST=${DB_HOST:-'db'}
-DB_NAME=${DB_NAME:-'wordpress'}
-DB_PASS=${DB_PASS:-'root'}
-DB_PREFIX=${DB_PREFIX:-'wp_'}
-SERVER_NAME=${SERVER_NAME:-'localhost'}
-ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME}.com"}
+ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME:-wordpress}.com"}
+DB_HOST=${DB_HOST:-db}
+DB_NAME=${DB_NAME:-wordpress}
+DB_PASS=${DB_PASS:-root}
+DB_PREFIX=${DB_PREFIX:-wp_}
 PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
-WP_DEBUG_DISPLAY=${WP_DEBUG_DISPLAY:-'true'}
-WP_DEBUG_LOG=${WB_DEBUG_LOG:-'false'}
-WP_DEBUG=${WP_DEBUG:-'false'}
-WP_VERSION=${WP_VERSION:-'latest'}
-[ "$SEARCH_REPLACE" ] && \
-  BEFORE_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 1) && \
-  AFTER_URL=$(echo "$SEARCH_REPLACE" | cut -d ',' -f 2) || \
-  SEARCH_REPLACE=false
+SERVER_NAME=${SERVER_NAME:-localhost}
+WP_VERSION=${WP_VERSION:-latest}
+# FIXME: Remove in next version
+URL_REPLACE=${URL_REPLACE:-"$SEARCH_REPLACE"}
+BEFORE_URL="${URL_REPLACE%,*}"
+AFTER_URL="${URL_REPLACE#*,}"
+
+declare -A plugin_deps
+declare -A theme_deps
+declare -A plugin_volumes
+declare -A theme_volumes
+
+# Apache configuration
+# --------------------
+sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME\nServerAlias www.$SERVER_NAME/" /etc/apache2/sites-available/000-default.conf
 
 # WP-CLI configuration
 # ---------------------
@@ -36,12 +38,12 @@ core config:
   dbprefix: $DB_PREFIX
   dbhost: $DB_HOST:3306
   extra-php: |
-    define('WP_DEBUG', ${WP_DEBUG,,});
-    define('WP_DEBUG_LOG', ${WP_DEBUG_LOG,,});
-    define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY,,});
+    define('WP_DEBUG', ${WP_DEBUG:-false});
+    define('WP_DEBUG_LOG', ${WP_DEBUG_LOG:-false});
+    define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY:-true});
 
 core install:
-  url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
+  url: ${AFTER_URL:-localhost:8080}
   title: $DB_NAME
   admin_user: root
   admin_password: $DB_PASS
@@ -49,311 +51,8 @@ core install:
   skip-email: true
 EOF
 
-# Apache configuration
-# --------------------
-sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME/" /etc/apache2/sites-available/000-default.conf
-
-main() {
-  h1 "Begin WordPress Installation"
-
-  # Download WordPress
-  # ------------------
-  if [ ! -f /app/wp-settings.php ]; then
-    h2 "Installing WordPress"
-    h3 "Downloading..."
-    chown -R www-data:www-data /app /var/www/html
-    WP core download --version="$WP_VERSION" |& loglevel
-    STATUS "${PIPESTATUS[0]}"
-  fi
-
-  # Wait for MySQL
-  # --------------
-  h2 "Waiting for MySQL to initialize..."
-  printf "%b " "${CYAN}${BOLD}  ->${NC} "
-  while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --silent; do
-    sleep 1
-  done
-
-  h2 "Configuring WordPress"
-  h3 "Generating wp-config.php file..."
-  rm -f /app/wp-config.php
-  WP core config |& loglevel
-  STATUS "${PIPESTATUS[0]}"
-
-  h2 "Checking database"
-  check_database
-
-  # Make multisite
-  # NOTE: This will likely cause issues down the road.
-  #       Multisite should ideally be a completely separate build.
-  # ---------------
-  h2 "Checking for multisite"
-  if [ "$MULTISITE" == "true" ]; then
-    h3 "Multisite found. Enabling..."
-    WP core multisite-convert |& loglevel
-    STATUS "${PIPESTATUS[0]}"
-  else
-    h3 "Multisite not found. SKIPPING..."
-    STATUS SKIP
-  fi
-
-  h2 "Checking themes"
-  check_themes
-
-  h2 "Checking plugins"
-  check_plugins
-
-  h2 "Finalizing"
-  if [ ! -f /app/.htaccess ]; then
-    h3 "Generating .htaccess file"
-    if [[ "$MULTISITE" == 'true' ]]; then
-      STATUS 1
-      h3warn "Cannot generate .htaccess for multisite!"
-    else
-      WP rewrite structure "$PERMALINKS" |& loglevel
-      WP rewrite flush --hard |& loglevel
-      STATUS "${PIPESTATUS[0]}"
-    fi
-  else
-    h3 ".htaccess exists. SKIPPING..."
-    STATUS SKIP
-  fi
-
-  h3 "Adjusting file permissions"
-  groupadd -f docker && usermod -aG docker www-data
-  find /app -type d -exec chmod 755 {} \;
-  find /app -type f -exec chmod 644 {} \;
-  mkdir -p /app/wp-content/uploads
-  chmod -R 775 /app/wp-content/uploads && \
-    chown -R :docker /app/wp-content/uploads
-  STATUS $?
-
-  h1 "WordPress Configuration Complete!"
-
-  rm -f /var/run/apache2/apache2.pid
-  source /etc/apache2/envvars
-  exec apache2 -D FOREGROUND
-}
-
-
-check_database() {
-  WP core is-installed |& loglevel
-  if [ "${PIPESTATUS[0]}" == '1' ]; then
-    h3 "Creating database $DB_NAME"
-    WP db create |& loglevel
-    STATUS "${PIPESTATUS[0]}"
-
-    # If an SQL file exists in /data => load it
-    if [[ "$(find /data -name '*.sql' 2>/dev/null | wc -l)" != "0" ]]; then
-      DATA_PATH=$(find /data/*.sql | head -n 1)
-      h3 "Loading data backup from $DATA_PATH"
-
-      WP db import "$DATA_PATH" |& loglevel
-      STATUS "${PIPESTATUS[0]}"
-
-      # If SEARCH_REPLACE is set => Replace URLs
-      if [ "$SEARCH_REPLACE" != false ]; then
-        h3 "Replacing URLs"
-        REPLACEMENTS=$(WP search-replace "$BEFORE_URL" "$AFTER_URL" \
-          --skip-columns=guid | grep replacement) || \
-          ERROR $((LINENO-2)) "Could not execute SEARCH_REPLACE on database"
-        echo -ne "$REPLACEMENTS\n"
-      fi
-    else
-      h3 "No database backup found. Initializing new database"
-      WP core install |& loglevel
-      STATUS "${PIPESTATUS[0]}"
-    fi
-  else
-    h3 "Database exists. SKIPPING..."
-    STATUS SKIP
-  fi
-}
-
-
-check_themes() {
-  declare -A themes
-  local -i theme_count=0
-  local -i i=1
-  local theme_name
-  local theme_url
-
-  # If $THEMES is not set => prune all existing themes
-  if [[ ! "${THEMES-}" ]]; then
-    h3 "No theme dependencies listed"
-    STATUS SKIP
-    h2 "Checking for orphaned themes"
-    while read -r theme_name; do
-      if [[ "$theme_name" == 'twentyseventeen' ]]; then continue; fi
-      h3 "'$theme_name' no longer needed. Pruning"
-      WP theme delete --quiet "$theme_name"
-      STATUS $?
-    done <<< "$(WP theme list --field=name)"
-    return
-  fi
-
-  # Correct for cases where user forgets to add trailing comma
-  [[ "${THEMES:(-1)}" != ',' ]] && THEMES+=','
-
-  # Set $theme_count to the total number of themes set in $THEMES
-  while read -r -d,; do ((theme_count++)); done <<< "$THEMES"
-
-  # Iterate over each theme set in $THEMES
-  while read -r -d, theme_name; do
-    theme_url=  # reset to null
-
-    # If $theme_name matches a URL using the old format => attempt to install it and continue
-    if [[ $theme_name =~ ^https?://[www]?.+ ]]; then
-      h3warn "$theme_name"
-      h3warn "Can't check if theme is already installed using above format!"
-      h3warn "Switch your compose file to '[theme-slug]http://themeurl.com/themefile.zip' for better checks"
-      h3 "($i/$theme_count) '$theme_name' not found. Installing"
-      WP theme install --quiet "$theme_name"
-      STATUS $?
-      ((i++))
-      continue
-    fi
-
-    # Locally volumed themes
-    if [[ $theme_name =~ ^\[local\] ]]; then
-      themes["${theme_name##*]}"]="${theme_name##*]}"
-      h3 "($i/$theme_count) '${theme_name##*]}' listed as a local volume. SKIPPING..."
-      STATUS SKIP
-      ((i++))
-      continue
-    fi
-
-    # If $theme_name matches a URL using the new format => set $theme_name & $theme_url
-    if [[ $theme_name =~ ^\[.+\]https?://[www]?.+ ]]; then
-      theme_url=${theme_name##\[*\]}
-      theme_name="$(echo "$theme_name" | grep -oP '\[\K(.+)(?=\])')"
-    fi
-
-    theme_url=${theme_url:-$theme_name}
-
-    if WP theme is-installed "$theme_name"; then
-      h3 "($i/$theme_count) '$theme_name' found. SKIPPING..."
-      STATUS SKIP
-    else
-      h3 "($i/$theme_count) '$theme_name' not found. Installing"
-      WP theme install --quiet "$theme_url"
-      STATUS $?
-    fi
-
-    # Make sure the first listed theme is active so that others can be removed
-    if [[ $i == 1 && $(WP theme status "$theme_name" | grep -Po 'Status.+' | awk '{print $2}') != 'Active' ]]; then
-      h3 "Activating '$theme_name'"
-      WP theme activate --quiet "$theme_name"
-      STATUS $?
-    fi
-
-    themes[$theme_name]=$theme_url
-    ((i++))
-  done <<< "$THEMES"
-
-  h2 "Checking for orphaned themes"
-  while read -r theme_name; do
-    if [[ ! ${themes[$theme_name]} ]]; then
-      h3 "'$theme_name' no longer needed. Pruning"
-      WP theme delete --quiet "$theme_name"
-      STATUS $?
-    fi
-  done <<< "$(WP theme list --field=name)"
-}
-
-
-check_plugins() {
-  declare -A plugins
-  local -i plugin_count=0
-  local -i i=1
-  local plugin_name
-  local plugin_url
-
-  # If $PLUGINS is not set => prune all existing plugins
-  if [[ ! "${PLUGINS-}" ]]; then
-    h3 "No plugin dependencies listed"
-    STATUS SKIP
-    h2 "Checking for orphaned plugins"
-    while read -r plugin_name; do
-      h3 "'$plugin_name' no longer needed. Pruning..."
-      WP plugin uninstall --deactivate --quiet "$plugin_name"
-      STATUS $?
-    done <<< "$(WP plugin list --field=name)"
-    return
-  fi
-
-  # Correct for cases where user forgets to add trailing comma
-  [[ "${PLUGINS:(-1)}" != ',' ]] && PLUGINS+=','
-
-  # Set $plugin_count to the total number of plugins set in $PLUGINS
-  while read -r -d,; do ((plugin_count++)); done <<< "$PLUGINS"
-
-  # Iterate over each plugin set in $PLUGINS
-  while read -r -d, plugin_name; do
-    plugin_url=  # reset to null
-
-    # If $plugin_name matches a URL using the old format => attempt to install it and continue
-    if [[ $plugin_name =~ ^https?://[www]?.+ ]]; then
-      h3warn "$plugin_name"
-      h3warn "Can't check if plugin is already installed using above format!"
-      h3warn "Switch your compose file to '[plugin-slug]http://pluginurl.com/pluginfile.zip' for better checks"
-      h3 "($i/$plugin_count) '$plugin_name' not found. Installing..."
-      WP plugin install --activate --quiet "$plugin_name"
-      STATUS $?
-      ((i++))
-      continue
-    fi
-
-    # Locally volumed plugins
-    if [[ $plugin_name =~ ^\[local\] ]]; then
-      plugins["${plugin_name##*]}"]="${plugin_name##*]}"
-      h3 "($i/$plugin_count) '${plugin_name##*]}' listed as a local volume. Activating..."
-      WP plugin activate --quiet "${plugin_name##*]}"
-      STATUS SKIP
-      ((i++))
-      continue
-    fi
-
-    # If $plugin_name matches a URL using the new format => set $plugin_name & $plugin_url
-    if [[ $plugin_name =~ ^\[.+\]https?://[www]?.+ ]]; then
-      plugin_url=${plugin_name##\[*\]}
-      plugin_name="$(echo "$plugin_name" | grep -oP '\[\K(.+)(?=\])')"
-    fi
-
-    plugin_url=${plugin_url:-$plugin_name}
-
-    if WP plugin is-installed "$plugin_name"; then
-      h3 "($i/$plugin_count) '$plugin_name' found. SKIPPING..."
-      STATUS SKIP
-    else
-      h3 "($i/$plugin_count) '$plugin_name' not found. Installing..."
-      WP plugin install --activate --quiet "$plugin_url"
-      STATUS $?
-      # Pretty much guarenteed to need/want 'restful' if you are using 'rest-api'
-      if [ "$plugin_name" == 'rest-api' ]; then
-        h3 "($i.5/$plugin_count) Installing 'restful' WP-CLI package..."
-        wp package install wp-cli/restful --quiet --allow-root
-        STATUS $?
-      fi
-    fi
-
-    plugins[$plugin_name]=$plugin_url
-    ((i++))
-  done <<< "$PLUGINS"
-
-  h2 "Checking for orphaned plugins"
-  while read -r plugin_name; do
-    if [[ ! ${plugins[$plugin_name]} ]]; then
-      h3 "'$plugin_name' no longer needed. Pruning..."
-      WP plugin uninstall --deactivate --quiet "$plugin_name"
-      STATUS $?
-    fi
-  done <<< "$(WP plugin list --field=name)"
-}
-
-
 # Helpers
-# --------------
+# ---------------------
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -377,42 +76,241 @@ h2() {
   echo -e "${ORANGE}${BOLD}==>${NC}${BOLD} $*${NC}"
 }
 
-h3() {
-  printf "%b " "${CYAN}${BOLD}  ->${NC} $*"
-}
-
-h3warn() {
-  printf "%b " "${RED}${BOLD}  [!]|${NC} $*" && echo ""
-}
-
-STATUS() {
-  local status=$1
-  if [[ $1 == 'SKIP' ]]; then
-    echo ""
-    return
-  fi
-  if [[ $status != 0 ]]; then
-    echo -e "${RED}✘${NC}"
-    return
-  fi
-  echo -e "${GREEN}✓${NC}"
-}
-
-ERROR() {
-  echo -e "${RED}=> ERROR (Line $1): $2.${NC}";
-  exit 1;
-}
-
-WP() {
-  sudo -u www-data wp "$@"
-}
-
-loglevel() {
-  [[ "$VERBOSE" == "false" ]] && return
+_colorize() {
   local IN
+  local success="${GREEN}${BOLD}Success:${NC}"
+  local failed="${RED}${BOLD}Error:${NC}"
+  local warning="${CYAN}${BOLD}Warning:${NC}"
   while read -r IN; do
-    echo "$IN"
+    IN="${IN/Success\:/$success}"
+    IN="${IN/Error\:/$failed}"
+    IN="${IN/Warning\:/$warning}"
+    echo -e "$IN"
   done
+}
+
+_get_volumes() {
+  local volume_type="$1"
+  local filenames dirnames
+  local names=()
+
+  filenames=$(
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type f ! -name 'index*' -group 1000 -print0 |
+    xargs -0 -I {} basename {} .php
+  )
+  dirnames=$(
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d -group 1000 -print0 |
+    xargs -0 basename -a 2>/dev/null
+  )
+  names=( $filenames $dirnames )
+
+  echo "${names[@]}"
+}
+
+_wp() {
+  wp --allow-root "$@" |& _colorize
+}
+
+# FIXME: Remove in next version
+# Deprecations
+# ---------------------
+_local_deprecation() {
+  local local_type="$1" # 'plugin' or 'theme'
+  echo "Warning: [local]$local_type-name has been deprecated and will be dropped in the next version." |& _colorize
+}
+
+_search_replace_depreaction() {
+  echo "Warning: SEARCH_REPLACE environment variable has been renamed to URL_REPLACE and will be dropped in the next version." |& _colorize
+}
+
+# Config Functions
+# ---------------------
+
+init() {
+  local plugins themes i IFS=$'\n'
+
+  # FIXME: Remove in next version
+  [[ -n $SEARCH_REPLACE ]] && _search_replace_depreaction
+
+  # Download WordPress
+  # ------------------
+  if [[ ! -f /app/wp-settings.php ]]; then
+    h2 "Downloading WordPress"
+    _wp core download --version="$WP_VERSION"
+  fi
+
+  PLUGINS="${PLUGINS/%,},"
+  THEMES="${THEMES/%,},"
+
+  if [[ -f /app/.dockercache ]]; then
+    . /app/.dockercache
+  else
+    plugins=$( _get_volumes plugins )
+    themes=$( _get_volumes themes )
+    echo "plugins='$plugins'" >> /app/.dockercache
+    echo "themes='$themes'" >> /app/.dockercache
+  fi
+
+  while read -r i; do
+    [[ ! "$i" ]] && continue
+    plugin_volumes[$i]="$i"
+  done <<< "$plugins"
+
+  while read -r i; do
+    [[ ! "$i" ]] && continue
+    theme_volumes[$i]="$i"
+  done <<< "$themes"
+
+  local key value
+
+  while read -r -d, i; do
+    [[ ! "$i" ]] && continue
+    i="${i# }"          # Trim leading whitespace
+    key="${i%]*}"       # Trim right bracket to end of string
+    key="${key//[\[ ]}" # Trim left bracket
+    value="${i##\[*\]}" # Trim bracketed text inclusive
+    # FIXME: Remove in next version
+    [[ "$key" == 'local' ]] && _local_deprecation plugin && continue
+    plugin_deps[$key]="$value"
+  done <<< "$PLUGINS"
+
+  while read -r -d, i; do
+    [[ ! "$i" ]] && continue
+    i="${i# }"          # Trim leading whitespace
+    key="${i%]*}"       # Trim right bracket to end of string
+    key="${key//[\[ ]}" # Trim left bracket
+    value="${i##\[*\]}" # Trim bracketed text inclusive
+    # FIXME: Remove in next version
+    [[ "$key" == 'local' ]] && _local_deprecation theme && continue
+    theme_deps[$key]="$value"
+  done <<< "$THEMES"
+
+  chown -R www-data /app /var/www/html
+}
+
+check_database() {
+  local data_path
+
+  # Already installed
+  wp core is-installed --allow-root 2>/dev/null && return
+
+  _wp db create
+
+  # No backups found
+  if [[ "$( find /data -name "*.sql" | wc -l )" -eq 0 ]]; then
+    _wp core install
+    return
+  fi
+
+  data_path=$( find /data -name "*.sql" -print -quit )
+  _wp db import "$data_path"
+
+  if [[ -n "$URL_REPLACE" ]]; then
+    wp search-replace --skip-columns=guid "$BEFORE_URL" "$AFTER_URL" --allow-root \
+    | grep 'replacement' \
+    |& _colorize
+  fi
+}
+
+check_plugins() {
+  local key
+  local plugin
+  local to_install=()
+  local to_remove=()
+
+  if [[ "${#plugin_deps[@]}" -gt 0 ]]; then
+    for key in "${!plugin_deps[@]}"; do
+      if ! wp plugin is-installed --allow-root "$key"; then
+        to_install+=( "${plugin_deps[$key]}" )
+      fi
+    done
+  fi
+
+  for plugin in $(wp plugin list --field=name --allow-root); do
+    [[ ${plugin_deps[$plugin]} ]] && continue
+    [[ ${plugin_volumes[$plugin]} ]] && continue
+    to_remove+=( "$plugin" )
+  done
+
+  [[ "${#to_install}" -gt 0 ]] && wp plugin install --allow-root "${to_install[@]}" | tail -n 1 |& _colorize
+  [[ "${#to_remove}" -gt 0 ]] && _wp plugin delete "${to_remove[@]}"
+  _wp plugin activate --all
+}
+
+check_themes() {
+  local key
+  local theme
+  local to_activate
+  local to_install=()
+  local to_remove=()
+
+  to_activate=$( "${!theme_volumes[@]}" | awk '{ print $1 }' )
+
+  if [[ "${#theme_deps[@]}" -gt 0 ]]; then
+    for key in "${!theme_deps[@]}"; do
+      if ! wp theme is-installed --allow-root "$key"; then
+        to_install+=( "${theme_deps[$key]}" )
+        [[ ! "$to_activate" ]] && to_activate="$key"
+      fi
+    done
+  fi
+
+  [[ "${#to_install}" -gt 0 ]] && wp theme install --allow-root "${to_install[@]}" | tail -n 1 |& _colorize
+  [[ "$to_activate" ]] && _wp theme activate "$to_activate"
+
+  for theme in $(wp theme list --field=name --status=inactive --allow-root); do
+    [[ ${theme_deps[$theme]} ]] && continue
+    [[ ${theme_volumes[$theme]} ]] && continue
+    to_remove+=( "$theme" )
+  done
+
+  [[ "${#to_remove}" -gt 0 ]] && _wp theme delete "${to_remove[@]}"
+}
+
+main() {
+  h1 "Begin WordPress Installation"
+  init
+
+  # Wait for MySQL
+  # --------------
+  h2 "Waiting for MySQL to initialize..."
+  while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --silent; do
+    sleep 1
+  done
+
+  h2 "Configuring WordPress"
+  rm -f /app/wp-config.php
+  _wp core config
+
+  h2 "Checking database"
+  check_database
+
+  if [[ "$MULTISITE" == "true" ]]; then
+    h2 "Enabling Multisite"
+    _wp core multisite-convert
+  fi
+
+  h2 "Checking themes"
+  check_themes
+
+  h2 "Checking plugins"
+  check_plugins
+
+  h2 "Finalizing"
+  if [[ ! -f /app/.htaccess ]] && [[ "$MULTISITE" != 'true' ]]; then
+    _wp rewrite structure "$PERMALINKS"
+  fi
+
+  chown -R www-data /app /var/www/html
+  find /app -type d -exec chmod 755 {} \;
+  find /app -type f -exec chmod 644 {} \;
+  find /app \( -type f -or -type d \) -group '1000' -exec chmod g+rw {} \;
+
+  h1 "WordPress Configuration Complete!"
+
+  rm -f /var/run/apache2/apache2.pid
+  . /etc/apache2/envvars
+  exec apache2 -D FOREGROUND
 }
 
 main

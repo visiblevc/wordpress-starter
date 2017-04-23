@@ -1,6 +1,7 @@
 FROM php:7.0-apache
-MAINTAINER Derek P Sifford <dereksifford@gmail.com>
-LABEL version="0.14.0-php7.0"
+ENV TERM=xterm
+LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
+      version="0.15.0-php7.0"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
@@ -25,10 +26,9 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/so
         mysqli \
         opcache \
         soap \
-        zip
-
-# Set recommended PHP.ini settings (see https://secure.php.net/manual/en/opcache.installation.php)
-RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
+        zip \
+    # See https://secure.php.net/manual/en/opcache.installation.php)
+    && echo 'memory_limit = 512M' > /usr/local/etc/php/php.ini \
     && { \
         echo 'opcache.memory_consumption=128'; \
         echo 'opcache.interned_strings_buffer=8'; \
@@ -38,19 +38,19 @@ RUN echo "memory_limit = 512M" > /usr/local/etc/php/php.ini \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-# Install wp-cli, configure apache, & add scripts
+# Install wp-cli, configure apache, add scripts, create install directory & symlink
 RUN curl \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
         -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
     && chmod +x /usr/local/bin/wp /run.sh \
-    && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
+    && sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
+    && echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf && a2enconf fqdn \
     && a2enmod rewrite expires \
-    && service apache2 restart
+    && service apache2 restart \
+    && mkdir -p /app \
+    && rm -fr /var/www/html \
+    && ln -s /app /var/www/html
 
-# Create install directory and symlink /var/www/html to it
-RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
-
-# Run the server
 EXPOSE 80 443
 CMD ["/run.sh"]
