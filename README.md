@@ -32,7 +32,7 @@ git clone https://github.com/visiblevc/wordpress-starter.git
 rm -rf .git Dockerfile run.sh README.md CHANGELOG.md ISSUE_TEMPLATE.md
 
 # start the website at localhost:8080
-docker-compose up
+docker-compose up -d
 ```
 
 **NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to forward the port by running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use another port than `8080`, change it in the command.
