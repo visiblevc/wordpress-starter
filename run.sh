@@ -9,6 +9,7 @@ VERBOSE=${VERBOSE:-false}
 # ------------
 DB_HOST=${DB_HOST:-'db'}
 DB_NAME=${DB_NAME:-'wordpress'}
+DB_USER=${DB_USER:-'root'}
 DB_PASS=${DB_PASS:-'root'}
 DB_PREFIX=${DB_PREFIX:-'wp_'}
 SERVER_NAME=${SERVER_NAME:-'localhost'}
@@ -30,7 +31,7 @@ apache_modules:
   - mod_rewrite
 
 core config:
-  dbuser: root
+  dbuser: $DB_USER
   dbpass: $DB_PASS
   dbname: $DB_NAME
   dbprefix: $DB_PREFIX
@@ -43,7 +44,7 @@ core config:
 core install:
   url: $([ "$AFTER_URL" ] && echo "$AFTER_URL" || echo localhost:8080)
   title: $DB_NAME
-  admin_user: root
+  admin_user: $DB_USER
   admin_password: $DB_PASS
   admin_email: $ADMIN_EMAIL
   skip-email: true
@@ -70,7 +71,7 @@ main() {
   # --------------
   h2 "Waiting for MySQL to initialize..."
   printf "%b " "${CYAN}${BOLD}  ->${NC} "
-  while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --silent; do
+  while ! mysqladmin ping --host="$DB_HOST" --user="$DB_USER" --password="$DB_PASS" --silent; do
     sleep 1
   done
 
