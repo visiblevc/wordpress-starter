@@ -44,6 +44,7 @@ RUN curl \
         -o /run.sh https://raw.githubusercontent.com/visiblevc/wordpress-starter/master/run.sh \
     && chmod +x /usr/local/bin/wp /run.sh \
     && sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf \
+    && sed -i 's/<FilesMatch "^\\.ht">/<FilesMatch "^\.ht|\.yml">/g' /etc/apache2/apache2.conf \    
     && a2enmod rewrite expires \
     && service apache2 restart
 
