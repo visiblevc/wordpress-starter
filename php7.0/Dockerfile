@@ -47,7 +47,7 @@ RUN curl \
     && echo "ServerName localhost" | tee /etc/apache2/conf-available/fqdn.conf && a2enconf fqdn \
     && a2enmod rewrite expires \
     && service apache2 restart \
-    && mkdir -p /app \
+    && mkdir -p /app ~/.wp-cli \
     && rm -fr /var/www/html \
     && ln -s /app /var/www/html
 

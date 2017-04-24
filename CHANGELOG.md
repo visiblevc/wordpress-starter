@@ -32,6 +32,7 @@ Logging has been changed to show necessary information by default.
   - Not listed in `docker-compose.yml`.
   - Not added as a local volume.
 - Adjust permissions of volumed files and directories so that they remain editable outside the container, and remain secure. (Closes #12)
+- Fix critical security vulnerability. HT @joerybruijntjes.
 
 ## 0.14.0
 - Add `SERVER_NAME` variable to allow for quickly setting that directive in the apache config for users interested in running in production.

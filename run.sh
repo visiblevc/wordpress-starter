@@ -27,7 +27,7 @@ sed -i "s/#ServerName www.example.com/ServerName $SERVER_NAME\nServerAlias www.$
 
 # WP-CLI configuration
 # ---------------------
-cat > /app/wp-cli.yml <<EOF
+cat > ~/.wp-cli/config.yml <<EOF
 apache_modules:
   - mod_rewrite
 
