@@ -299,6 +299,7 @@ main() {
   h2 "Finalizing"
   if [[ ! -f /app/.htaccess ]] && [[ "$MULTISITE" != 'true' ]]; then
     _wp rewrite structure "$PERMALINKS"
+    _wp rewrite flush --hard
   fi
 
   chown -R www-data /app /var/www/html
