@@ -23,6 +23,7 @@ This name reflects that requirement better and will lead to less confusion down 
 Logging has been changed to show necessary information by default.
 
 ### Improvements
+- Add `php7.1` base image.
 - Widespread efficiency improvements to build process.
 - Reduce the number of Dockerfile layers.
 - If `SERVER_NAME` is specified (eg. `example.com`), create a `ServerAlias` in the apache configs for `www.example.com`.

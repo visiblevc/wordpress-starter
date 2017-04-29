@@ -53,7 +53,8 @@ docker-compose up -d && docker-compose logs -f wordpress
 
 | PHP Version | Tags |
 | ----------- | ---- |
-| **7.0**     | `latest` `latest-php7.0` `<version>-php7.0` |
+| **7.1**     | `latest` `latest-php7.1` `<version>-php7.1` |
+| **7.0**     | `latest-php7.0` `<version>-php7.0` |
 | **5.6**     | `latest-php5.6` `<version>-php5.6`|
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
