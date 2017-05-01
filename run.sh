@@ -95,11 +95,11 @@ _get_volumes() {
   local names=()
 
   filenames=$(
-    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type f ! -name 'index*' -group 1000 -print0 |
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type f ! -name 'index*' ! -group root -print0 |
     xargs -0 -I {} basename {} .php
   )
   dirnames=$(
-    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d -group 1000 -print0 |
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d ! -group root -print0 |
     xargs -0 basename -a 2>/dev/null
   )
   names=( $filenames $dirnames )
@@ -305,7 +305,7 @@ main() {
   chown -R www-data /app /var/www/html
   find /app -type d -exec chmod 755 {} \;
   find /app -type f -exec chmod 644 {} \;
-  find /app \( -type f -or -type d \) -group '1000' -exec chmod g+rw {} \;
+  find /app \( -type f -or -type d \) ! -group root -exec chmod g+rw {} \;
 
   h1 "WordPress Configuration Complete!"
 
