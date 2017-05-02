@@ -27,7 +27,7 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/so
         opcache \
         soap \
         zip \
-    # See https://secure.php.net/manual/en/opcache.installation.php)
+    # See https://secure.php.net/manual/en/opcache.installation.php
     && echo 'memory_limit = 512M' > /usr/local/etc/php/php.ini \
     && { \
         echo 'opcache.memory_consumption=128'; \
