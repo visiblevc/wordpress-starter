@@ -51,6 +51,8 @@ docker-compose up -d && docker-compose logs -f wordpress
 
 ### Available Images
 
+> **Note:** If you'd prefer to use an automated build mirror of this repository, you can do so by using the image [`dsifford/wordpress`](https://hub.docker.com/r/dsifford/wordpress/) rather than `visiblevc/wordpress`.
+
 | PHP Version | Tags |
 | ----------- | ---- |
 | **7.1**     | `latest` `latest-php7.1` `<version>-php7.1` |

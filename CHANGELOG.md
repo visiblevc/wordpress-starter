@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.15.0 - latest
+## 0.15.1 - latest
+
+### Fixes
+- Fix error causing volumed plugins to be deleted.
+- Always flush `.htaccess` to add rewrite rules back in the event a plugin modified it (e.g. `w3-total-cache`).
+
+### Other
+- Add `wp-cli` bash completions to the wordpress container.
+
+## 0.15.0
 
 ### Deprecations
 

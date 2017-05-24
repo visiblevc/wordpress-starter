@@ -20,6 +20,7 @@ declare -A plugin_deps
 declare -A theme_deps
 declare -A plugin_volumes
 declare -A theme_volumes
+declare volume_gid
 
 # Apache configuration
 # --------------------
@@ -50,6 +51,13 @@ core install:
   admin_email: $ADMIN_EMAIL
   skip-email: true
 EOF
+
+# WP-CLI bash completions
+# ------------------
+echo "
+. /etc/bash_completion.d/wp-cli
+" >> /root/.bashrc
+. /etc/bash_completion.d/wp-cli
 
 # Helpers
 # ---------------------
@@ -91,7 +99,7 @@ _colorize() {
 
 _get_volumes() {
   local volume_type="$1"
-  local filenames dirnames
+  local filenames dirnames group
   local names=()
 
   filenames=$(
@@ -102,6 +110,9 @@ _get_volumes() {
     find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d ! -group root -print0 |
     xargs -0 basename -a 2>/dev/null
   )
+  group="$(find /app/wp-content -type d ! -group root -print -quit)"
+
+  volume_gid="$( stat -c '%g' "$group" 2>/dev/null )"
   names=( $filenames $dirnames )
 
   echo "${names[@]}"
@@ -119,7 +130,7 @@ _local_deprecation() {
   echo "Warning: [local]$local_type-name has been deprecated and will be dropped in the next version." |& _colorize
 }
 
-_search_replace_depreaction() {
+_search_replace_deprecation() {
   echo "Warning: SEARCH_REPLACE environment variable has been renamed to URL_REPLACE and will be dropped in the next version." |& _colorize
 }
 
@@ -127,10 +138,10 @@ _search_replace_depreaction() {
 # ---------------------
 
 init() {
-  local plugins themes i IFS=$'\n'
+  local plugins themes i
 
   # FIXME: Remove in next version
-  [[ -n $SEARCH_REPLACE ]] && _search_replace_depreaction
+  [[ -n $SEARCH_REPLACE ]] && _search_replace_deprecation
 
   # Download WordPress
   # ------------------
@@ -151,18 +162,15 @@ init() {
     echo "themes='$themes'" >> /app/.dockercache
   fi
 
-  while read -r i; do
-    [[ ! "$i" ]] && continue
+  for i in $plugins; do
     plugin_volumes[$i]="$i"
-  done <<< "$plugins"
+  done
 
-  while read -r i; do
-    [[ ! "$i" ]] && continue
+  for i in $themes; do
     theme_volumes[$i]="$i"
-  done <<< "$themes"
+  done
 
-  local key value
-
+  local key value IFS=$'\n'
   while read -r -d, i; do
     [[ ! "$i" ]] && continue
     i="${i# }"          # Trim leading whitespace
@@ -185,7 +193,7 @@ init() {
     theme_deps[$key]="$value"
   done <<< "$THEMES"
 
-  chown -R www-data /app /var/www/html
+  chown -R "www-data:$volume_gid" /app/wp-content
 }
 
 check_database() {
@@ -240,23 +248,18 @@ check_plugins() {
 check_themes() {
   local key
   local theme
-  local to_activate
   local to_install=()
   local to_remove=()
-
-  to_activate=$( "${!theme_volumes[@]}" | awk '{ print $1 }' )
 
   if [[ "${#theme_deps[@]}" -gt 0 ]]; then
     for key in "${!theme_deps[@]}"; do
       if ! wp theme is-installed --allow-root "$key"; then
         to_install+=( "${theme_deps[$key]}" )
-        [[ ! "$to_activate" ]] && to_activate="$key"
       fi
     done
   fi
 
   [[ "${#to_install}" -gt 0 ]] && wp theme install --allow-root "${to_install[@]}" | tail -n 1 |& _colorize
-  [[ "$to_activate" ]] && _wp theme activate "$to_activate"
 
   for theme in $(wp theme list --field=name --status=inactive --allow-root); do
     [[ ${theme_deps[$theme]} ]] && continue
@@ -297,7 +300,7 @@ main() {
   check_plugins
 
   h2 "Finalizing"
-  if [[ ! -f /app/.htaccess ]] && [[ "$MULTISITE" != 'true' ]]; then
+  if [[ "$MULTISITE" != 'true' ]]; then
     _wp rewrite structure "$PERMALINKS"
     _wp rewrite flush --hard
   fi
