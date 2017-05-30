@@ -10,6 +10,7 @@
   ],
   "license": "MIT",
   "scripts": {
+    "deploy": "./deploy.sh",
     "update-version": "for file in './php7.0/Dockerfile' './php5.6/Dockerfile' './php7.1/Dockerfile'; do sed -Ei \"s/(version=\\\")(.*)(-)/\\1$npm_package_version\\3/g\" \"$file\"; done && sed -Ei \"s/(wordpress:)(.*)(-)/\\1$npm_package_version\\3/g\" ./example/docker-compose.yml"
   }
 }
