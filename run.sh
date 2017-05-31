@@ -20,7 +20,6 @@ declare -A plugin_deps
 declare -A theme_deps
 declare -A plugin_volumes
 declare -A theme_volumes
-declare volume_gid
 
 # Apache configuration
 # --------------------
@@ -99,20 +98,17 @@ _colorize() {
 
 _get_volumes() {
   local volume_type="$1"
-  local filenames dirnames group
+  local filenames dirnames
   local names=()
 
   filenames=$(
-    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type f ! -name 'index*' ! -group root -print0 |
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type f ! -name 'index*' -print0 2>/dev/null |
     xargs -0 -I {} basename {} .php
   )
   dirnames=$(
-    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d ! -group root -print0 |
+    find /app/wp-content/"$volume_type"/* -maxdepth 0 -type d -print0 2>/dev/null |
     xargs -0 basename -a 2>/dev/null
   )
-  group="$(find /app/wp-content -type d ! -group root -print -quit)"
-
-  volume_gid="$( stat -c '%g' "$group" 2>/dev/null )"
   names=( $filenames $dirnames )
 
   echo "${names[@]}"
@@ -143,23 +139,16 @@ init() {
   # FIXME: Remove in next version
   [[ -n $SEARCH_REPLACE ]] && _search_replace_deprecation
 
-  # Download WordPress
-  # ------------------
-  if [[ ! -f /app/wp-settings.php ]]; then
-    h2 "Downloading WordPress"
-    _wp core download --version="$WP_VERSION"
-  fi
-
   PLUGINS="${PLUGINS/%,},"
   THEMES="${THEMES/%,},"
 
-  if [[ -f /app/.dockercache ]]; then
-    . /app/.dockercache
+  if [[ -f /root/.dockercache ]]; then
+    . /root/.dockercache
   else
     plugins=$( _get_volumes plugins )
     themes=$( _get_volumes themes )
-    echo "plugins='$plugins'" >> /app/.dockercache
-    echo "themes='$themes'" >> /app/.dockercache
+    echo "plugins='$plugins'" >> ~/.dockercache
+    echo "themes='$themes'" >> ~/.dockercache
   fi
 
   for i in $plugins; do
@@ -193,7 +182,14 @@ init() {
     theme_deps[$key]="$value"
   done <<< "$THEMES"
 
-  chown -R "www-data:$volume_gid" /app/wp-content
+  # Download WordPress
+  # ------------------
+  if [[ ! -f /app/wp-settings.php ]]; then
+    h2 "Downloading WordPress"
+    _wp core download --version="$WP_VERSION"
+  fi
+
+  chown -R www-data /app/wp-content
 }
 
 check_database() {
@@ -205,7 +201,7 @@ check_database() {
   _wp db create
 
   # No backups found
-  if [[ "$( find /data -name "*.sql" | wc -l )" -eq 0 ]]; then
+  if [[ "$( find /data -name "*.sql" 2>/dev/null | wc -l )" -eq 0 ]]; then
     _wp core install
     return
   fi
