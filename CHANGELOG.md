@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.15.1 - latest
+## 0.15.2 - latest
+
+### Fixes
+- **REALLY** fix error causing volumed plugins and/or themes to be deleted.
+- Move `.dockercache` out of index directory so it can't be accessed directly.
+
+## 0.15.1
 
 ### Fixes
 - Fix error causing volumed plugins to be deleted.

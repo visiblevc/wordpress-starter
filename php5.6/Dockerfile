@@ -1,7 +1,7 @@
 FROM php:5.6-apache
 ENV TERM=xterm
 LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
-      version="0.15.1-php5.6"
+      version="0.15.2-php5.6"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
