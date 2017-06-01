@@ -1,6 +1,12 @@
 
 # Quickstart
 
+Download this example to your current working directory
+
+```sh
+$ curl https://codeload.github.com/visiblevc/wordpress-starter/tar.gz/master | tar -xz --strip 1 wordpress-starter-master/example
+```
+
 The only thing you need to get started is a `docker-compose.yml` file:
 
 ```yml
