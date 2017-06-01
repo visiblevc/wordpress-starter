@@ -16,8 +16,4 @@ Thumbs.db
 
 # Wordpress
 wp-content/*
-
-# WordPress Starter Dev Files
-/Dockerfile
-/docker-compose.yml
-test.sh
+!wp-content/themes
