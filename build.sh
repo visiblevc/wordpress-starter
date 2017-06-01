@@ -29,5 +29,3 @@ echo "
 Successfully built images with the following tags:"
 
 docker images visiblevc/wordpress --format "{{.Tag}}" | sort -r
-
-docker push visiblevc/wordpress
