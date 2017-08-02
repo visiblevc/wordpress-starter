@@ -11,6 +11,7 @@ DB_PREFIX=${DB_PREFIX:-wp_}
 PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 SERVER_NAME=${SERVER_NAME:-localhost}
 WP_VERSION=${WP_VERSION:-latest}
+WP_LOCALE=${WP_LOCALE:-en_US}
 # FIXME: Remove in next version
 URL_REPLACE=${URL_REPLACE:-"$SEARCH_REPLACE"}
 BEFORE_URL="${URL_REPLACE%,*}"
@@ -186,7 +187,7 @@ init() {
   # ------------------
   if [[ ! -f /app/wp-settings.php ]]; then
     h2 "Downloading WordPress"
-    _wp core download --version="$WP_VERSION"
+    _wp core download --version="$WP_VERSION" --locale="$WP_LOCALE"
   fi
 
   chown -R www-data /app/wp-content
