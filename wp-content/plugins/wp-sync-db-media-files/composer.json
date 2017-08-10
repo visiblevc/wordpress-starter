@@ -1,0 +1,11 @@
+{
+  "name": "wp-sync-db/wp-sync-db-media-files",
+  "type": "wordpress-plugin",
+  "homepage": "https://github.com/wp-sync-db/wp-sync-db-media-files",
+  "license": "GPL-2.0",
+  "description": "WP Sync DB Media File Addon for WP Sync DB",
+  "keywords": ["plugin","wordpress","wp-sync-db","media"],
+  "require": {
+    "composer/installers": "~1.0.6"
+  }
+}
