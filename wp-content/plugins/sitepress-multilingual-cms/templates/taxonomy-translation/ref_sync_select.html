@@ -1,0 +1,5 @@
+<select id="in-lang" name="language">
+	<% _.each( langs, function( lang, code ) { %>
+		<option value="<%=code%>"><%= lang.label %></option>
+	<% }); %>
+</select>

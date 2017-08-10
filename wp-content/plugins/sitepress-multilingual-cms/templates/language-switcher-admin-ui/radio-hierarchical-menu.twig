@@ -1,0 +1,23 @@
+{% if not slot_settings.is_hierarchical is defined %}
+    {% set is_hierarchical = 1 %}
+{% else %}
+    {% set is_hierarchical = slot_settings.is_hierarchical %}
+{% endif %}
+
+<h4><label>{{ strings.menus.is_hierarchical_label }}</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.menu_style_type } %}</h4>
+<ul>
+    <li>
+        <label>
+            <input type="radio" class="js-wpml-ls-trigger-update js-wpml-ls-menu-is-hierarchical"
+                   name="{% if name_base %}{{ name_base }}[is_hierarchical]{% else %}is_hierarchical{% endif %}"
+                   value="1"{% if is_hierarchical == 1 %} checked="checked"{% endif %}><b>{{ strings.menus.hierarchical }}</b> - {{ strings.menus.hierarchical_desc }}
+        </label>
+    </li>
+    <li>
+        <label>
+            <input type="radio" class="js-wpml-ls-trigger-update js-wpml-ls-menu-is-hierarchical"
+                   name="{% if name_base %}{{ name_base }}[is_hierarchical]{% else %}is_hierarchical{% endif %}"
+                   value="0"{% if is_hierarchical == 0 %} checked="checked"{% endif %}><b>{{ strings.menus.flat }}</b> - {{ strings.menus.flat_desc }}
+        </label>
+    </li>
+</ul>

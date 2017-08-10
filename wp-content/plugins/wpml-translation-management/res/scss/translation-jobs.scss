@@ -1,0 +1,99 @@
+.listing-table {
+	table.wp-list-table {
+		.listing-page-table-list {
+			&:first-of-type {
+				.groups-heading {
+					th {
+						border-top-width: 0;
+					}
+				}
+			}
+			.groups-heading {
+				th {
+					border-image: linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%) 30 0 0 0 repeat repeat;
+					border-top:   0.25em double #b5bdc8;
+					position:     relative;
+					background:   #FAFAFA;
+					color:        #222;
+
+					.buttons {
+						margin-top:   1.45em;
+						margin-right: 1em;
+						position:     absolute;
+						top:          0;
+						right:        0;
+
+						.dashicons {
+							line-height: 1.5em;
+						}
+
+						.group-action {
+							height: auto;
+						}
+
+						.group-collapse {
+							display: none;
+						}
+
+						.group-expand {
+							display: block;
+						}
+					}
+
+					.listing-heading-summary {
+						ul {
+							li {
+								vertical-align: top;
+								padding:        0 0.5em;
+								display:        table-cell;
+								border-right:   1px #222 solid;
+								font-size: .95em;
+
+								span.value {
+									font-weight: bold;
+								}
+
+								&:first-child {
+									padding-left: 0;
+								}
+
+								&:last-child {
+									padding-right: 0;
+									border-right:  none;
+								}
+
+								ul.group-list {
+									li {
+										display: block;
+										border-right: none;
+										padding:      0;
+										margin: 0;
+									}
+								}
+							}
+						}
+					}
+				}
+
+			}
+
+			.item {
+				&:nth-child(odd) { background-color: #eee; }
+				&:nth-child(even) { background-color: #fff; }
+			}
+
+			&:last-child {
+				.groups-heading {
+					th {
+						border-bottom: none;
+					}
+				}
+			}
+		}
+	}
+	.navigator {
+		display:  inline;
+		float:    right;
+		overflow: auto;
+	}
+}

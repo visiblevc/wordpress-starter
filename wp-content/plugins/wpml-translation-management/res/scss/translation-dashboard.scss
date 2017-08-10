@@ -1,0 +1,53 @@
+.icl_dup_ovr_warn {
+	margin-top: 2em;
+	display: none;
+}
+#icl-tm-translation-dashboard {
+	.row-actions {
+		display: inline-block;
+		margin-left: 1em;
+	}
+}
+.icl_tm_wrap .column-title {
+	@media (max-width: 782px) {
+		width: 45%
+	}
+}
+.column-note {
+	width: 5%;
+	@media (max-width: 782px) {
+		width: 15%
+	}
+}
+
+#icl_dashboard_advanced_filters {
+	fieldset {
+		display:         table;
+		border-spacing:  4px;
+		border-collapse: separate;
+
+		.fieldset_row {
+			display: table-row;
+		}
+		label {
+			display:        table-cell;
+			padding-right:  2em;
+			height:         100%;
+			vertical-align: top;
+		}
+		input, select {
+			display:        table-cell;
+			vertical-align: top;
+		}
+	}
+}
+
+.wpml-tm-dashboard-promo {
+	//text-align: right;
+}
+
+td {
+	&.wpml-tm-dashboard-promo {
+		vertical-align: top;
+	}
+}

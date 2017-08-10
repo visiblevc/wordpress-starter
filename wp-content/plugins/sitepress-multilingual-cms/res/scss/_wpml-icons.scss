@@ -1,0 +1,68 @@
+[class*="otgs-ico"]:before {
+  font-size: 16px;
+}
+
+.otgs-ico-not-translated {
+  color: #d89000;
+}
+
+.otgs-ico-waiting {
+  color: #000;
+}
+
+.otgs-ico-basket {
+  color: #3078a8;
+}
+
+.otgs-ico-in-progress {
+  color: #000;
+}
+
+.otgs-ico-duplicate {
+  color: #000;
+}
+
+.otgs-ico-translated {
+  color: #186018;
+}
+
+.otgs-ico-needs-update {
+  color: #78c0d8;
+}
+
+.otgs-ico-add-disabled {
+  color: #888888;
+}
+
+.otgs-ico-edit-disabled {
+  color: #888888;
+}
+
+.otgs-ico-note-add-o {
+  &:before {
+    font-size: 20px;
+    color: #0073aa;
+  }
+  &:hover:before {
+    content: "a";
+  }
+}
+
+.otgs-ico-note-edit-o {
+  &:before {
+    font-size: 20px;
+    color: #0073aa;
+  }
+  &:hover:before {
+    content: "i";
+  }
+}
+
+.wpml-section,
+.wpml-ls-subform-options {
+  .otgs-ico-help:before {
+    vertical-align: top;
+  }
+}
+
+

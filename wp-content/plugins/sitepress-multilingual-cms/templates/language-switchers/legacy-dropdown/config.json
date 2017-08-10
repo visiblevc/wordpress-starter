@@ -1,0 +1,8 @@
+{
+  "name" : "Dropdown",
+  "slug" : "wpml-legacy-dropdown",
+  "for"  : [ "sidebars", "shortcode_actions" ],
+  "settings": {
+    "display_link_for_current_lang": 1
+  }
+}

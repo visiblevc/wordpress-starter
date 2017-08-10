@@ -1,0 +1,58 @@
+<wpml-config>
+    <custom-fields>
+        <custom-field action="translate">title</custom-field>
+        <custom-field action="translate">description</custom-field>
+        <custom-field action="translate">keywords</custom-field>
+        <custom-field action="ignore">_edit_last</custom-field>
+        <custom-field action="ignore">_edit_lock</custom-field>
+        <custom-field action="ignore">_wp_page_template</custom-field>
+        <custom-field action="ignore">_wp_attachment_metadata</custom-field>
+        <custom-field action="ignore">original_post_id</custom-field>
+        <custom-field action="ignore">_wpml_original_post_id</custom-field>
+        <custom-field action="ignore">_wp_old_slug</custom-field>
+        <custom-field action="ignore">_icl_translator_note</custom-field>
+        <custom-field action="ignore">_alp_processed</custom-field>
+        <custom-field action="ignore">_pingme</custom-field>
+        <custom-field action="ignore">_encloseme</custom-field>
+        <custom-field action="ignore">_icl_lang_duplicate_of</custom-field>
+        <custom-field action="ignore">_thumbnail_id</custom-field>
+        <custom-field action="ignore">_wp_attached_file</custom-field>
+    </custom-fields>
+    <language-switcher-settings>
+        <key name="link_empty">0</key>
+        <key name="statics">
+            <key name="footer">
+                <key name="show">0</key>
+                <key name="display_flags">1</key>
+                <key name="display_names_in_current_lang">1</key>
+                <key name="display_names_in_native_lang">1</key>
+                <key name="display_link_for_current_lang">1</key>
+                <key name="font_current_normal">#444444</key>
+                <key name="font_current_hover">#000000</key>
+                <key name="background_current_normal">#ffffff</key>
+                <key name="background_current_hover">#eeeeee</key>
+                <key name="font_other_normal">#444444</key>
+                <key name="font_other_hover">#000000</key>
+                <key name="background_other_normal">#ffffff</key>
+                <key name="background_other_hover">#eeeeee</key>
+                <key name="border">#cdcdcd</key>
+            </key>
+            <key name="post_translations">
+                <key name="show">0</key>
+                <key name="display_flags">0</key>
+                <key name="display_names_in_current_lang">1</key>
+                <key name="display_names_in_native_lang">1</key>
+                <key name="display_link_for_current_lang">0</key>
+                <key name="display_before_content">1</key>
+                <key name="display_after_content">0</key>
+                <key name="availability_text">This post is also available in: %s</key>
+            </key>
+            <key name="shortcode_actions">
+                <key name="display_flags">0</key>
+                <key name="display_names_in_current_lang">1</key>
+                <key name="display_names_in_native_lang">1</key>
+                <key name="display_link_for_current_lang">1</key>
+            </key>
+        </key>
+    </language-switcher-settings>
+</wpml-config>

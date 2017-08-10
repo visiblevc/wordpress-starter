@@ -1,0 +1,23 @@
+	<input type="hidden" name="source_lang" value="<%= language.source %>" />
+	<input type="hidden" name="target_lang" value="<%= language.target %>" />
+	<h3 class="wpml-header-original"><%= labels.source_lang %>:
+		<span class="wpml-title-flag">
+			<img src="<%= language.img.source_url %>"
+				 alt="<%= language.source_lang %>"/>
+		</span>
+		<strong><%= language.source_lang %></strong>
+	</h3>
+
+	<h3 class="wpml-header-translation"><%= labels.target_lang %>:
+		<span class="wpml-title-flag">
+			<img src="<%= language.img.target_url %>"
+				 alt="<%= language.target_lang %>"/>
+		</span>
+		<strong><%= language.target_lang %></strong>
+	</h3>
+
+	<div class="wpml-copy-container">
+		<button class="button-secondary button-copy-all js-button-copy-all" title="<%= labels.copy_from_original %>">
+			<i class="otgs-ico-copy"></i> <%= labels.copy_all %>
+		</button>
+	</div>

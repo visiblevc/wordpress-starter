@@ -1,0 +1,93 @@
+#wpbody .wrap > h2:first-child {
+	margin-bottom: 6px;
+}
+
+.actions select {
+	float: left;
+	margin-right: 6px;
+	max-width: 200px;
+}
+
+.icl_tj_your_job {
+	width:       14px;
+	color:       #f00;
+	font-weight: bold;
+	cursor:      help;
+}
+
+.icl-tj-original {
+	margin-bottom:      8px;
+	padding:            4px;
+	border:             1px solid #ddd;
+	background-color:   #efefef;
+	color:              #555;
+	font-size:          90%;
+	.icl_multiple, .icl_single {
+		padding: 4px;
+	}
+	textarea {
+		width:  100%;
+		height: 300px;
+	}
+
+	.html {
+		display: none;
+	}
+}
+
+.icl-tj-original-cf {
+	textarea {
+		height: 150px;
+	}
+}
+
+.icl_tm_orig_toggle {
+	margin-bottom: -1px;
+	padding-right: 8px;
+	text-align:    right;
+}
+
+.icl_tm_toggle_visual, .icl_tm_toggle_html {
+	float:            right;
+	margin:           5px 5px 0 0;
+	padding:          4px 5px 2px;
+	height:           18px;
+	border:           1px solid #DFDFDF;
+	background-color: #F6F6F6;
+	color:            #999999;
+	text-decoration:  none;
+	cursor:           pointer;
+}
+
+input {
+	&.icl_multiple {
+		width: 80% !important;
+	}
+}
+
+.icl_tm_tf {
+	float:      right;
+	margin-top: 8px;
+	font-style: italic;
+	font-size:  85%;
+}
+
+#icl_tm_validation_error {
+	display:    none;
+	margin-top: 6px;
+}
+
+.icl_tm_row_highlight {
+	background-color: #FFC0CB;
+}
+
+#icl_tm_languages {
+	table {
+		border: none;
+	}
+	td {
+		height:         20px;
+		border:         none;
+		vertical-align: middle;
+	}
+}

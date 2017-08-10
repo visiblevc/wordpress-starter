@@ -1,0 +1,30 @@
+<div class="icl_tt_form wpml-dialog" id="icl_tt_form_<%= taxonomy %>" title="<%= labels.labelPopupDialogTitle %>">
+	<div class="wpml-dialog-body wpml-dialog-translate ">
+		<header class="wpml-term-translation-header">
+			<h3 class="wpml-header-original"><%- labels.original %> <span class="wpml-title-flag"><img src="<%= langs[ source_lang ].flag %>"></span><strong><%- langs[ source_lang ].label %></strong></h3>
+			<h3 class="wpml-header-translation"><%- labels.translationTo %> <span class="wpml-title-flag"><img src="<%= langs[ lang ].flag %>"></span><strong><%- langs[ lang ].label %></strong></h3>
+		</header>
+	
+		<div class="wpml-form-row">
+			<label for="<%= taxonomy %>-singular"><%- labels.Singular %></label>
+			<input readonly id="<%= taxonomy %>-singular-original" value="<%- originalLabels.singular %>" type="text">
+			<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%- labels.copyFromOriginal %>"/>
+			<input class="js-translation" id="<%= taxonomy %>-singular" value="<%- translatedLabels.singular %>" type="text">
+		</div>
+	
+		<div class="wpml-form-row">
+			<label for="<%= taxonomy %>-plural"><%- labels.Plural %></label>
+			<input readonly id="<%= taxonomy %>-plural-original" value="<%-originalLabels.general %>" type="text">
+			<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%- labels.copyFromOriginal %>"/>
+			<input class="js-translation" id="<%= taxonomy %>-plural" value="<%- translatedLabels.general %>" type="text">
+		</div>
+	
+		<div class="wpml-dialog-footer ">
+			<span class="errors icl_error_text"></span>
+			<input class="cancel wpml-dialog-close-button alignleft" value="<%- labels.cancel %>" type="button">
+			<input class="button-primary js-label-save alignright" value="<%- labels.save %>" type="submit">
+			<span class="spinner alignright"></span>
+		</div>	
+	</div>
+</div>
+

@@ -1,0 +1,5 @@
+{
+  "name" : "Vertical List",
+  "slug" : "wpml-legacy-vertical-list",
+  "for"  : [ "sidebars", "footer", "shortcode_actions" ]
+}

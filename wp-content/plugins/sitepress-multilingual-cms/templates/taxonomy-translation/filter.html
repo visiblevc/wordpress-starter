@@ -1,0 +1,18 @@
+<div class="icl-tt-tools tablenav top clearfix">
+	<% if ( mode === "translate" ) { %>
+		<%= WPML_core[ "templates/taxonomy-translation/status-trans-select.html" ]( { taxonomy: taxonomy } ) %>
+		<label for="in-lang" id="in-lang-label" class="hidden"><%=labels.in%></label>
+			<select name="language" id="in-lang" class="hidden">
+				<option value="all"><%= labels.anyLang %></option>
+				<% _.each(langs, function( lang, code ) { %>
+					<option value="<%= code %>"><%= lang.label %></option>
+				<% }); %>
+			</select>
+		<div class="alignright">
+			<input type="text" name="search" id="tax-search" placeholder="<%= labels.searchPlaceHolder %>" value="">
+		</div>
+	<% } else { %>
+		<%= labels.refLang.replace( "%language%", WPML_core[ "templates/taxonomy-translation/ref_sync_select.html" ]( { taxonomy:taxonomy, langs:langs } ) ) %>
+	<% } %>
+	<span class="spinner"></span>
+</div>

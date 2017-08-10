@@ -1,0 +1,78 @@
+#icl_language_pairs {
+  /*display: none;*/
+}
+
+.icl_language_pairs {
+  li {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+  }
+  ul {
+    /*display:none;*/
+    margin: 10px;
+    li {
+      border: none;
+      float: none;
+      width: auto;
+      padding: 0;
+    }
+  }
+}
+
+.icl_benefits {
+	background:   url(../img/yes.png) no-repeat 25px 3px;
+	padding-left: 50px;
+}
+
+#icl_setup_wizard .icl_setup_wizard_step {
+  width: 33%;
+  float: left;
+}
+
+#icl_setup_wizard_2 .icl_setup_wizard_step {
+  width: 50%;
+  float: left;
+}
+
+#icl_setup_wizard_progress {
+  height: 10px;
+  background-color: #ccc;
+  margin: 10px 0 10px 0;
+  width: 100%;
+}
+
+#icl_setup_wizard_progress_bar {
+  background-color: #777;
+  height: 10px;
+}
+
+.icl_cost_estimate_toggle, .icl_account_setup_toggle {
+  margin-bottom: 5px;
+}
+
+#icl_cost_estimate, #icl_account_setup {
+  display: none;
+}
+
+.icl_account_form {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.icl_status_jobs, .icl_status_project {
+  padding-left: 20px;
+  background: url(../img/documents.png) no-repeat;
+}
+
+.icl_status_balance {
+  padding-left: 20px;
+  background: url(../img/dollar1.png) no-repeat;
+}
+
+.icl_status_help {
+  padding-left: 20px;
+  background: url(../img/question1.png) no-repeat;
+}

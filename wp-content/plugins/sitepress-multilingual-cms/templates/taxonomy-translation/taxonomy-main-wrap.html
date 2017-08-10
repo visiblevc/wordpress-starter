@@ -1,0 +1,31 @@
+<div class="wpml-wrap">
+	<% if ( mode === 'translate' ) { %>
+		<h3 id="term-table-summary"><%= summaryTerms %></h3>
+		<div id="wpml-taxonomy-translation-filters"></div>
+		<div id="wpml-taxonomy-translation-terms-table"></div>
+		<div id="wpml-taxonomy-translation-terms-nav"></div>
+		<% if ( TaxonomyTranslation.data.translatedTaxonomyLabels ) { %>
+			<h3 id="term-label-summary"><%= labelSummary %></h3>
+			<div id="wpml-taxonomy-translation-labels-table"></div>
+			<p><%= labels.changeLabelLanguage %></p>
+		<% } %>
+	<% } else if ( mode === 'sync' ) { %>
+		<div id="wpml-taxonomy-translation-filters"></div>
+		<% if ( hasContent ) { %>
+			<div id="wpml-taxonomy-translation-terms-table"></div>
+			<div id="wpml-taxonomy-translation-terms-nav"></div>
+			<div class="wpml-tt-sync-section">
+				<div class="wpml-tt-sync-legend">
+					<strong><%= labels.legend %></strong>
+					<span class="wpml-parent-added" style="background-color:#CCFF99;"><%= labels.willBeAdded %></span>
+					<span class="wpml-parent-removed" style="background-color:#F55959;"><%= labels.willBeRemoved %></span>
+				</div>
+				<div class="wpml-tt-sync-action">
+					<input type="submit" class="button-primary button-lg" value="<%= labels.synchronizeBtn %>" id="tax-apply">
+				</div>
+			</div>
+		<% } else { %>
+			<h2 class="text-center"><%= labelSynced %></h2>
+		<% } %>
+	<% } %>
+</div>

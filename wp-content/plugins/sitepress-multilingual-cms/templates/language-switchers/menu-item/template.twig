@@ -1,0 +1,20 @@
+{% set css_classes_flag    = ('wpml-ls-flag ' ~ backward_compatibility.css_classes_flag)|trim %}
+{% set css_classes_native  = ('wpml-ls-native ' ~ backward_compatibility.css_classes_native)|trim %}
+{% set css_classes_display = ('wpml-ls-display ' ~ backward_compatibility.css_classes_display)|trim %}
+{% set css_classes_bracket = ('wpml-ls-bracket ' ~ backward_compatibility.css_classes_bracket)|trim %}
+
+{%- if flag_url -%}
+    <img class="{{ css_classes_flag }}" src="{{ flag_url }}" alt="{{ code }}" title="{{ flag_title }}">
+{%- endif -%}
+
+{%- if native_name -%}
+    <span class="{{ css_classes_native }}">{{ native_name }}</span>
+{%- endif -%}
+
+{%- if display_name -%}
+    <span class="{{ css_classes_display }}">
+    {%- if native_name -%}<span class="{{ css_classes_bracket }}"> (</span>{%- endif -%}
+        {{- display_name -}}
+        {%- if native_name -%}<span class="{{ css_classes_bracket }}">)</span>{%- endif -%}
+    </span>
+{%- endif -%}

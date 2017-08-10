@@ -1,0 +1,21 @@
+.wpml-section-cf-translation {
+	table td, .fixed th {
+		width:      auto;
+		text-align: center;
+		word-wrap: break-word;
+	}
+
+	table td, .fixed th {
+		&:first-child {
+			width:      40%;
+			text-align: left;
+		}
+	}
+}
+
+@media all and (max-width: 1185px) {
+	.icl_tm_wrap .wpml-section-content {
+		width:  100%;
+		margin: 0 1%;
+	}
+}

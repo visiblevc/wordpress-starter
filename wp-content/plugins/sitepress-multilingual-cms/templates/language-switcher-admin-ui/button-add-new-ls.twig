@@ -1,0 +1,19 @@
+<p class="alignright">
+
+	{% set add_tooltip = tooltip_all_assigned %}
+
+	{% if  existing_items == 0 %}
+		{% set add_tooltip = tooltip_no_item %}
+	{% endif %}
+
+	{% if settings_items >=  existing_items %}
+		{% set disabled = true %}
+	{% endif %}
+
+	<span class="js-wpml-ls-tooltip-wrapper{% if not disabled %} hidden{% endif %}">
+        {% include 'tooltip.twig' with { "content": add_tooltip } %}
+    </span>
+
+	<button class="js-wpml-ls-open-dialog button-secondary"{% if disabled %} disabled="disabled"{% endif %}
+			data-target="{{ button_target }}">+ {{ button_label }}</button>
+</p>

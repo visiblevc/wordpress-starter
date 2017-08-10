@@ -1,0 +1,7 @@
+<form method="post" action="" name="wpml-user-language-switcher-form" id="wpml-user-language-switcher-form">
+	<select name="language" title="Language selector">
+		{% for option in options %}
+			<option value="{{ option.value }}"{% if option.selected %} selected="selected"{% endif %}>{{ option.label }}</option>
+		{%  endfor %}
+	</select>
+</form>

@@ -1,0 +1,26 @@
+.ui-widget-header {
+	border:      1px solid #aaaaaa;
+	background:  #cccccc;
+	color:       #222222;
+	font-weight: bold;
+
+	a {
+		color: #222222;
+	}
+}
+
+/* Overlays */
+.ui-widget-overlay {
+	background: #aaaaaa;
+	opacity:    .3;
+	filter:     Alpha(Opacity=30); /* support: IE8 */
+}
+
+.ui-widget-shadow {
+	margin:        -8px 0 0 -8px;
+	padding:       8px;
+	border-radius: 8px;
+	background:    #aaaaaa;
+	opacity:       .3; /* support: IE8 */
+	filter:        Alpha(Opacity=30);
+}

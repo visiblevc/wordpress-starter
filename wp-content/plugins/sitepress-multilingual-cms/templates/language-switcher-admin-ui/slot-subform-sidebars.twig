@@ -1,0 +1,53 @@
+{% if not slot_settings is defined %}
+    {% set slot_settings = default_sidebars_slot %}
+{% endif %}
+
+{% include 'preview.twig' with {"preview": preview } %}
+
+<div class="wpml-ls-subform-options">
+
+    {% include 'dropdown-sidebars.twig'
+        with {
+            "slug":     slug,
+            "settings": settings,
+            "sidebars": slots,
+            "strings": strings,
+        }
+    %}
+
+    {% include 'dropdown-templates.twig'
+        with {
+            "id": "in-sidebars-" ~ slug,
+            "name": "sidebars[" ~ slug ~ "][template]",
+            "value": slot_settings.template,
+            "slot_type": "sidebars",
+        }
+    %}
+
+    {% include 'checkboxes-includes.twig'
+        with {
+            "name_base": "sidebars[" ~ slug ~ "]",
+            "slot_settings": slot_settings,
+            "strings": strings,
+            "template_slug": slot_settings.template,
+        }
+    %}
+
+    <h4><label for="widget-title-in-{{ slug }}">
+            {{ strings.sidebars.label_widget_title }}  {% include 'tooltip.twig' with { "content": strings.tooltips.widget_title } %}</label></h4>
+
+    <input type="text" id="widget-title-in-{{ slug }}"
+           name="sidebars[{{ slug }}][widget_title]" value="{{ slot_settings.widget_title }}" size="40">
+
+
+    {% include 'panel-colors.twig'
+        with {
+            "strings": strings,
+            "id": "in-sidebars-" ~ slug,
+            "name_base": "sidebars[" ~ slug ~ "]",
+            "slot_settings": slot_settings,
+            "color_schemes": color_schemes,
+        }
+    %}
+
+</div>

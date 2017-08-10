@@ -1,0 +1,27 @@
+<div class="icl_tt_form wpml-dialog" id="icl_tt_form_<%= trid + '_' + lang %>" title="<%= labels.originalTermPopupDialogTitle %>">
+	<div class="wpml-dialog-body wpml-dialog-translate ">
+		<header class="wpml-term-translation-header">
+			<h3 class="wpml-header-original-no-translation"><%= labels.original %> <span class="wpml-title-flag"><img src="<%= langs[ lang ].flag %>"></span><strong><%= langs[ lang ].label %></strong></h3>
+		</header>
+	
+		<div class="wpml-form-row-no-translation">
+			<label for="term-name"><%= labels.Name %></label >
+			<input id="term-name" value="<%= term.name %>" type="text">
+		</div>
+
+		<div class="wpml-form-row-no-translation">
+			<label for="term-slug"><%= labels.Slug %></label>
+			<input id="term-slug" value="<%= term.slug %>" type="text">
+		</div>
+		<div class="wpml-form-row-no-translation">
+			<label for="term-description"><%= labels.Description %></label>
+			<textarea id="term-description" cols="22" rows="4"><%= term.description %></textarea>
+		</div>
+		<div class="wpml-dialog-footer ">
+			<span class="errors icl_error_text"></span>
+			<input class="cancel wpml-dialog-close-button alignleft" value="<%= labels.cancel %>" type="button">
+			<input class="button-primary term-save alignright" value="<%= labels.save %>" type="submit">
+			<span class="spinner alignright"></span>
+		</div>	
+	</div>
+</div>

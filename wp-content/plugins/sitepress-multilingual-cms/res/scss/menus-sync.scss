@@ -1,0 +1,85 @@
+.menu-check-all input[type="checkbox"] {
+	padding:        10px 0 0 1px;
+	vertical-align: top;
+}
+
+.icl_msync i.inactive {
+  color: #aaa;
+  font-weight: normal;
+}
+
+.icl_msync_item {
+	-moz-border-radius:        3px;
+	border-radius: 3px 3px;
+}
+
+.icl_msync_add {
+  background-color: #CCFF99;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_del {
+  background-color: #F5BFCC;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_not {
+  background-color: #A1A1A1;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_mov {
+  background-color: #33B3B3;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_label_changed {
+  background-color: #33b3ff;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_url_changed, .icl_msync_options_changed {
+  background-color: #2743ff;
+  color: #ddd;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_label_missing {
+  background-color: #F55959;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_url_missing {
+  background-color: #f58f36;
+  padding: 2px 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.icl_msync_menu_title {
+  background-color: #99CCCC;
+  font-weight: bold;
+}
+
+input.icl_msync_add {
+  background-color: #CCFF99;
+  padding: 2px 4px;
+}
+
+.icl_msync_menu_title small {
+  font-weight: normal;
+}

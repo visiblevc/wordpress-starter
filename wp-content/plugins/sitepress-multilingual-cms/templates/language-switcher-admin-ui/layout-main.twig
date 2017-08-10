@@ -1,0 +1,94 @@
+<form id="wpml-ls-settings-form" name="wpml_ls_settings_form">
+
+	<input type="hidden" name="wpml-ls-refresh-on-browser-back-button" id="wpml-ls-refresh-on-browser-back-button" value="no">
+
+    {% if notifications.css_not_loaded %}
+        <div class="wpml-ls-message notice notice-info">
+            <p>{{ notifications.css_not_loaded }}</p>
+        </div>
+    {% endif %}
+
+    <div id="wpml-language-switcher-options" class="js-wpml-ls-section wpml-section">
+        <div class="wpml-section-header">
+            <h3>{{ strings.options.section_title }}</h3>
+			<p>{{ strings.options.section_description }}</p>
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-options.twig' %}
+        </div>
+    </div>
+
+    <div id="wpml-language-switcher-menus" class="js-wpml-ls-section wpml-section">
+        <div class="wpml-section-header">
+            <h3>
+                {{ strings.menus.section_title }}
+            </h3>
+            {% include 'save-notification.twig' %}
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-menus.twig' %}
+        </div>
+    </div>
+
+    <div id="wpml-language-switcher-sidebars" class="js-wpml-ls-section wpml-section">
+        <div class="wpml-section-header">
+            <h3>
+                {{ strings.sidebars.section_title }}
+            </h3>
+            {% include 'save-notification.twig' %}
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-sidebars.twig' %}
+        </div>
+    </div>
+
+    <div id="wpml-language-switcher-footer" class="js-wpml-ls-section wpml-section">
+        <div class="wpml-section-header">
+            <h3>
+                {{ strings.footer.section_title }}
+                {% include 'tooltip.twig' with { "content": strings.tooltips.show_in_footer } %}
+            </h3>
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-footer.twig' %}
+        </div>
+
+    </div>
+
+    <div id="wpml-language-switcher-post-translations" class="js-wpml-ls-section wpml-section">
+        <div class="wpml-section-header">
+            <h3>
+                {{ strings.post_translations.section_title }}
+                {% include 'tooltip.twig' with { "content": strings.tooltips.section_post_translations } %}
+            </h3>
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-post-translations.twig' %}
+        </div>
+    </div>
+
+    <div id="wpml-language-switcher-shortcode-action" class="js-wpml-ls-section wpml-section"
+        {% if not setup_complete %} style="display:none;"{% endif %}>
+        <div class="wpml-section-header">
+            <h3>
+                {{ strings.shortcode_actions.section_title }}
+                {#{% include 'tooltip.twig' with { "content": strings.tooltips.section_shortcode_action } %}#}
+            </h3>
+            {% include 'save-notification.twig' %}
+        </div>
+
+        <div class="js-setting-group wpml-ls-settings-group wpml-section-content">
+            {% include 'section-shortcode-action.twig' %}
+        </div>
+    </div>
+
+    {% include 'setup-wizard-buttons.twig' %}
+
+    {% include 'dialog-box.twig' %}
+
+</form>

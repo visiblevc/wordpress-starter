@@ -1,0 +1,163 @@
+.otgs-notice {
+	position: relative;
+
+	.otgs-notice-actions {
+		margin-bottom: 1em;
+	}
+
+	&.message,
+	&.info,
+	&.warning,
+	&.error {
+		clear:              both;
+		//copy WP .notice style
+		background:         #fff;
+		border-left:        4px solid #fff;
+		-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+		box-shadow:         0 1px 1px 0 rgba(0, 0, 0, .1);
+		margin:             5px 15px 2px;
+		padding:            1px 12px;
+		.wrap & {
+			margin: 5px 0 15px;
+		}
+		p {
+			margin:  .5em 0;
+			padding: 2px;
+		}
+	}
+
+	&.message,
+	&.info,
+	&.warning,
+	&.error {
+		ul, ol {
+			max-height: 10em;
+			overflow:   auto;
+			padding-left: 2em !important;
+		}
+		ul {
+			list-style-type: disc;
+		}
+
+		&.right > * {
+			text-align: right;
+		}
+		&.center > * {
+			text-align: center;
+			> {
+				ul, ol {
+					text-align:   left;
+					padding-left: 1em !important;
+					font-weight:  normal;
+				}
+				ul {
+					list-style-type: disc;
+				}
+			}
+		}
+	}
+
+	&.message {
+		border-left: 4px solid #9bc8f0;
+	}
+
+	&.info {
+		border-left: 4px solid #d5e8f9;
+	}
+
+	&.inline {
+		border-left: 4px solid #d5e8f9;
+	}
+
+	&.warning,
+	&.error {
+		border-left: 4px solid #fff366;
+	}
+
+	&.error {
+		border-color:     #dd3d36;
+		background-color: #FFE6E5;
+	}
+
+	&.is-dismissible {
+		position:      relative;
+		padding-right: 38px;
+		.notice-dismiss {
+			text-decoration: none;
+		}
+		p [class*="button-"] {
+			margin: -5px 5px;
+		}
+	}
+
+	.otgs-notice-collapse-hide{
+		position: absolute;
+		top: 0;
+		right: 1px;
+		border: none;
+		margin: 0;
+		padding: 9px;
+		background: 0 0;
+		color: #b4b9be;
+		cursor: pointer;
+	}
+
+	.otgs-notice-collapse-hide:before{
+		background: 0 0;
+		color: #b4b9be;
+		content: "\f460";
+		display: block;
+		font: 400 16px/20px dashicons;
+		speak: none;
+		height: 20px;
+		text-align: center;
+		width: 20px;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	.otgs-notice-collapse-hide:hover:before{
+		color: #d54e21;
+	}
+
+	.otgs-notice-collapsed-text{
+
+		.otgs-notice-collapse-show{
+			color: #b4b9be;
+			cursor: pointer;
+		}
+
+		.otgs-notice-collapse-show:before{
+			background: 0 0;
+			color: #b4b9be;
+			content: "\f132";
+			display: block;
+			font: 400 16px/20px dashicons;
+			speak: none;
+			height: 20px;
+			width: 20px;
+			float: left;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		.otgs-notice-collapse-show:hover:before{
+			color: #d54e21;
+		}
+	}
+
+	.notice-collapse-header{
+		display: none;
+	}
+	
+	.notice-action-link {
+		display: block;
+		position: absolute;
+		right: 1em;
+		bottom: 1em;
+		[dir="rtl"] & {
+			right: auto;
+			left: 1em;
+		}
+	}
+}

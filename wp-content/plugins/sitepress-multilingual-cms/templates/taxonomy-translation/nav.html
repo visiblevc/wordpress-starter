@@ -1,0 +1,17 @@
+<div class="tablenav bottom">
+	<div class="tablenav-pages" id="taxonomy-terms-table-nav">
+		<span class="displaying-num">
+			<% if(pages > 1) { %>
+				<%=items%> <%=labels.items%>
+			<% } else if(pages === 1) {%>
+				1 <%=labels.item%>
+			<% } %>
+		</span>
+		<a class="first-page <% if(page <= 1 ){ %> disabled <% } %>" href="###" title="<%=labels.goToFirstPage%>">«</a>
+		<a href="###" title="<%=labels.goToPreviousPage%>" class="prev-page <% if(page < 2 ) {%> disabled<% } %>">‹</a>
+		<input class="current-page" size="1" value="<%=page%>" title="<%=labels.currentPage%>" type="text"/>
+		<%= labels.of %> <span class="total-pages"><%= pages %></span>
+		<a class="next-page  <% if(page == pages ) {%> disabled <% } %>" href="###" title="<%=labels.goToNextPage%>">›</a>
+		<a class="last-page <% if(page == pages ) {%> disabled <% } %>" href="###" title="<%=labels.goToLastPage%>">»</a>
+	</div>
+</div>

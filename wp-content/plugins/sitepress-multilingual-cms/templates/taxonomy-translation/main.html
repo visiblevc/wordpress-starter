@@ -1,0 +1,14 @@
+<label for="icl_tt_tax_switch">
+	<%=labels.taxToTranslate%>
+	<select id="icl_tt_tax_switch">
+		<option disabled selected> -- <%=labels.taxonomy%> --</option>
+		<% _.each(taxonomies, function(taxonomy, index){ %>
+			<option value="<%=index%>">
+				<%=taxonomy.label%>
+			</option>
+	<% }); %>
+	</select>
+</label>
+<div class="wpml-loading-taxonomy"><span class="spinner is-active"></span><%=labels.preparingTermsData%></div>
+<div id="taxonomy-translation">
+</div>

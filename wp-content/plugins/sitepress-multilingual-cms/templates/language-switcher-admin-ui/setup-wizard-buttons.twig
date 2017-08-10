@@ -1,0 +1,8 @@
+{% if not setup_complete %}
+	<footer id="icl_setup_nav_3" class="js-wpml-ls-section wpml-section clearfix text-right">
+		<input id="icl_setup_back_2" class="button-secondary alignleft" name="save" value="{{ strings.misc.button_back }}" type="button" />
+		{{ setup_step_2_nonce_field|raw }}
+		<input class="button-primary alignright" name="save" value="{{ strings.misc.button_next }}" type="submit" />
+		<input type="hidden" name="submit_setup_wizard" value="0" />
+	</footer>
+{% endif %}

@@ -1,0 +1,21 @@
+<div class="icl_tt_form wpml-dialog" id="icl_tt_form_<%= trid + '_' + lang %>" title="<%= labels.copyToAllLanguages %>">
+	<div class="wpml-dialog-body wpml-dialog-translate ">
+
+		<p class="wpml-dialog-cols-icon">
+			<i class="otgs-ico-copy wpml-dialog-icon-xl"></i>
+		</p>
+
+		<div class="wpml-dialog-cols-content">
+			<p>
+				<%= copyMessage %>
+			</p>
+			<label><input type="checkbox" name="overwrite"> <%= labels.copyAllOverwrite %></label>
+		</div>
+		<div class="wpml-dialog-footer ">
+			<span class="errors icl_error_text"></span>
+			<input class="cancel wpml-dialog-close-button alignleft" value="<%= labels.cancel %>" type="button">
+			<input class="button-primary js-copy-all-ok alignright" value="<%= labels.Ok %>" type="submit">
+			<span class="spinner alignright"></span>
+		</div>
+	</div>
+</div>

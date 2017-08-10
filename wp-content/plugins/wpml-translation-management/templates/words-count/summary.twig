@@ -1,0 +1,45 @@
+<p class="no-results">{{ strings.noResults }}</p>
+<table class="report widefat fixed striped wpml-wc-report">
+	<thead>
+	<tr>
+		<td class="manage-column column-cb check-column">
+			<label class="screen-reader-text" for="cb-select-all-1">{{ strings.columns.selectAll }}</label>
+			<input type="checkbox" id="cb-select-all-1" name="check-all">
+		</td>
+		<th scope="col" class="manage-column column-title column-primary">{{ strings.columns.type }}</th>
+		<th scope="col" class="manage-column num">{{ strings.columns.count.untranslated }}</th>
+		<th scope="col" class="manage-column num">{{ strings.columns.words.untranslated }}</th>
+	</tr>
+	</thead>
+	<tfoot>
+	<tr>
+		<td class="manage-column column-cb check-column">
+			<label class="screen-reader-text" for="cb-select-all-2">{{ strings.columns.selectAll }}</label>
+			<input type="checkbox" id="cb-select-all-2" name="check-all">
+		</td>
+		<th scope="col" class="manage-column column-title column-primary text-right"><strong>{{ strings.columns.sumTotal }}</strong></th>
+		<td scope="col" class="manage-column num">0</td>
+		<td scope="col" class="manage-column num">0</td>
+	</tr>
+	</tfoot>
+	<tbody>
+	{% for row in rows %}
+		<tr>
+			<th class="manage-column column-cb check-column">
+				<!-- //TODO There is a text not possible to translate! -->
+				<label class="screen-reader-text" for="cd-{{ row.type|e }}">Select {{ row.type }}</label>
+				<input id="cd-{{ row.type|e }}" type="checkbox"{{ row.selected ? 'checked="checked"' }}>
+			</th>
+			<td class="description column-description">
+				{{ row.type }}
+			</td>
+			<td class="posts column-posts num" data-value="{{ row.count.untranslated }}">
+				{{ row.count.untranslated|number_format(0) }}
+			</td>
+			<td class="posts column-posts num" data-value="{{ row.words.untranslated }}">
+				{{ row.words.untranslated|number_format(0) }}
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

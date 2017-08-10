@@ -1,0 +1,45 @@
+{% if slot_type == 'statics' %}
+	{% set is_static = true %}
+	{% set dialog_title = strings[ slug ].dialog_title %}
+	{% set include_row  = 'slot-subform-' ~ slot_type ~ '-' ~ slug ~ '.twig' %}
+{% else %}
+	{% set dialog_title = strings[ slot_type ].dialog_title %}
+	{% set include_row  = 'slot-subform-' ~ slot_type ~ '.twig' %}
+{% endif %}
+
+{% set slot_row_id = 'wpml-ls-' ~ slot_type ~ '-row-' ~ slug %}
+<tr id="{{ slot_row_id }}" class="js-wpml-ls-row" data-item-slug="{{ slug }}" data-item-type="{{ slot_type }}">
+    <td class="wpml-ls-cell-preview">
+        <div class="js-wpml-ls-subform wpml-ls-subform" data-origin-id="{{ slot_row_id }}" data-title="{{ dialog_title }}" data-item-slug="{{ slug }}" data-item-type="{{ slot_type }}">
+            {% if slot_settings %}
+                {% include include_row
+                    with {
+                        "slug":     slug,
+                        "slot_settings": slot_settings,
+                        "settings": settings,
+                        "slots":    slots,
+                        "strings": strings,
+                        "preview": previews[ slot_type ][ slug ],
+                        "color_schemes": color_schemes,
+                    }
+                %}
+            {% endif %}
+        </div>
+    </td>
+
+	{% if not is_static %}
+    <td>
+        <span class="js-wpml-ls-row-title">{{ slots[ slug ].name }}</span>
+    </td>
+	{% endif %}
+
+	<td class="wpml-ls-cell-action">
+        <a href="#" title="{{ strings.misc.title_action_edit }}" class="js-wpml-ls-row-edit wpml-ls-row-edit"><i class="otgs-ico-edit"></i></a>
+    </td>
+
+	{% if not is_static %}
+    <td class="wpml-ls-cell-action">
+        <a href="#" title="{{ strings.misc.title_action_delete }}" class="js-wpml-ls-row-remove wpml-ls-row-remove"><i class="otgs-ico-delete"></i></a>
+    </td>
+	{% endif %}
+</tr>

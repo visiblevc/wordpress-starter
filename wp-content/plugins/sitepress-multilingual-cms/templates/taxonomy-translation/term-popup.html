@@ -1,0 +1,46 @@
+<div class="icl_tt_form wpml-dialog" id="icl_tt_form_<%= trid + '_' + lang %>" title="<%= labels.termPopupDialogTitle %>">
+	<div class="wpml-dialog-body wpml-dialog-translate ">
+		<header class="wpml-term-translation-header">
+			<h3 class="wpml-header-original"><%= labels.original %> <span class="wpml-title-flag"><img src="<%= langs[ source_lang ].flag %>"></span><strong><%= langs[ source_lang ].label %></strong></h3>
+			<h3 class="wpml-header-translation"><%= labels.translationTo %> <span class="wpml-title-flag"><img src="<%= langs[ lang ].flag %>"></span><strong><%= langs[ lang ].label %></strong></h3>
+		</header>
+	
+		<div class="wpml-form-row">
+			<label for="term-name"><%= labels.Name %></label>
+			<input readonly id="term-name-original" value="<%= original_term.name %>" type="text">
+			<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%= labels.copyFromOriginal %>"/>
+			<input id="term-name" value="<%= term.name %>" type="text">
+		</div>
+	
+		<div class="wpml-form-row">
+			<label for="term-slug"><%= labels.Slug %></label>
+			<input readonly id="term-slug-original" value="<%= original_term.slug %>" type="text">
+			<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%= labels.copyFromOriginal %>"/>
+			<input id="term-slug" value="<%= term.slug %>" type="text">
+		</div>
+		<div class="wpml-form-row">
+			<label for="term-description"><%= labels.Description %></label>
+			<textarea readonly id="term-description-original" cols="22" rows="4"><%= original_term.description %></textarea>
+			<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%= labels.copyFromOriginal %>"/>
+			<textarea id="term-description" cols="22" rows="4"><%= term.description %></textarea>
+		</div>
+		<% if ( original_term_meta.length ) { %>
+			<hr>
+			<label><%= labels.termMetaLabel%></label>
+			<div class="wpml-form-row">
+				<% _.each(original_term_meta, function(meta_data){ %>
+					<label for="term-meta"><%= meta_data.meta_key %></label>
+					<input readonly value="<%- meta_data.meta_value %>" type="text">
+					<button class="button-copy button-secondary js-button-copy otgs-ico-copy" title="<%= labels.copyFromOriginal %>"/>
+					<input name="term-meta" class="term-meta" data-meta-key="<%= meta_data.meta_key %>" value="<%- term_meta[meta_data.meta_key] %>" type="text">
+				<% }); %>
+			</div>
+		<% } %>
+		<div class="wpml-dialog-footer ">
+			<span class="errors icl_error_text"></span>
+			<input class="cancel wpml-dialog-close-button alignleft" value="<%= labels.cancel %>" type="button">
+			<input class="button-primary term-save alignright" value="<%= labels.save %>" type="submit">
+			<span class="spinner alignright"></span>
+		</div>
+	</div>
+</div>

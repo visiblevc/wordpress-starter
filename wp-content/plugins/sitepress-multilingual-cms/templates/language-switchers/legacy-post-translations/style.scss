@@ -1,0 +1,32 @@
+.wpml-ls-statics-post_translations  {
+   clear: both;
+  .wpml-ls-item {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    &:not(:last-child):after {
+      content: ', ';
+    }
+  }
+
+  a {
+    line-height: 1;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .wpml-ls-flag {
+    display: inline;
+    vertical-align: baseline;
+    width: 18px;
+    height: 12px;
+  }
+
+  .wpml-ls-flag + span {
+    margin-left: .3em;
+    .rtl & {
+      margin-left: 0;
+      margin-right: .3em;
+    }
+  }
+}

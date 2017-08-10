@@ -1,0 +1,17 @@
+<div class="wpml-section" id="wpml_ls_reset">
+	<div class="wpml-section-header">
+		<h3>{{ title }}</h3>
+	</div>
+	<div class="wpml-section-content">
+		<p>{{ description|raw }}</p>
+
+		{% if theme_config_file %}
+			<p class="explanation-text">{{ explanation_text|raw }}</p>
+		{% endif %}
+
+		<p class="buttons-wrap">
+			<a class="button button-secondary" onclick="if(!confirm('{{ confirmation_message }}')) return false;"
+			   href="{{ restore_page_url }}">{{ restore_button_label }}{% if theme_config_file %} *{% endif %}</a>
+		</p>
+	</div>
+</div>

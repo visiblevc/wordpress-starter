@@ -1,0 +1,30 @@
+{% include 'preview.twig' with {"preview": previews.statics.footer } %}
+
+<div class="wpml-ls-subform-options">
+
+	{% include 'dropdown-templates.twig'
+		with {
+			"id": "in-footer",
+			"name": "statics[footer][template]",
+			"value":     settings.statics.footer.template,
+			"slot_type": "footer",
+		}
+	%}
+
+	{% include 'checkboxes-includes.twig'
+		with {
+			"name_base": "statics[footer]",
+			"slot_settings": settings.statics.footer,
+			"template_slug": slot_settings.template,
+		}
+	%}
+
+	{% include 'panel-colors.twig'
+		with {
+			"id": "static-footer",
+			"name_base": "statics[footer]",
+			"slot_settings": settings.statics.footer,
+		}
+	%}
+
+</div>

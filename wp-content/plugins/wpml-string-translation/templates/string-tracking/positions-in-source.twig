@@ -1,0 +1,33 @@
+{%- if positions -%}
+    <div id="icl_show_source_top">
+    {% for key, position in positions %}
+        {% set number = key + 1 %}
+        <a href="#" onclick="icl_show_in_source({{ key }},{{ position.line }})">{{ number }}</a><br />
+    {% endfor %}
+    </div>
+    <div id="icl_show_source_wrap">
+    {% for key, position in positions %}
+        <div class="icl_string_track_source" id="icl_string_track_source_{{ key }}"
+             {% if key > 0 %}style="display:none"{% endif %}>
+
+            {% if key > 0 %}
+                <script type="text/javascript">icl_show_in_source_scroll_once = '{{ position.line }}'</script>
+            {% endif %}
+
+            <div class="icl_string_track_filename">{{ position.path }}</div>
+
+            <pre>
+                <ol>
+                {%- for line_number, line in position.content -%}
+                    <li id="icl_source_line_{{ key }}_{{ line_number }}"
+                        {%- if line_number == position.line - 1 -%}style="background-color:{{ highlight_color }}"{%- endif -%}
+                    >{{- line -}}&nbsp;</li>
+                {%- endfor -%}
+                </ol>
+            </pre>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    {{ no_result_label }}
+{% endif %}

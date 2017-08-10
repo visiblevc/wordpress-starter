@@ -1,0 +1,100 @@
+<div class="js-wpml-ls-option wpml-ls-language_order">
+	<h4><label>{{ strings.options.label_language_order }}</label> {% include 'tooltip.twig' with { "content": strings.tooltips.languages_order } %}
+		{% include 'save-notification.twig' %}
+	</h4>
+	<p class="explanation-text">{{ strings.options.tip_drag_languages }}</p>
+	<ul id="wpml-ls-languages-order" class="wpml-ls-languages-order">
+		{% for language in ordered_languages %}
+		<li class="js-wpml-languages-order-item" data-language-code="{{ language.code }}">
+			<img src="{{ language.flag_url }}"> {{ language.display_name }}<input type="hidden" name="languages_order[]" value="{{ language.code }}">
+		</li>
+		{%  endfor %}
+	</ul>
+</div>
+
+<div class="js-wpml-ls-option wpml-ls-languages_with_no_translations">
+	<h4><label>{{ strings.options.label_languages_with_no_translations }} {% include 'tooltip.twig' with { "content": strings.tooltips.languages_without_translation } %}
+		</label>
+		{% include 'save-notification.twig' %}
+	</h4>
+	<ul>
+		<li>
+			<label for="link_empty_off">
+				<input type="radio" name="link_empty" id="link_empty_off"
+					   class="js-wpml-ls-trigger-save"
+					   value="0"{% if not settings.link_empty %} checked="checked"{% endif %}>{{ strings.options.option_skip_link }}
+			</label>
+		</li>
+		<li>
+			<label for="link_empty_on">
+				<input type="radio" name="link_empty" id="link_empty_on"
+					   class="js-wpml-ls-trigger-save"
+					   value="1"{% if settings.link_empty %} checked="checked"{% endif %}>{{ strings.options.option_link_home }}
+			</label>
+		</li>
+	</ul>
+</div>
+
+<div class="js-wpml-ls-option wpml-ls-preserve_url_args">
+	<p class="wpml-ls-form-line">
+		{% if not settings.copy_parameters %}<a href="#" class="js-wpml-ls-toggle-once">{% endif %}
+			<label for="copy_parameters">
+				{{ strings.options.label_preserve_url_args }}{% if not settings.copy_parameters -%}<span class="otgs-ico-caret-down js-arrow-toggle"></span>{%- endif -%}
+			</label>{% if not settings.copy_parameters %}</a>{% endif %}
+
+		{% include 'tooltip.twig' with { "content": strings.tooltips.preserve_url_arguments } %}
+
+		{% include 'save-notification.twig' %}
+
+		<input type="text" size="100" id="copy_parameters" name="copy_parameters"
+			   value="{{ settings.copy_parameters }}"
+			   class="js-wpml-ls-trigger-save js-wpml-ls-trigger-need-save{% if not settings.copy_parameters %} js-wpml-ls-toggle-target hidden{% endif %}">
+	</p>
+</div>
+
+<div class="js-wpml-ls-option wpml-ls-additional_css">
+	<p class="wpml-ls-form-line">
+		{% if not settings.additional_css %}<a href="#" class="js-wpml-ls-toggle-once">{% endif %}
+			<label for="additional_css">
+				{{ strings.options.label_additional_css }}{% if not settings.additional_css %}<span class="otgs-ico-caret-down js-arrow-toggle"></span>{%- endif -%}
+			</label>{% if not settings.additional_css %}</a>{% endif %}
+
+
+		{% include 'tooltip.twig' with { "content": strings.tooltips.additional_css } %}
+
+		{% include 'save-notification.twig' %}
+
+		<textarea id="additional_css" name="additional_css" rows="4"
+				  class="large-text js-wpml-ls-additional-css js-wpml-ls-trigger-save js-wpml-ls-trigger-need-save{% if not settings.additional_css %} js-wpml-ls-toggle-target hidden{% endif %}">
+			{{- settings.additional_css -}}
+		</textarea>
+	</p>
+</div>
+
+<div class="js-wpml-ls-option wpml-ls-backwards_compatibility">
+	<div class="wpml-ls-form-line">
+		{% if not settings.migrated == 1 %}
+			{% set hide_backwards_compatibility = true %}
+		{% endif %}
+
+		{% if hide_backwards_compatibility %}<a href="#" class="js-wpml-ls-toggle-once">{% endif %}
+			<label>
+				{{ strings.options.label_migrated_toggle }}{% if hide_backwards_compatibility %}<span class="otgs-ico-caret-down js-arrow-toggle"></span>{%- endif -%}
+			</label>{% if hide_backwards_compatibility %}</a>{% endif %}
+
+		{% include 'tooltip.twig' with { "content": strings.tooltips.backwards_compatibility } %}
+
+		{% include 'save-notification.twig' %}
+
+		<p{% if hide_backwards_compatibility %} class="js-wpml-ls-toggle-target hidden"{% endif %}>
+			<input type="checkbox" id="wpml-ls-backwards-compatibility" name="migrated"
+				   value="0"{% if settings.migrated == 0 %} checked="checked"{% endif %}
+				   class="js-wpml-ls-migrated js-wpml-ls-trigger-save js-wpml-ls-trigger-need-save">
+
+			<label for="wpml-ls-backwards-compatibility">
+				{{ strings.options.label_skip_backwards_compatibility }}
+			</label>
+		</p>
+
+	</div>
+</div>

@@ -1,0 +1,43 @@
+{% set slug_placeholder = '%id%' %}
+
+{% include 'table-slots.twig'
+    with {
+        "slot_type": "menus",
+        "slots_settings": settings.menus,
+        "slots"    : data.menus,
+    }
+%}
+
+{% include 'button-add-new-ls.twig'
+    with {
+        "existing_items": data.menus|length,
+        "settings_items":  settings.menus|length,
+        "tooltip_all_assigned": strings.tooltips.add_menu_all_assigned,
+        "tooltip_no_item": strings.tooltips.add_menu_no_menu,
+        "button_target": "#wpml-ls-new-menus-template",
+        "button_label": strings.menus.add_button_label,
+    }
+%}
+
+<script type="text/html" id="wpml-ls-new-menus-template" class="js-wpml-ls-template">
+    <div class="js-wpml-ls-subform wpml-ls-subform" data-title="{{ strings.menus.dialog_title_new }}" data-item-slug="{{ slug_placeholder }}" data-item-type="menus">
+
+        {% include 'slot-subform-menus.twig'
+        with {
+            "slug":     slug_placeholder,
+            "slots_settings": slots_settings,
+            "slots":    data.menus,
+            "preview": previews.menu[ slug ],
+        }
+        %}
+    </div>
+</script>
+
+<script type="text/html" id="wpml-ls-new-menus-row-template" class="js-wpml-ls-template">
+    {% include 'table-slot-row.twig'
+        with {
+            "slug": slug_placeholder,
+            "slots": menus
+        }
+    %}
+</script>

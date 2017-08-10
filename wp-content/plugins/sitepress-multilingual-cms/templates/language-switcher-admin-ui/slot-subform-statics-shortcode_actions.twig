@@ -1,0 +1,31 @@
+{% include 'preview.twig' with {"preview": previews.statics.shortcode_actions } %}
+
+<div class="wpml-ls-subform-options">
+
+	{% include 'dropdown-templates.twig'
+		with {
+			"id": "in-shortcode-action",
+			"name": "statics[shortcode_actions][template]",
+			"value":     settings.statics.shortcode_actions.template,
+			"slot_type": "shortcode_actions",
+		}
+	%}
+
+	{% include 'checkboxes-includes.twig'
+		with {
+			"id": "in-shortcode-actions",
+			"name_base": "statics[shortcode_actions]",
+			"slot_settings": settings.statics.shortcode_actions,
+			"template_slug": slot_settings.template,
+		}
+	%}
+
+	{% include 'panel-colors.twig'
+		with {
+			"id": "in-shortcode-actions",
+			"name_base": "statics[shortcode_actions]",
+			"slot_settings": settings.statics.shortcode_actions,
+		}
+	%}
+
+</div>

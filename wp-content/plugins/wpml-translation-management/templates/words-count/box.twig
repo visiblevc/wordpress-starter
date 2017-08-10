@@ -1,0 +1,26 @@
+<div class="wpml-accordion wpml-wc-accordion">
+	<h4 class="handle"><span>{{ strings.title }}</span></h4>
+
+	<div class="inside">
+		<input type="hidden" name="wpml_words_count_panel_nonce" value="{{ nonces.wpml_words_count_panel_nonce|e }}">
+		<input type="hidden" name="wpml_words_count_chunk_size" value="{{ wc_chunk_size|e }}">
+
+		<div class="wpml-wc-messages">
+			{% for message in strings.messages %}
+				<p>{{ message }}</p>
+			{% endfor %}
+		</div>
+		<div class="wpml-wc-buttons">
+			<p>
+				<a class="button-primary" href="{{ strings.openDialogButtonURL }}" title="{{ strings.openDialogButton|e }}">
+					{{ strings.openDialogButton }}
+				</a>
+			</p>
+
+			<p class="call-to-action">
+				{{ strings.callToAction.Text }} <a href="{{ strings.callToAction.linkURL }}" target="_blank" title="{{ strings.callToAction.linkText|e }}">{{ strings.callToAction.linkText }}</a>.
+			</p>
+		</div>
+		{% include 'dialog.twig' with dialog %}
+	</div>
+</div>

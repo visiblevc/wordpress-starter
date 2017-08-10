@@ -1,0 +1,8 @@
+{
+  "name" : "Dropdown click",
+  "slug" : "wpml-legacy-dropdown-click",
+  "for"  : [ "sidebars", "shortcode_actions" ],
+  "settings": {
+    "display_link_for_current_lang": 1
+  }
+}

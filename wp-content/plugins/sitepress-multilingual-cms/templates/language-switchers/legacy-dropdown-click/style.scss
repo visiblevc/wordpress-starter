@@ -1,0 +1,90 @@
+.wpml-ls-legacy-dropdown-click {
+	width: 15.5em;
+	max-width: 100%;
+	& > ul {
+		position: relative;
+		padding: 0;
+		margin: 0 !important;
+		list-style-type: none;
+	}
+
+	.wpml-ls-item {
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+	}
+
+	a {
+		display: block;
+		text-decoration: none;
+		color: #444;
+		border: 1px solid #cdcdcd;
+		background-color: #fff;
+		padding: 5px 10px;
+		line-height: 1;
+		span {
+			vertical-align: middle;
+		}
+
+		&.wpml-ls-item-toggle {
+			position: relative;
+			padding-right: calc(10px + .7em + .7em);
+			.rtl & {
+				padding-right: 10px;
+				padding-left: calc(10px + .7em + .7em);
+			}
+
+			&:after {
+				content: '';
+				vertical-align: middle;
+				display: inline-block;
+				border: .35em solid transparent;
+				border-top: .5em solid;
+				position: absolute;
+				right: 10px;
+				top: calc(50% - .175em);
+				.rtl & {
+					right: auto;
+					left: 10px;
+				}
+			}
+		}
+	}
+	a:hover,
+	a:focus,
+	.wpml-ls-current-language:hover>a {
+		color: #000;
+		background: #eee;
+	}
+
+	.wpml-ls-sub-menu {
+		visibility: hidden;
+		position: absolute;
+		top: 100%;
+		right: 0;
+		left: 0;
+		border-top: 1px solid #cdcdcd;
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+		z-index: 101;
+		a {
+			border-width: 0 1px 1px 1px;
+		}
+	}
+
+	.wpml-ls-flag {
+		display: inline;
+		vertical-align: middle;
+		width: 18px;
+		height: 12px;
+	}
+
+	.wpml-ls-flag + span {
+		margin-left: .4em;
+		.rtl & {
+			margin-left: 0;
+			margin-right: .4em;
+		}
+	}
+}

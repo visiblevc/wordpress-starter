@@ -1,0 +1,57 @@
+{% if not slot_settings is defined %}
+	{% set slot_settings = default_menus_slot %}
+{% endif %}
+
+{% include 'preview.twig' with {"preview": preview } %}
+
+<div class="wpml-ls-subform-options">
+
+    {% include 'dropdown-menus.twig'
+        with {
+            "slug":     slug,
+            "menus":    slots,
+        }
+    %}
+
+    {% include 'dropdown-templates.twig'
+        with {
+            "id": "in-menus-" ~ slug,
+            "name": "menus[" ~ slug ~ "][template]",
+            "value": slot_settings.template,
+            "slot_type": "menus",
+        }
+    %}
+
+    {% include 'radio-position-menu.twig'
+        with {
+            "name_base": "menus[" ~ slug ~ "]",
+            "slot_settings": slot_settings
+        }
+    %}
+
+    {% include 'radio-hierarchical-menu.twig'
+        with {
+            "name_base": "menus[" ~ slug ~ "]",
+            "slot_settings": slot_settings
+        }
+    %}
+
+
+    {% include 'checkboxes-includes.twig'
+        with {
+            "name_base": "menus[" ~ slug ~ "]",
+            "slot_settings": slot_settings,
+            "template_slug": slot_settings.template,
+        }
+    %}
+
+    {% include 'panel-colors.twig'
+        with {
+            "id": "in-menus-" ~ slug,
+            "name_base": "menus[" ~ slug ~ "]",
+            "slot_settings": slot_settings,
+            "slot_type": "menus",
+        }
+    %}
+
+</div>

@@ -1,0 +1,41 @@
+{% set css_classes_flag    = ('wpml-ls-flag ' ~ backward_compatibility.css_classes_flag)|trim %}
+{% set css_classes_native  = ('wpml-ls-native ' ~ backward_compatibility.css_classes_native)|trim %}
+{% set css_classes_display = ('wpml-ls-display ' ~ backward_compatibility.css_classes_display)|trim %}
+{% set css_classes_bracket = ('wpml-ls-bracket ' ~ backward_compatibility.css_classes_bracket)|trim %}
+
+<div class="{{ css_classes }} wpml-ls-legacy-list-vertical"{% if backward_compatibility.css_id %} id="{{ backward_compatibility.css_id }}"{% endif %}>
+	<ul>
+
+		{% for code, language in languages %}
+			<li class="{{ language.css_classes }} wpml-ls-item-legacy-list-vertical">
+				<a href="{{ language.url }}"{% if language.backward_compatibility.css_classes_a %} class="{{ language.backward_compatibility.css_classes_a }}"{% endif %}>
+					{%- if language.flag_url -%}
+						<img class="{{ css_classes_flag }}" src="{{ language.flag_url }}" alt="{{ language.code }}" title="{{ language.flag_title }}">
+					{%- endif -%}
+
+					{%- if language.is_current and (language.native_name or language.display_name)  -%}
+
+						{%- set current_language_name = language.native_name|default(language.display_name) -%}
+						<span class="{{ css_classes_native }}">{{- current_language_name -}}</span>
+
+					{%- else -%}
+
+						{%- if language.native_name -%}
+							<span class="{{ css_classes_native }}">{{- language.native_name -}}</span>
+						{%- endif -%}
+
+						{%- if language.display_name -%}
+							<span class="{{ css_classes_display }}">
+							{%- if language.native_name -%}<span class="{{ css_classes_bracket }}"> (</span>{%- endif -%}
+								{{- language.display_name -}}
+							{%- if language.native_name -%}<span class="{{ css_classes_bracket }}">)</span>{%- endif -%}
+							</span>
+						{%- endif -%}
+
+					{%- endif -%}
+				</a>
+			</li>
+		{% endfor %}
+
+	</ul>
+</div>

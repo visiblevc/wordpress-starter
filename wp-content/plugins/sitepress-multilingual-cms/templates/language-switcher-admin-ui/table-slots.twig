@@ -1,0 +1,33 @@
+{% if slot_type == 'statics' %}
+	{% set is_static = true %}
+	{% set table_id = 'wpml-ls-slot-list-' ~ slot_type ~ '-' ~ slug %}
+{% else %}
+	{% set table_id = 'wpml-ls-slot-list-' ~ slot_type %}
+{% endif %}
+
+{% if slug in ['footer', 'post_translations'] %}
+    {% set label_action = strings.misc.label_action %}
+{% else %}
+    {% set label_action = strings.misc.label_actions %}
+{% endif %}
+
+<table id="{{ table_id }}" class="js-wpml-ls-slot-list wpml-ls-slot-list"{% if not slots_settings %} style="display:none;"{% endif %}>
+    <thead>
+    <tr>
+        <th>{{ strings.misc.label_preview }}</th>
+        {% if not is_static %}<th>{{ strings.misc.label_position }}</th>{% endif %}
+        <th{% if not is_static %} colspan="2"{% endif %}>{{ label_action }}</th></tr>
+    </thead>
+    <tbody>
+    {% for slug, slot_settings in slots_settings %}
+        {% include 'table-slot-row.twig'
+            with {
+                "slug": slug,
+                "slot_type": slot_type,
+                "slot_settings": slot_settings,
+                "slots": slots,
+            }
+        %}
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,67 @@
+.listing-table table.wp-list-table .listing-page-table-list:first-of-type .groups-heading th {
+  border-top-width: 0;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th {
+  -o-border-image: linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%) 30 0 0 0 repeat repeat;
+     border-image: linear-gradient(to bottom, #b5bdc8 0%, #828c95 36%, #28343b 100%) 30 0 0 0 repeat repeat;
+  border-top: 0.25em double #b5bdc8;
+  position: relative;
+  background: #FAFAFA;
+  color: #222;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .buttons {
+  margin-top: 1.45em;
+  margin-right: 1em;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .buttons .dashicons {
+  line-height: 1.5em;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .buttons .group-action {
+  height: auto;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .buttons .group-collapse {
+  display: none;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .buttons .group-expand {
+  display: block;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .listing-heading-summary ul li {
+  vertical-align: top;
+  padding: 0 0.5em;
+  display: table-cell;
+  border-right: 1px #222 solid;
+  font-size: .95em;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .listing-heading-summary ul li span.value {
+  font-weight: bold;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .listing-heading-summary ul li:first-child {
+  padding-left: 0;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .listing-heading-summary ul li:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+.listing-table table.wp-list-table .listing-page-table-list .groups-heading th .listing-heading-summary ul li ul.group-list li {
+  display: block;
+  border-right: none;
+  padding: 0;
+  margin: 0;
+}
+.listing-table table.wp-list-table .listing-page-table-list .item:nth-child(odd) {
+  background-color: #eee;
+}
+.listing-table table.wp-list-table .listing-page-table-list .item:nth-child(even) {
+  background-color: #fff;
+}
+.listing-table table.wp-list-table .listing-page-table-list:last-child .groups-heading th {
+  border-bottom: none;
+}
+.listing-table .navigator {
+  display: inline;
+  float: right;
+  overflow: auto;
+}

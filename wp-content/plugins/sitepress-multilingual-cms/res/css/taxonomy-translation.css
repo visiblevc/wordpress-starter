@@ -1,0 +1,35 @@
+/*===================================================================*/
+#term-label-summary {
+  margin-top: 30px; }
+
+#wpml-taxonomy-translation-terms-table {
+  overflow-x: auto; }
+
+.wpml-tt-sync-table td {
+  vertical-align: middle; }
+
+.wpml-col-ttsync {
+  width: 110px; }
+
+.wpml-tt-sync-section {
+  margin-top: 15px; }
+
+.wpml-tt-sync-legend span {
+  padding: 0 7px;
+  margin: 0 3.5px; }
+
+.wpml-tt-sync-action {
+  text-align: center;
+  margin: 7px 15px 0; }
+
+.wpml-loading-taxonomy {
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  vertical-align: middle;
+  display: none; }
+.wpml-loading-taxonomy .spinner {
+  float: none;
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 5px 2px 5px; }

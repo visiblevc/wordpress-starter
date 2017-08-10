@@ -1,0 +1,5 @@
+{
+  "name" : "Post translations",
+  "slug" : "wpml-legacy-post-translations",
+  "for"  : [ "post_translations" ]
+}

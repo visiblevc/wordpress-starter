@@ -1,0 +1,17 @@
+#icl_plugin_texts_wrapper .postbox-container {
+  width: 100% !important; }
+#icl_plugin_texts_wrapper .widefat th {
+  line-height: 1em;
+  padding: 4px;
+  color: #555; }
+
+div.postbox div.inside {
+  margin: 10px;
+  position: relative; }
+
+#icl_custom_posts_sync_options, #icl_custom_tax_sync_options {
+  width: 49%;
+  float: left; }
+
+#icl_custom_posts_sync_options {
+  margin-right: 2%; }

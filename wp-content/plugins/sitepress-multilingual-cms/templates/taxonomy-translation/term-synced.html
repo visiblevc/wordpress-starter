@@ -1,0 +1,10 @@
+<span class="icl_tt_term_name_sync" id="<%=trid + '-' + lang%>">
+	<% if ( name ) { %>
+		<%= parent %>
+		<%if ( level > 0 ) { %>
+			</br>
+			<%= Array(level+1).join('—') + " " %>
+		<% } %>
+		<%= name %>
+	<% } %>
+</span>

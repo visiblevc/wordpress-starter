@@ -1,0 +1,50 @@
+{% include 'preview.twig' with {"preview": previews.statics.post_translations } %}
+
+<div class="wpml-ls-subform-options">
+
+	{% include 'dropdown-templates.twig'
+	with {
+	"id": "in-post-translations",
+	"name": "statics[post_translations][template]",
+	"value":     settings.statics.post_translations.template,
+	"slot_type": "post_translations",
+	}
+	%}
+
+	{% include 'checkboxes-includes.twig'
+		with {
+			"name_base": "statics[post_translations]",
+			"slot_settings": settings.statics.post_translations,
+			"template_slug": slot_settings.template,
+		}
+	%}
+
+	<h4><label>{{ strings.post_translations.position_label }}</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.post_translation_position } %}</h4>
+	<ul>
+		<li>
+			<label>
+				<input type="checkbox" name="statics[post_translations][display_before_content]"
+					   id="wpml-ls-before-in-post-translations"
+					   value="1"{% if settings.statics.post_translations.display_before_content %} checked="checked"{% endif %}>{{ strings.post_translations.position_above }}
+			</label>
+		</li>
+		<li>
+			<label>
+				<input type="checkbox"  name="statics[post_translations][display_after_content]"
+					   id="wpml-ls-after-in-post-translations"
+					   value="1"{% if settings.statics.post_translations.display_after_content %} checked="checked"{% endif %}>{{ strings.post_translations.position_below }}
+			</label>
+		</li>
+	</ul>
+
+	{% if settings.statics.post_translations.availability_text is empty %}
+		{% set availability_text = strings.post_translations.default_alternative_languages_text %}
+	{% else %}
+		{% set availability_text = settings.statics.post_translations.availability_text %}
+	{% endif %}
+
+	<h4><label>{{ strings.post_translations.label_alternative_languages_text }}</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.alternative_languages_text } %}</h4>
+	<input type="text" class="js-wpml-ls-trigger-update"
+		   name="statics[post_translations][availability_text]" value="{{ availability_text }}" size="40">
+
+</div>

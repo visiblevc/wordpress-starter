@@ -1,0 +1,158 @@
+= 1.7.15 =
+* Bug fix: New search, results not visible with WordPress 4.6 when searching from installer page
+* Bug fix: A js error was showing on the admin pages: `pagenow` is undefined
+* Added support for equivalent subscriptions
+
+= 1.7.14 =
+* Refactoring for compliance with Envato market
+
+= 1.7.13 =
+* Added sanitization for some inputs
+* Fixed PHP notice being logged when installing a plugin from the WP plugins directory
+
+= 1.7.12 =
+* Allow to set the site keys in PHP (as constants)
+* Fixed an issue with unregistered sites gets wrong info (or error) when clicking "View version x.y.x details" link
+
+= 1.7.11 =
+* Fixed styling for 'must-register' warnings on the plugins page
+
+= 1.7.10 =
+* Fixed a notice that was appearing when the site key registration failed
+
+= 1.7.9 =
+* Save the client_id value from the site_key_validation API call response and make it available via WP_Installer_API::get_ts_client_id API call
+
+= 1.7.8 =
+* Small fix for hiding the WPML registration notice
+
+= 1.7.7 =
+* Fixed js error showing up during registration
+* Styles update for unified WPML messages
+
+= 1.7.6 =
+* Updated error messages when validating site keys and stopped removing site keys in case of communication errors
+* Added a note for users who renewed or purchased new subscriptions and who need to revalidate their subscription from their websites
+* Fixed a problem with the registrations for multi-site setups when WordPress was installed in a separate folder
+
+= 1.7.5 =
+* Fixed a bug causing registration to not be recognized for the entire network in the multi-site mode
+
+= 1.7.4 =
+* Use https for wp-types API
+
+= 1.7.3 =
+* Added a dependencies class and check for the windows paths length exception
+* Bug fix: all downloads showed up twice on the plugins list whe upgrading from WPML 3.3 
+
+= 1.7.2 =
+* Added an exception to handle the case when Types embedded is installer from Toolset Installer and its included Installer version overrides the one running the Toolset setup wizard
+
+= 1.7.1 =
+* Added an exception for the case of Types 1.8.9 (Installer 1.7.0) together with older WPML (older Installer)
+
+= 1.7.0 =
+* New format for the products data file.
+* Other fixes
+
+= 1.6.8 =
+* Sanitized an input that was a potential security issue
+
+= 1.6.7 =
+* Fixed a bug causing repeated calls to the Toolset api to validate the user subscription
+* Use https for API urls
+
+= 1.6.6 =
+* Fixed the 'Call to undefined function get_plugins()' issue
+
+= 1.6.5 =
+* Added configuration file for composer
+* Updated how free plugins are shown on the plugins list (commercial tab)
+* API calls for manipulating translation service preferences
+* Support for hosting custom Installer packages on wpml.org
+* Fixed a warning that was showing when using the OTGS_DISABLE_AUTO_UPDATES constant before any product data was downloaded
+* Changed the frequency with which product updates are checked automatically (24 hours)
+* Improved reporting for version numbers
+
+= 1.6.4 =
+* Enabled the OTGS_DISABLE_AUTO_UPDATES constant for theme update checks
+* Fixed a bug that was causing Register links to show for all installed plugins
+
+= 1.6.3 =
+* Fixed performance issue related to themes upgrade logic
+
+= 1.6 =
+* Improved the way plugins are matched: not just by the folder name (slug) but also by name
+* Added support for installing and upgrading themes from repositories (currently: Toolset themes)
+* Added support for 'alias' plugins on the toolset and wpml repositories (currently: Types)
+* Enhanced the progress animation during plugins downloading
+
+= 1.5.6 =
+* Updated the translations
+* Fix for WPML 3.2 conditional upgrade logic
+
+= 1.5.5 =
+* Fixed the logic for the high_priority parameter
+* Fixed js bug causing a conflict with NextGen
+* Fixed bug preventing users to install and upgrade Types when they didn't have a Toolset subscription
+* Fixed bug preventing users to upgrade from the embedded Types to the full version
+
+= 1.5.4 =
+* Option to disable auto-updates
+* Escaped urls generated with add_query_arg
+
+= 1.5.3 =
+* Fixed bug in WP_Installer::custom_plugins_api_call (filter for plugins_api) causing conflicts with other filters for plugins_api
+
+= 1.5.2 =
+* More meaningful errors when plugin downloads fail
+* WordPress 4.2 compatibility
+* Performance improvements (will not load in places where it's not needed and not make unnecessary requests to the CDN)
+* Support putting deps.xml config file in the theme folder (root)
+* Included code for importing data for toolset plugins
+* Use CloudFront urls for products list files
+
+= 1.5.1 =
+* Fix for allowing embedded plugins to be updated
+* Logic for the migration from embedded plugins to full plugins
+
+= 1.5 =
+* Support for embedded plugins
+* Bug fix: When user registers site key with trailing slash, downloads might not work
+* Tweak: Set a higher timeout limit for the http requests to CDN and API
+* API function: link to specific repository
+* API function: get product price
+* New method for defining affiliate info (with backwards compatibility)
+
+= 1.4 =
+* Show explicit error in case of connectivity issues while validating a key.
+* Bug fix: Downloading plugins in bulk was broken by plugin that had a redirect after activation
+* Display friendly error message when WordPress does not have permissions to write to the plugins folder
+* Added support for configuration files to auto-download required plugins and theme keys
+* Changed the "Update this info" button to "Check for updates" (it refreshes the subscription info and checks for updates)
+* Support for high_priority parameter that allows setting priority for an Installer instance when more with the same version number exist.
+* Config files from different instances are combined (define repositories in different instances)
+* Updated support for conditional updates display for ICL users
+* More friendly error reporting and handling when using an invalid site key or the plugins archives are not valid.
+
+
+= 1.3.1 =
+* Support for conditional release notification (ICanLocalize)
+
+= 1.3 =
+* Added a new repository: Toolset
+* The product packages can be displayed hierarchically and ordered
+* The link to automatically create site keys will follow through login on the account site (e.g. wpml.org, wp-types.com)
+* Fixed animation issues (not showing in most browsers) when downloading plugins.
+* Created an admin screen on the repository end (icl-mpp) to sho registration stats (site keys, site keys usage, components usage etc..).
+* Bug fix: Renew and Upgrade buttons were not entirely clickable
+* Bug fix: Action buttons (buy, renew, upgrade) were not displayed correctly when WPML was not active (Installer embedded in theme)
+* Support for site-wide registration. Products can be registered on the network instead of on each site separately.
+* Users are able to add either http or https version for any site urls. There will be one site key that will work with both http and https versions.
+
+= 1.2 =
+* Added pagination for site keys list of Account -> My Sites
+* Reversed the order in which the site keys are displayed.
+* Fixed problem with WPML registration information (site key) not being saved when the option_value field in the wp_options table used a different charset than the default WordPress charset defined in wp-config.php
+* Allow registering new sites by clicking a link in the WordPress admin instead of copying and pasting the site url in the Account -> My Sites section
+* Display more detailed debug information related to connectivity issues with the WPML repository

@@ -1,0 +1,68 @@
+<!--suppress CssInvalidPropertyValue, CssOverwrittenProperties -->
+<div class="icl_tm_wrap" style="overflow: auto;">
+	<p>
+		{{ strings.header }}
+	</p>
+	{% if rows %}
+		<p>
+			<a href="{{ urls.switch_mode }}" class="button-secondary">{{ strings.switch_mode }}</a>
+		</p>
+		<table class="widefat">
+			<thead>
+			<tr>
+				{% for header_key, header_label in headers %}
+					<th scope="col" class="manage-column manage-column-{{ header_key }}" style="font-size:10px;">
+						{{ header_label }}
+					</th>
+				{% endfor %}
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+				{% for header_key, header_label in headers %}
+					<th scope="col" class="manage-column manage-column-{{ header_key }}" style="font-size:10px;">
+						{{ header_label }}
+					</th>
+				{% endfor %}
+			</tr>
+			</tfoot>
+			<tbody>
+			{% set row = 0 %}
+			{% for log_item in rows %}
+				<tr class="{{ row is divisible by(2) ? 'alternate' : '' }}">
+					{% for header_key, header_label in headers %}
+						{% set item_value = log_item[header_label] is defined ? log_item[header_label] : '' %}
+						<td class="column-{{ header_key }}" style="font-size:10px; overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all; word-break: break-word; -ms-hyphens: auto; -moz-hyphens: auto; -webkit-hyphens: auto; hyphens: auto;">
+							{% if is_url(item_value) %}
+								<a href="{{ item_value }}" target="_blank">{{ log_item.Title }}</a>
+							{% else %}
+								{% if item_value is iterable %}
+									{% set sub_items_count = item_value|length %}
+									{% set sub_items_index = 1 %}
+									{% for item_value_sub_item in item_value %}
+										{{ item_value_sub_item }}
+										{% if sub_items_index < sub_items_count %}
+											<br>
+										{% endif %}
+										{% set sub_items_index = sub_items_index + 1 %}
+									{% endfor %}
+								{% else %}
+									{{ item_value }}
+								{% endif %}
+							{% endif %}
+						</td>
+						{% set row = row + 1 %}
+					{% endfor %}
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<form method="post" id="{{ misc.ui_key }}-form" name="{{ misc.ui_key }}-form" action="{{ urls.main }}">
+			<p>
+				<input class="button-secondary" type="submit" name="{{ misc.ui_key }}-clear" value="{{ strings.clear_log }}">&nbsp;<input class="button-secondary" type="submit" name="{{ misc.ui_key }}-export-csv" value="{{ strings.export_csv }}">
+			</p>
+		</form>
+	{% else %}
+		<strong>{{ strings.empty_log }}</strong>
+	{% endif %}
+</div>

@@ -1,0 +1,20 @@
+<table class="widefat striped fixed <%=  ( mode !== 'sync' )? 'wpml-tt-table' : 'wpml-tt-sync-table' %>" id="tax-table-<%=tableType%>">
+	<thead>
+		<tr>
+			<% if ( mode !== 'sync' ) { %>
+				<th class="wpml-col-title"><%= firstColumnHeading %></th>
+				<th class="wpml-col-languages">
+					<% _.each(langs, function( lang ) { %>
+						<span title="<%= lang.label %>"><img src="<%= lang.flag %>" alt="<%= lang.label %>"></span>
+					<% }); %>
+				</th>
+			<% } else { %>
+				<% _.each(langs, function( lang ) { %>
+					<th class="wpml-col-ttsync">
+						<span class="wpml-title-flag"><img src="<%= lang.flag %>" alt="<%= lang.label %>"></span><%= lang.label %>
+					</th>
+				<% }); %>
+			<% } %>
+		</tr>
+	</thead>
+</table>

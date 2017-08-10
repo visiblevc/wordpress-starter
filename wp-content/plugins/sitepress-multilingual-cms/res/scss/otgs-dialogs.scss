@@ -1,0 +1,158 @@
+/*
+* Css with rules that will prevent other plugins to make changes on our dialogs
+*/
+
+.otgs-ui-dialog {
+	&.ui-dialog {
+		z-index: 100102 !important;
+		border-radius: 0px !important;
+		padding: 0 !important;
+		overflow: visible;
+		[dir="rtl"] & {
+			right: auto;
+		}
+		.ui-dialog-content {
+			position: static;
+		}
+	}
+	&.ui-widget-content {
+		border-top: 1px solid #dddddd !important;
+		border-bottom: 0px !important;
+		border-left: 0px !important;
+		border-right: 0px !important;
+		border: 1px solid #dddddd;
+		background: #ffffff !important;
+		color: #333333 !important;
+	}
+	.ui-dialog-titlebar {
+		background: #fcfcfc !important;
+		border-bottom: 1px solid #ddd !important;
+		height: 36px !important;
+		font-size: 18px !important;
+		font-weight: 600 !important;
+		line-height: 36px !important;
+		padding: 0 36px 0 16px !important;
+		[dir="rtl"] & {
+			padding: 0 16px 0 36px !important;
+		}
+	}
+	.ui-dialog-title {
+		float: none !important;
+		display: block !important;
+		width: 100% !important;
+		white-space: nowrap !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+	}
+	.ui-widget,
+	&.ui-widget {
+		font-family: "Open Sans", sans-serif !important;
+		font-size: 13px !important;
+		line-height: 1.4em !important;
+	}
+	&.ui-widget {
+		color: #444 !important;
+		input, select, textarea {
+			font-size: 13px !important;
+			font-family: "Open Sans", sans-serif !important;
+		}
+	}
+	.ui-widget-header {
+		border: 1px solid #dddddd !important;
+		border-top: 0px !important;
+		background: #fcfcfc !important;
+		color: #444 !important;
+		font-weight: bold !important;
+		border-radius: 0px !important;
+		&.ui-tabs-nav {
+			border: 0px !important;
+		}
+	}
+	.ui-tabs-nav {
+		.ui-state-active.ui-state-default {
+			background: #ededed !important;
+		}
+		.ui-state-default {
+			background: #fcfcfc !important;
+			font-weight: normal !important;
+		}
+	}
+	.ui-tabs-panel.ui-widget-content {
+		border-left: 1px solid #ccc !important;
+		[dir="rtl"] & {
+			border-left: 0;
+			border-right: 1px solid #ccc !important;
+		}
+	}
+
+	.ui-widget button {
+		font-size: 13px !important;
+		font-family: "Open Sans", sans-serif !important;
+	}
+
+	.ui-widget-overlay {
+		background: #000 !important;
+		opacity: .7 !important;
+		filter: alpha(opacity=70) !important;
+		z-index: 100101;
+	}
+
+	.ui-button.ui-dialog-titlebar-close {
+		background: 0 0 !important;
+		border: none !important;
+		-webkit-box-shadow: none !important;
+		box-shadow: none !important;
+		color: #666 !important;
+		cursor: pointer !important;
+		display: block !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		position: absolute !important;
+		top: 0 !important;
+		right: 0 !important;
+		width: 36px !important;
+		height: 36px !important;
+		text-align: center !important;
+		&:hover {
+			color: #00a0d2 !important;
+		}
+		[dir="rtl"] & {
+			right: auto !important;
+			left: 0 !important;
+		}
+	}
+	.ui-icon {
+		width: 0px !important;
+		height: 0px !important;
+	}
+	.ui-widget-content {
+		border: 0px !important;
+	}
+	.ui-dialog-buttonpane {
+		border-top: 1px solid #ddd !important;
+	}
+	.button-primary {
+		background: #0085ba !important;
+		border-color: #0073aa #006799 #006799 !important;
+		box-shadow: 0 1px 0 #006799 !important;
+		color: #fff !important;
+		text-decoration: none !important;
+		text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799 !important;
+		font-weight: normal !important;
+		border-radius: 3px !important;
+		&:hover {
+			border-color: #069dd4 !important;
+		}
+	}
+	.button-secondary {
+		color: #555 !important;
+		border-color: #ccc !important;
+		background: #f7f7f7 !important;
+		box-shadow: 0 1px 0 #ccc !important;
+		font-weight: normal !important;
+		border-radius: 3px !important;
+		&:hover {
+			border-color: #999 !important;
+		}
+	}
+}

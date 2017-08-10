@@ -1,0 +1,14 @@
+<h4><label for="wpml-ls-available-sidebars">{{ strings.sidebars.select_label }}:</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.available_sidebars } %}</h4>
+<select name="wpml_ls_available_sidebars" class="js-wpml-ls-available-slots js-wpml-ls-available-sidebars">
+    <option disabled="disabled">-- {{ strings.sidebars.select_option_choose }} --</option>
+    {% for sidebar_key, sidebar in sidebars %}
+        {% if sidebar_key == slug %}
+            {% set attr = ' selected="selected"' %}
+        {% elseif sidebar.id in settings.sidebar|keys %}
+            {% set attr = ' disabled="disabled"' %}
+        {% else %}
+            {% set attr = '' %}
+        {% endif %}
+        <option value="{{ sidebar.id }}"{{ attr }}>{{ sidebar.name }}</option>
+    {% endfor %}
+</select>

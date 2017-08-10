@@ -1,0 +1,19 @@
+.icl_nav_menu_text {
+  font-size: 11px;
+  font-style: normal;
+}
+
+.icl_lang_menu a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &.current {
+    font-weight: bold;
+  }
+}
+
+html[dir="rtl"] #nav-menu-header div.icl_nav_menu_text {
+  float: left !important;
+  text-align: left;
+}

@@ -1,0 +1,179 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "otgs-icons";
+  src:url("../font/otgs-icons.eot");
+  src:url("../font/otgs-icons.eot?#iefix") format("embedded-opentype"),
+  url("../font/otgs-icons.woff") format("woff"),
+  url("../font/otgs-icons.ttf") format("truetype"),
+  url("../font/otgs-icons.svg#otgs-icons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class*="otgs-ico"] {
+	display: inline-block;
+	transform: translate(0, 0);
+}
+
+
+[class*="otgs-ico"]:before,
+[data-otgs-ico]:before {
+  font-family: "otgs-icons" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1 !important;
+  vertical-align: text-bottom;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.otgs-ico-32:before {
+  font-size: 32px;
+}
+[data-otgs-ico]:before {
+  content: attr(data-otgs-ico);
+}
+
+.otgs-ico-note-add:before {
+  content: "a";
+}
+.otgs-ico-note-add-o:before {
+  content: "b";
+}
+.otgs-ico-translated:before,
+.otgs-ico-ok:before {
+  content: "c";
+}
+.otgs-ico-yes:before {
+  content: "d";
+}
+.otgs-ico-in-progress:before {
+  content: "e";
+}
+.otgs-ico-copy:before {
+  content: "f";
+}
+.otgs-ico-copy-o:before {
+  content: "g";
+}
+
+.otgs-ico-note-edit:before {
+  content: "i";
+}
+.otgs-ico-note-edit-o:before {
+  content: "j";
+}
+.otgs-ico-add:before {
+  content: "k";
+}
+.otgs-ico-refresh:before {
+  content: "l";
+}
+.otgs-ico-no:before {
+  content: "n";
+}
+.otgs-ico-not-translated:before {
+  content: "o";
+}
+.otgs-ico-delete:before {
+  content: "p";
+}
+.otgs-ico-waiting:before {
+  content: "q";
+}
+.otgs-ico-warning:before {
+  content: "s";
+}
+.otgs-ico-original:before {
+  content: "t";
+}
+.otgs-ico-needs-update:before {
+  content: "u";
+}
+.otgs-ico-access:before {
+  content: "v";
+}
+.otgs-ico-cred:before {
+  content: "w";
+}
+.otgs-ico-layouts:before {
+  content: "x";
+}
+.otgs-ico-module-manager:before {
+  content: "y";
+}
+.otgs-ico-toolset:before {
+  content: "z";
+}
+.otgs-ico-types:before {
+  content: "A";
+}
+.otgs-ico-views:before {
+  content: "B";
+}
+.otgs-ico-edit:before {
+  content: "h";
+}
+.otgs-ico-duplicate:before {
+  content: "m";
+}
+.otgs-ico-basket:before {
+  content: "r";
+}
+.otgs-ico-discoverwp:before {
+  content: "C";
+}
+.otgs-ico-wpml:before {
+  content: "D";
+}
+.otgs-ico-otgs:before {
+  content: "E";
+}
+.otgs-ico-envelope-o:before {
+  content: "F";
+}
+.otgs-ico-user:before {
+  content: "G";
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Stay as Dashicons!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+.otgs-ico-close:before {
+	content: "\f158";
+	font-family: dashicons !important;
+}
+
+.otgs-ico-help:before {
+	content: "\f223";
+	font-family: dashicons !important;
+}
+
+.otgs-ico-caret-up:before {
+	font-family: dashicons !important;
+	content: "\f142";
+}
+
+.otgs-ico-caret-right:before {
+	font-family: dashicons !important;
+	content: "\f139";
+}
+
+.otgs-ico-caret-down:before {
+	font-family: dashicons !important;
+	content: "\f140";
+}
+
+.otgs-ico-caret-left:before {
+	font-family: dashicons !important;
+	content: "\f141";
+}
+.otgs-ico-unlink:before {
+	font-family: dashicons !important;
+	content: "\f225";
+}
+

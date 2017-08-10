@@ -1,0 +1,195 @@
+.icl-translation-management-menu {
+	margin-bottom: 0;
+}
+
+.progressbar {
+	position:      relative;
+	margin-top:    5px;
+	margin-bottom: 5px;
+	.progress_label {
+		position: absolute;
+		top:      4px;
+		left:     50%;
+		.value {
+			text-shadow: 1px 1px 0 #fff;
+			font-weight: bold;
+		}
+	}
+}
+
+.buttons {
+	margin-top: 1em;
+	white-space: nowrap;
+}
+
+#icl_tm_adduser {
+	margin-top: 4px;
+	.icl_tm_lang_pairs {
+		display: none;
+		padding: 5px;
+		li ul li {
+			display: inline;
+		}
+	}
+}
+
+.icl_tm_lang_pairs_to {
+	display:       none;
+	margin-top:    1px;
+	padding:       4px;
+	border-radius: 4px;
+	background:    #ededed repeat-x scroll left top;
+}
+
+.icl_tm_no_to {
+	display:            none;
+	margin-bottom:      5px;
+	padding:            5px;
+	-moz-border-radius: 4px;
+	background-color:   pink;
+}
+
+.icl_tj_select_translator_controls {
+	display: none;
+}
+
+.icl_tj_select_translator {
+	select {
+		width: 100%;
+	}
+}
+
+.custom_element_sync_options {
+	table {
+		td {
+			width:       auto;
+			text-align:  right;
+			white-space: nowrap;
+
+			&:first-child {
+				width:       100%;
+				text-align:  left;
+				white-space: normal;
+			}
+		}
+	}
+}
+
+#icl_custom_tax_sync_options {
+	@extend .custom_element_sync_options;
+}
+
+#icl_custom_posts_sync_options {
+	@extend .custom_element_sync_options;
+
+	table {
+		table {
+			margin:     0 0 10px;
+			border:     1px solid #ededed;
+			background: #fff;
+			td {
+				border-color: transparent;
+			}
+		}
+	}
+}
+
+.icl_tm_admin_options li ul {
+	margin-left: 20px;
+}
+
+#local_translations_add_translator_toggle {
+	padding: 10px;
+	border:  1px solid #CCCCCC;
+}
+
+.icl_tm_diff {
+	display:       none;
+	margin-bottom: 10px;
+}
+
+.icl_tm_error {
+	color:          #ff0000;
+	vertical-align: bottom;
+	font-size:      11px;
+}
+
+#icl_quick_src_users {
+	width:        150px;
+	border-color: red;
+}
+
+#icl_user_src_nf {
+	font-style: italic;
+	font-size:  90%;
+}
+
+#icl_show_promo {
+	float: right;
+}
+
+#wpml-basket-items {
+	margin-left:      4px;
+	border-radius:    8px;
+	background-color: #d54e21;
+}
+
+#basket-item-count {
+	padding: 6px;
+	color:   #fff;
+}
+
+.icl-tm-explanation {
+	font-size: smaller;
+}
+
+.tm-analytics-promote {
+	margin:                15px 0;
+	padding:               10px 0 10px 0;
+	width:                 100%;
+	border:                1px solid #e6db55;
+	border-radius:         4px;
+	background:            #ffffe0;
+	color:                 #454545;
+	font-size:             12px;
+	font-family:           'Arial', 'Helvetica', sans-serif;
+	line-height:           20px;
+
+	p {
+		margin:  0;
+		padding: 5px 15px;
+	}
+
+	a {
+		color:           #454545;
+		text-decoration: underline;
+
+		&:hover {
+			color:           #616161;
+			text-decoration: underline;
+		}
+	}
+
+	h1 {
+		padding:     0 15px;
+		color:       #e25527;
+		font-weight: 600;
+		font-style:  italic;
+		font-size:   30px;
+	}
+}
+
+@import "services";
+@import "mce-setup";
+
+#icl-translation-jobs {
+	.column-resign {
+		width: 40px;
+	}
+	.column-job_id {
+		width: 6%;
+	}
+	.column-title {
+		width: 40%;
+	}
+}

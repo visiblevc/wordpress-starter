@@ -1,0 +1,14 @@
+<h4><label for="wpml-ls-available-menus">{{ strings.menus.select_label }}:</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.available_menus } %}</h4>
+<select name="wpml_ls_available_menus" class="js-wpml-ls-available-slots js-wpml-ls-available-menus">
+    <option disabled="disabled">-- {{ strings.menus.select_option_choose }} --</option>
+    {% for menu_key, menu in menus %}
+        {% if menu_key == slug %}
+            {% set attr = ' selected="selected"' %}
+        {% elseif menu.term_id in settings.menus|keys %}
+            {% set attr = ' disabled="disabled"' %}
+        {% else %}
+            {% set attr = '' %}
+        {% endif %}
+        <option value="{{ menu.term_id }}"{{ attr }}>{{ menu.name }}</option>
+    {% endfor %}
+</select>

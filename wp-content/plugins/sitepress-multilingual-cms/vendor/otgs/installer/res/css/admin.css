@@ -1,0 +1,201 @@
+.otgsi_site_key_form{
+    display:none;
+    /*display:inline;*/
+}
+
+.installer-status-installing, .installer-status-installed, .installer-status-updating, .installer-status-updated, .installer-status-activating, .installer-status-activated, .installer-status-success{
+    display: none;
+}
+.installer-status-installing{color: #FF9900; }
+.installer-status-installed{color: #003300; font-weight: bold; }
+.installer-status-updating{color: #FF9900; }
+.installer-status-updated{color: #003300; font-weight: bold; }
+
+.installer-status-activating{color: #996666 }
+.installer-status-activated{color: #333366; font-weight: bold; }
+
+.js-status-success p{
+    color: #FF9900;
+    padding: 4px;
+}
+
+.installer-green-text{
+    color:#006600;
+    font-weight:bold;
+}
+
+.installer-red-text{
+    color:#b22121;
+    font-weight:bold;
+}
+
+.installer-footnote{
+    color:#3d5e69;
+    display:block;
+    float: left;
+    font-style: italic;
+    font-size: 90%;
+}
+
+.installer-products-list li{
+    display: inline;
+    margin-right: 20px;
+}
+
+.otgs_wp_installer_table a.disabled{
+    color:#888;
+}
+
+.otgs_wp_installer_subtable{
+    clear: both;
+    margin-left:-20px;
+}
+.otgs_wp_installer_subtable td p{
+    font-size: 92%;
+}
+
+.installer-status-error{
+    color: #f00;
+}
+
+.installer-status-note{
+    color: #6F6E6D;
+    font-style: italic;
+}
+
+.installer-warn-box{
+    -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border:1px solid #962722;background-color:#F5C8C6;
+    color: #333;
+    padding: 5px;
+}
+.installer-warn-box span.details{
+    font-style: italic;
+    color:#777;
+}
+
+.installer-error-box{
+    color:#962722;
+    margin-top: 10px;
+}
+.installer-error-box p{
+    margin: 10px 0 10px 0;
+    -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border:1px solid #962722;background-color:#F5C8C6;
+    color: #333;
+    padding: 5px;
+    text-align: center;
+}
+
+.spinner-inline{
+    float: none;
+    display: inline-block;
+    visibility: visible;
+}
+
+.installer-q-icon:before{
+    content: '\f223' !important;
+    font-family: dashicons !important;
+    color: #f56e28;
+    font: 20px/1 "dashicons";
+}
+
+.installer-plugin-update-tr td{
+    padding-left:3px !important;
+}
+
+.otgsi_yellow_bg{
+    background-color: #f2f46b;
+}
+
+.otgs_wp_installer_table_compact{
+    width:480px;
+    border: solid 1px #999;
+    padding:10px;
+    border-radius: 5px;
+}
+
+.installer-plugins-list-compact{
+    background-color: #fff;
+    border-collapse: collapse;
+    border:solid 1px #C1DAD7;
+    width:100%;
+}
+
+.installer-plugins-list-compact tr th{
+    padding-top:3px;
+    background-color: #ccc;
+}
+
+.installer-plugins-list-compact tr{
+    background-color: #ddd;
+}
+
+.installer-plugins-list-compact tr.even{
+    background-color: #eee;
+}
+
+.installer-plugins-list-compact td{
+    padding:2px 5px 2px 5px;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+}
+
+.installer-plugins-list-compact td.twelve{
+    width:16px;
+}
+
+.otgs_wp_installer_table_compact .installer-status-downloading,
+.otgs_wp_installer_table_compact .installer-status-downloaded,
+.otgs_wp_installer_table_compact .installer-status-activating,
+.otgs_wp_installer_table_compact .installer-status-activated{
+    display: none;
+    color:transparent; width: 12px; padding:2px;
+}
+
+.otgs_wp_installer_table_compact .installer-status-success,
+.otgs_wp_installer_table_compact .installer-status-fail{
+    display: none;
+}
+
+.installer-status-success{
+    float: right;
+    color: #006600;
+}
+
+.otgs_wp_installer_table_compact .installer-status-downloading{background: url(../img/dn.gif) no-repeat center; }
+.otgs_wp_installer_table_compact .installer-status-downloaded{background: url(../img/complete.png) no-repeat center;}
+.otgs_wp_installer_table_compact .installer-status-activating{background: url(../img/dn.gif) no-repeat center; }
+.otgs_wp_installer_table_compact .installer-status-activated{background: url(../img/complete.png) no-repeat center; }
+.otgs_wp_installer_table_compact .installer-status-error{background: url(../img/icon_error.gif) no-repeat center; }
+
+.installer_highlight{
+    color:#c5510b;
+}
+
+.installer_highlight_package{
+    background-color: #fff9c0;
+}
+
+.plugin_progress{
+    font-style: italic;
+    color: #777
+}
+
+.installer-download-progress-status{
+    display: none;
+    float:right;
+    color: #006600;
+    font-style: italic;
+    background: url('../img/spinner.gif') no-repeat;
+    padding-left:24px;
+}
+
+.otgs-is-dismissible {
+    position: relative;
+    padding-right: 38px;
+}
+.otgs-is-dismissible .notice-dismiss {
+    text-decoration: none;
+}
+.otgs-is-dismissible p [class*="button-"] {
+    margin: -5px 5px;
+}

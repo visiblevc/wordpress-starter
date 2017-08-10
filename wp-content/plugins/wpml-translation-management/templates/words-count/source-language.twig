@@ -1,0 +1,12 @@
+<div class="source_language">
+	<label for="source-language-selector">{{ strings.sourceLanguageSelectorLabel }}:</label>
+	<select id="source-language-selector">
+		{% for activeLanguage in activeLanguages %}
+			{% set default = (activeLanguage.code == defaultLanguage) %}
+			{% set showTranslated = (activeLanguage['native_name'] != activeLanguage['translated_name']) %}
+			{% set language = showTranslated ? "#{activeLanguage['translated_name']} (#{activeLanguage['native_name']})" : activeLanguage['native_name'] %}
+			<option value="{{ activeLanguage.code|e }}"{% if (default) %} selected="selected" {% endif %}>{{ language }}</option>
+		{% endfor %}
+	</select>
+	<input type="hidden" name="wpml_words_count_source_language_nonce" value="{{ nonces.wpml_words_count_source_language_nonce|e }}">
+</div>

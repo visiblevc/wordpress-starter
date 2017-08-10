@@ -1,0 +1,44 @@
+@import "_mixins";
+@import "_variables";
+
+#term-label-summary {
+  margin-top: $margin-base;
+}
+#wpml-taxonomy-translation-terms-table {
+  overflow-x: auto;
+}
+
+.wpml-tt-sync-table {
+  td {
+   vertical-align: middle;
+  }
+}
+.wpml-col-ttsync {
+  width: 110px;
+}
+.wpml-tt-sync-section {
+  margin-top: $margin-sm;
+}
+.wpml-tt-sync-legend {
+  span {
+    padding: 0 $margin-xs;
+    margin: 0 $margin-xs/2;
+  }
+}
+.wpml-tt-sync-action {
+  text-align: center;
+  margin: $margin-xs $margin-sm 0;
+}
+.wpml-loading-taxonomy {
+	.spinner {
+		float:          none;
+		vertical-align: middle;
+		display:        inline-block;
+		margin:         0 5px 2px 5px;
+	}
+	margin-bottom:  5px;
+	font-size:      13px;
+	font-weight:    bold;
+	vertical-align: middle;
+	display:        none;
+}

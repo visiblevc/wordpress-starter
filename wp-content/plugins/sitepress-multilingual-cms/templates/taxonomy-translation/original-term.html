@@ -1,0 +1,18 @@
+<a class="icl_tt_term_name"	id="<%=trid + '-' + lang%>">
+	<span class="wpml-title-flag"><img src="<%= langs[ lang ].flag %>"></span>
+	<strong>
+		<% if(!name){ %>
+			<%=labels.lowercaseTranslate%>
+		<% } else {  %>
+			<% if ( level > 0 ) { %>
+				<%=Array(level+1).join('—') + " "%>
+			<% } %>
+			<%=name%>
+		<% } %>
+	</strong>
+</a>
+<div id="<%=trid + '-popup-' + lang%>"></div>
+<div class="row-actions">
+	<a class="js-copy-to-all-langs"><%= labels.copyToAllLanguages %></a>
+</div>
+

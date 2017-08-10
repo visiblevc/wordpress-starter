@@ -1,0 +1,24 @@
+{% set count = 0 %}
+	<h3>
+		{{ strings.title }}
+	</h3>
+
+	<div>
+		<div>
+			<ul class="wpml-status-list wpml-plugins-status-list">
+				{% for requirement in data.requirements %}
+					<li>
+						{% if requirement.missing %}
+							<i class="otgs-ico-warning"></i>
+						{% else %}
+							<i class="otgs-ico-ok"></i>
+						{% endif %}
+						{{ requirement.name }}
+						{% if requirement.missing %}
+							(<a href="{{ shared.install_link }}">{{ strings.install }}</a> | <a href="{{ requirement.url }}" target="_blank">{{ strings.download }}</a>)
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>

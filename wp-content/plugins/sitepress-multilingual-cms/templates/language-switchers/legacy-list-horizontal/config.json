@@ -1,0 +1,5 @@
+{
+  "name" : "Horizontal List",
+  "slug" : "wpml-legacy-horizontal-list",
+  "for"  : [ "sidebars", "footer", "shortcode_actions" ]
+}

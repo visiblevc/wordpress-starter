@@ -1,0 +1,9 @@
+<label><%=field.title%></label>
+<textarea class="original_value js-original-value" readonly cols="22" rows="10" <%=field.original_direction%>><%= field.field_data %></textarea>
+<button class="button-copy button-secondary js-button-copy icl_tm_copy_link otgs-ico-copy" id="icl_tm_copy_link_<%=field.field_type%>" title="<%= labels.copy_from_original %>"/>
+<textarea class="translated_value js-translated-value cols="22" rows="10" name="fields[<%=field.field_type%>][data]" <%=field.translation_direction%>><%= field.field_data_translated %></textarea>
+<div class="field_translation_complete">
+	<label><input class="icl_tm_finished js-field-translation-complete" name="fields[<%=field.field_type%>][finished]" type="checkbox" <% if (field.field_finished) { %> checked="checked" <% } %> /><%=labels.translation_complete%></label>
+</div>
+<input type="hidden" name="fields[<%=field.field_type%>][tid]" value="<%=field.tid%>">
+<input type="hidden" name="fields[<%=field.field_type%>][format]" value="base64">

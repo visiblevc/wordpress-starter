@@ -1,0 +1,6 @@
+<div id="term-table-tab-controls" class="wpml-tabs">
+	<button class="nav-tab <%= ( mode ==='translate' ? 'nav-tab-active' : '' ) %>" id="term-table-header"><%= headerTerms %></button>
+	<% if( taxonomy.hierarchical ) {%>
+		<button class="nav-tab <%= ( mode ==='sync' ? 'nav-tab-active' : '' ) %>" id="term-table-sync-header"><%= syncLabel %></button>
+	<% } %>
+</div>

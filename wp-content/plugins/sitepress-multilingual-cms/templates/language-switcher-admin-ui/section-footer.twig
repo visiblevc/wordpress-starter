@@ -1,0 +1,25 @@
+<p class="wpml-ls-form-line js-wpml-ls-option">
+    <label for="wpml-ls-show-in-footer">
+        <input type="checkbox" id="wpml-ls-show-in-footer" name="statics[footer][show]" value="1"
+               class="js-wpml-ls-toggle-slot js-wpml-ls-trigger-save" data-target=".js-wpml-ls-footer-toggle-target"
+               {% if settings.statics.footer.show %}checked="checked"{% endif %}/>
+        {{ strings.footer.show }}
+    </label>
+
+	{% include 'save-notification.twig' %}
+</p>
+
+<div class="js-wpml-ls-footer-toggle-target{% if settings.statics.footer.show != 1 %} hidden{% endif %}">
+
+	{% set slot_settings = [] %}
+	{% set slot_settings = slot_settings|merge({'footer': settings.statics.footer}) %}
+
+	{% include 'table-slots.twig'
+		with {
+			"slot_type": "statics",
+			"slots_settings": slot_settings,
+	        "slug"     : 'footer',
+		}
+	%}
+
+</div>

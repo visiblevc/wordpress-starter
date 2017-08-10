@@ -1,0 +1,16 @@
+.wpml-ls-menu-item {
+  .wpml-ls-flag {
+    display: inline;
+    vertical-align: baseline;
+    width: 18px;
+    height: 12px;
+  }
+
+  .wpml-ls-flag + span {
+    margin-left: .3em;
+    .rtl & {
+      margin-left: 0;
+      margin-right: .3em;
+    }
+  }
+}

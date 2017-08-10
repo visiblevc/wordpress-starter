@@ -1,0 +1,38 @@
+{% set supported_core_templates = [] %}
+{% set supported_custom_templates = [] %}
+
+{% for template in data.templates if slot_type in template.supported_slot_types %}
+	{% if template.is_core %}
+		{% set supported_core_templates = supported_core_templates|merge([template]) %}
+	{% else %}
+		{% set supported_custom_templates = supported_custom_templates|merge([template]) %}
+	{% endif %}
+{% endfor %}
+
+{% set total_templates = (supported_core_templates|length) + (supported_custom_templates|length)%}
+
+<div{% if total_templates <= 1 %} class="hidden"{% endif %}>
+
+	<h4><label for="template-{{ id }}">{{ strings.misc.templates_dropdown_label }}</label>  {% include 'tooltip.twig' with { "content": strings.tooltips.available_templates } %}</h4>
+
+	<select id="template-{{ id }}" name="{{ name }}" class="js-wpml-ls-template-selector js-wpml-ls-trigger-update">
+
+		<optgroup label="{{ strings.misc.templates_wpml_group }}">
+		{% for template in supported_core_templates %}
+			{% set template_data = template.get_template_data() %}
+			<option value="{{ template_data.slug }}" {% if value == template_data.slug %}selected="selected"{% endif %}>{{ template_data.name }}</option>
+		{% endfor %}
+		</optgroup>
+
+		{% if supported_custom_templates|length > 0 %}
+			<optgroup label="{{ strings.misc.templates_custom_group }}">
+			{% for template in supported_custom_templates %}
+				{% set template_data = template.get_template_data() %}
+				<option value="{{ template_data.slug }}" {% if value == template_data.slug %}selected="selected"{% endif %}>{{ template_data.name }}</option>
+			{% endfor %}
+			</optgroup>
+		{% endif %}
+
+	</select>
+
+</div>

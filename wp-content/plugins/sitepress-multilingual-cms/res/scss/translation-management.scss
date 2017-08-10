@@ -1,0 +1,54 @@
+@import "mixins";
+
+.icl_tm_wrap {
+	border:           1px solid #CCCCCC;
+	padding:          10px;
+	background-color: #ffffff;
+}
+
+#icl_tm_adduser {
+	margin-top: 4px;
+	.icl_tm_lang_pairs {
+		display: none;
+		padding: 5px;
+		li ul li {
+			display: inline;
+		}
+	}
+}
+
+.icl_tm_lang_pairs_to {
+	display:          none;
+	padding:          4px;
+	margin-top:       1px;
+	border-radius: 		4px;
+	/* autoprefixer: off */
+	@include background-gradient( to bottom, #ededed, #dfdfdf, #ededed );
+}
+
+.icl_tm_no_to {
+	display:          none;
+	background-color: pink;
+	padding:          5px;
+	margin-bottom:    5px;
+	border-radius:    4px;
+}
+
+.form-table {
+	td, th {
+		border-bottom: none;
+	}
+}
+
+.icl_tj_select_translator_controls {
+	display: none;
+}
+
+.icl_tm_admin_options li ul {
+	margin-left: 20px;
+}
+
+#local_translations_add_translator_toggle {
+	border:  1px solid #CCCCCC;
+	padding: 10px;
+}

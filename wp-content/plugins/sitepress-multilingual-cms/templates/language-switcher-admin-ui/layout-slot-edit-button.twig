@@ -1,0 +1,12 @@
+{% spaceless %}
+{% if action == 'edit' %}
+	{% set class = 'otgs-ico-edit' %}
+{% else %}
+	{% set class = 'otgs-ico-add' %}
+{% endif %}
+
+<p class="wpml-ls-slot-management-link-wrapper">
+	<a href="{{ url }}" class="js-wpml-ls-slot-management-link button-secondary">
+		<span class="{{ class }}"></span> {{ label -}}</a>
+</p>
+{% endspaceless %}
