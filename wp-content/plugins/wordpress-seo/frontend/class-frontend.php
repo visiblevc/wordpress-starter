@@ -761,10 +761,6 @@ class WPSEO_Frontend {
 			if ( $is_paged && $noindex_subpages ) {
 				$robots['index'] = 'noindex';
 			}
-
-			if ( $this->options['noodp'] === true ) {
-				$robots['other'][] = 'noodp';
-			}
 			unset( $robot );
 		}
 
@@ -782,6 +778,7 @@ class WPSEO_Frontend {
 		}
 
 		$robotsstr = preg_replace( '`^index,follow,?`', '', $robotsstr );
+		$robotsstr = str_replace( array( 'noodp,', 'noodp' ), '', $robotsstr );
 
 		/**
 		 * Filter: 'wpseo_robots' - Allows filtering of the meta robots output of Yoast SEO
@@ -826,11 +823,6 @@ class WPSEO_Frontend {
 				$robots['other'][] = $robot;
 			}
 			unset( $robot );
-		}
-		elseif ( $meta_robots_adv === '' || $meta_robots_adv === '-' ) {
-			if ( $this->options['noodp'] === true ) {
-				$robots['other'][] = 'noodp';
-			}
 		}
 		unset( $meta_robots_adv );
 
@@ -1036,6 +1028,15 @@ class WPSEO_Frontend {
 		 * @api bool $unsigned Whether or not to rel=next / rel=prev
 		 */
 		if ( is_home() && function_exists( 'genesis' ) && apply_filters( 'wpseo_genesis_force_adjacent_rel_home', false ) === false ) {
+			return;
+		}
+
+		/**
+		 * Filter: 'wpseo_disable_adjacent_rel_links' - Allows disabling of Yoast adjacent links if this is being handled by other code.
+		 *
+		 * @api bool $links_generated Indicates if other code has handled adjacent links.
+		 */
+		if ( true === apply_filters( 'wpseo_disable_adjacent_rel_links', false ) ) {
 			return;
 		}
 
@@ -1246,7 +1247,6 @@ class WPSEO_Frontend {
 		if ( $echo !== false ) {
 			if ( is_string( $this->metadesc ) && $this->metadesc !== '' ) {
 				echo '<meta name="description" content="', esc_attr( strip_tags( stripslashes( $this->metadesc ) ) ), '"/>', "\n";
-				$this->add_robot_content_noodp( $this->metadesc );
 			}
 			elseif ( current_user_can( 'manage_options' ) && is_singular() ) {
 				echo '<!-- ', __( 'Admin only notice: this page doesn\'t show a meta description because it doesn\'t have one, either write it for this page specifically or go into the SEO -> Titles menu and set up a template.', 'wordpress-seo' ), ' -->', "\n";
@@ -1883,17 +1883,6 @@ class WPSEO_Frontend {
 	 */
 	private function is_premium() {
 		return file_exists( WPSEO_PATH . 'premium/' );
-	}
-
-	/**
-	 * Checks whether the user has written a meta-description. If written,  makes sure meta robots content is noodp.
-	 *
-	 * @param String $description The content of the meta description.
-	 */
-	private function add_robot_content_noodp( $description ) {
-		if ( ! ( empty( $description ) ) && $this->options['noodp'] === false ) {
-			$this->options['noodp'] = true;
-		}
 	}
 
 	/**

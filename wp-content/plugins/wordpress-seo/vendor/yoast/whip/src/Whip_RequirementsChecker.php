@@ -21,7 +21,7 @@ class Whip_RequirementsChecker {
 	 * @param array  $configuration The configuration to check.
 	 * @param string $textdomain The text domain to use for translations.
 	 */
-	public function __construct( $configuration = array(), $textdomain = 'wordpress-seo' ) {
+	public function __construct( $configuration = array(), $textdomain = 'wordpress' ) {
 		$this->requirements     = array();
 		$this->configuration    = new Whip_Configuration( $configuration );
 		$this->messageMananger  = new Whip_MessagesManager();
