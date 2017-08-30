@@ -59,6 +59,57 @@ docker-compose up -d && docker-compose logs -f wordpress
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
 
+#### Image customisation and php extensions
+
+When the default provided image is not enough or maybe missing some dependencies, please customise it. 
+The easiest way is to build a custom base image with a php extension starting from the base images provided.
+
+Let's add php `intl` to **php7.1** base image.
+We need to do the following:
+ * add the extension and dependencies to the image
+ * use the new image in our docker compose setup
+ 
+First we need to update **php7.1/Dockerfile** and update the build instructions to install the needed packages and dependencies for intl. Each extension has it's own dependencies. For the `intl` example we need to make the following changes: 
+
+php7.1/Dockerfile:
+````
+     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+         less \
+         libpng12-dev \
+         libjpeg-dev \
+         libxml2-dev \
++        libicu-dev \
+         mariadb-client \
+         unzip \
+         ......
+     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+     && docker-php-ext-install \
+         exif \
+         gd \
+         mysqli \
++        intl \
+         opcache \         
+         
+````
+
+To use the new image we should also update **example/docker-compose.yml** to use build our image instead of using the published one.
+
+````
+ version: '3'
+ services:
+   wordpress:
+-    image: visiblevc/wordpress:0.15.2-php7.1
++    # image: visiblevc/wordpress:0.15.2-php7.1
++    build: ../php7.1
+     ports:
+````
+
+It may take multimple tryies until you figure out the correct software packages for each extension so you will have to rebuild your image again and again. To do that just run:
+````
+   docker-compose build --no-cache
+````
+
+
 ### Default Wordpress Admin Credentials
 
 To access the Wordpress Admin at `/wp-admin`, the default values are as follows:
