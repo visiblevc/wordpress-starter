@@ -104,9 +104,10 @@ To use the new image we should also update **example/docker-compose.yml** to use
      ports:
 ````
 
-It may take multimple tryies until you figure out the correct software packages for each extension so you will have to rebuild your image again and again. To do that just run:
+It may take multiple tries until you figure out the correct software packages for each extension so you will have to rebuild your image again and again. To do that just run:
+
 ````
-   docker-compose build --no-cache
+   docker-compose up --build
 ````
 
 
