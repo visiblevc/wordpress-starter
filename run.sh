@@ -41,9 +41,9 @@ core config:
     define('WP_DEBUG', ${WP_DEBUG:-false});
     define('WP_DEBUG_LOG', ${WP_DEBUG_LOG:-false});
     define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY:-true});
-    if (\$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+    if (\$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
        \$_SERVER['HTTPS']='on';
-
+    }
     if (isset(\$_SERVER['HTTP_X_FORWARDED_HOST'])) {
        \$_SERVER['HTTP_HOST'] = \$_SERVER['HTTP_X_FORWARDED_HOST'];
     }
