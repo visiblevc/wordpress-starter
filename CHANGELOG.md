@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.15.2 - latest
+## 0.16.0 - latest
+- **BREAKING CHANGE:** Builds will now exit if any plugin or theme installs fail.
+- Improve logging.
+
+## 0.15.2
 
 ### Fixes
 - **REALLY** fix error causing volumed plugins and/or themes to be deleted.
