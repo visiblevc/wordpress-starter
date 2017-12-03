@@ -5,14 +5,14 @@
 # ------------
 ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME:-wordpress}.com"}
 DB_HOST=${DB_HOST:-db}
+DB_USER=${DB_USER:-root}
 DB_NAME=${DB_NAME:-wordpress}
 DB_PASS=${DB_PASS:-root}
 DB_PREFIX=${DB_PREFIX:-wp_}
 PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 SERVER_NAME=${SERVER_NAME:-localhost}
 WP_VERSION=${WP_VERSION:-latest}
-# FIXME: Remove in next version
-URL_REPLACE=${URL_REPLACE:-"$SEARCH_REPLACE"}
+URL_REPLACE=${URL_REPLACE:-''}
 BEFORE_URL="${URL_REPLACE%,*}"
 AFTER_URL="${URL_REPLACE#*,}"
 
@@ -32,7 +32,7 @@ apache_modules:
   - mod_rewrite
 
 core config:
-  dbuser: root
+  dbuser: $DB_USER
   dbpass: $DB_PASS
   dbname: $DB_NAME
   dbprefix: $DB_PREFIX
@@ -45,7 +45,7 @@ core config:
 core install:
   url: ${AFTER_URL:-localhost:8080}
   title: $DB_NAME
-  admin_user: root
+  admin_user: $DB_USER
   admin_password: $DB_PASS
   admin_email: $ADMIN_EMAIL
   skip-email: true
@@ -103,7 +103,7 @@ _log_last_exit_colorize() {
   else
     echo "$2" |& _colorize
     exit 1
-  fi  
+  fi
 }
 
 _get_volumes() {
@@ -125,19 +125,7 @@ _get_volumes() {
 }
 
 _wp() {
-  wp --allow-root "$@" 
-}
-
-# FIXME: Remove in next version
-# Deprecations
-# ---------------------
-_local_deprecation() {
-  local local_type="$1" # 'plugin' or 'theme'
-  echo "Warning: [local]$local_type-name has been deprecated and will be dropped in the next version." |& _colorize
-}
-
-_search_replace_deprecation() {
-  echo "Warning: SEARCH_REPLACE environment variable has been renamed to URL_REPLACE and will be dropped in the next version." |& _colorize
+  wp --allow-root "$@"
 }
 
 # Config Functions
@@ -145,9 +133,6 @@ _search_replace_deprecation() {
 
 init() {
   local plugins themes i
-
-  # FIXME: Remove in next version
-  [[ -n $SEARCH_REPLACE ]] && _search_replace_deprecation
 
   PLUGINS="${PLUGINS/%,},"
   THEMES="${THEMES/%,},"
@@ -176,8 +161,6 @@ init() {
     key="${i%]*}"       # Trim right bracket to end of string
     key="${key//[\[ ]}" # Trim left bracket
     value="${i##\[*\]}" # Trim bracketed text inclusive
-    # FIXME: Remove in next version
-    [[ "$key" == 'local' ]] && _local_deprecation plugin && continue
     plugin_deps[$key]="$value"
   done <<< "$PLUGINS"
 
@@ -187,8 +170,6 @@ init() {
     key="${i%]*}"       # Trim right bracket to end of string
     key="${key//[\[ ]}" # Trim left bracket
     value="${i##\[*\]}" # Trim bracketed text inclusive
-    # FIXME: Remove in next version
-    [[ "$key" == 'local' ]] && _local_deprecation theme && continue
     theme_deps[$key]="$value"
   done <<< "$THEMES"
 
@@ -214,14 +195,14 @@ check_database() {
 
   # No backups found
   if [[ "$( find /data -name "*.sql" 2>/dev/null | wc -l )" -eq 0 ]]; then
-    _wp core install 
+    _wp core install
     _log_last_exit_colorize "Success: core install" "Error: core install failed!"
 
     return
   fi
 
   data_path=$( find /data -name "*.sql" -print -quit )
-  _wp db import "$data_path" 
+  _wp db import "$data_path"
   _log_last_exit_colorize "Success: db import" "Error: db import failed!"
 
   if [[ -n "$URL_REPLACE" ]]; then
@@ -254,10 +235,10 @@ check_plugins() {
   for key in "${to_install[@]}"; do
     wp plugin install --allow-root "$key"
     _log_last_exit_colorize "Success: $key plugin installed" "Error: $key plugin install failure!"
-  done  
+  done
 
   [[ "${#to_remove}" -gt 0 ]] && _wp plugin delete "${to_remove[@]}"
-  _wp plugin activate --all 
+  _wp plugin activate --all
   _log_last_exit_colorize "Success: plugin activate all" "Error: plugin activate all failed!"
  }
 
@@ -276,9 +257,9 @@ check_themes() {
   fi
 
   for key in "${to_install[@]}"; do
-    wp theme install --allow-root "$key" 
+    wp theme install --allow-root "$key"
     _log_last_exit_colorize "Success: $key theme install " "Error: $key theme install failed!"
-  done 
+  done
 
   for theme in $(wp theme list --field=name --status=inactive --allow-root); do
     [[ ${theme_deps[$theme]} ]] && continue
@@ -287,7 +268,7 @@ check_themes() {
   done
 
   for key in "${to_remove[@]}"; do
-    wp theme delete --allow-root "$key" 
+    wp theme delete --allow-root "$key"
     _log_last_exit_colorize "Success: $key theme deleted" "Error: $key theme delete failed!"
   done
 
@@ -306,7 +287,7 @@ main() {
 
   h2 "Configuring WordPress"
   rm -f /app/wp-config.php
-  _wp core config 
+  _wp core config
   _log_last_exit_colorize "Success: core config" "Error: core config failed!"
 
   h2 "Checking database"
