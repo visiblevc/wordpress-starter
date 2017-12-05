@@ -1,7 +1,7 @@
 FROM php:7.2-apache
 ENV TERM=xterm
 LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
-      version="0.16.0-php7.2"
+      version="0.17.0-php7.2"
 
 # Install base requirements & sensible defaults + required PHP extensions
 RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list \
