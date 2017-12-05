@@ -8,6 +8,8 @@ docker login
 # NOTE: Not building this stack of images concurrently due to a known issue
 # with docker concurrent builds. https://github.com/moby/moby/issues/9656
 
+set -e
+
 docker build \
   -t "visiblevc/wordpress:latest" \
   -t "visiblevc/wordpress:latest-php7.2" \
