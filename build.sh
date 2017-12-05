@@ -10,6 +10,12 @@ docker login
 
 docker build \
   -t "visiblevc/wordpress:latest" \
+  -t "visiblevc/wordpress:latest-php7.2" \
+  -t "visiblevc/wordpress:$npm_package_version-php7.2" \
+./php7.2/
+
+docker build \
+  -t "visiblevc/wordpress:latest" \
   -t "visiblevc/wordpress:latest-php7.1" \
   -t "visiblevc/wordpress:$npm_package_version-php7.1" \
 ./php7.1/
