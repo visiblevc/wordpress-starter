@@ -1,14 +1,15 @@
-FROM php:7.0-apache
+FROM php:7.2-apache
 ENV TERM=xterm
 LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
-      version="0.17.0-php7.0"
+      version="0.17.0-php7.2"
 
 # Install base requirements & sensible defaults + required PHP extensions
-RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list \
+RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        bash-completion \
         less \
-        libpng12-dev \
+        libpng-dev \
         libjpeg-dev \
         libxml2-dev \
         mariadb-client \
@@ -16,7 +17,7 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/so
         sudo \
         vim \
         zip \
-    && DEBIAN_FRONTEND=noninteractive apt-get -t jessie-backports install -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get -t stretch-backports install -y \
         python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
