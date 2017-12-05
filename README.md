@@ -1,39 +1,44 @@
 # Visible Wordpress Starter
 
-A Docker Wordpress development environment by the team at [Visible](https://visible.vc/) and some awesome [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors). Our goal is to make Wordpress development slightly less frustrating.
+A Docker Wordpress development environment by the team at [Visible](https://visible.vc/) and some
+awesome [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors). Our goal
+is to make Wordpress development slightly less frustrating.
 
-- [Introduction](#introduction)
-- [Example](./example/)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Available Images](#available-images)
-- [Default Wordpress Admin Credentials](#default-wordpress-admin-credentials)
-- [Default Database Credentials](#default-database-credentials)
-- [Service Environment Variables](#service-environment-variables)
-  - [`wordpress`](#wordpress)
-  - [`db`](#db)
-- [Workflow Tips](#workflow-tips)
-  - [Using `wp-cli`](#using-wp-cli)
-  - [Working with Databases](#working-with-databases)
-- [Using in Production](#using-in-production)
-- [Contributing](#contributing)
+* [Introduction](#introduction)
+* [Example](./example/)
+* [Requirements](#requirements)
+* [Getting Started](#getting-started)
+* [Available Images](#available-images)
+* [Default Wordpress Admin Credentials](#default-wordpress-admin-credentials)
+* [Default Database Credentials](#default-database-credentials)
+* [Service Environment Variables](#service-environment-variables)
+  * [`wordpress`](#wordpress)
+  * [`db`](#db)
+* [Workflow Tips](#workflow-tips)
+  * [Using `wp-cli`](#using-wp-cli)
+  * [Working with Databases](#working-with-databases)
+* [Using in Production](#using-in-production)
+* [Contributing](#contributing)
 
 ### Introduction
 
 We wrote a series of articles explaining in depth the philosophy behind this project:
 
-- [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
-- [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
-- [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
-- [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
+* [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
+* [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
+* [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
+* [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
 
 ### Requirements
 
-Well, to run a Docker environment, you will need Docker. The Dockerfile is only for an Apache+PHP+Wordpress container, you will need a `MySQL` or `MariaDB` container to run a website. We use Docker Compose 1.6+ for the orchestration.
+Well, to run a Docker environment, you will need Docker. The Dockerfile is only for an
+Apache+PHP+Wordpress container, you will need a `MySQL` or `MariaDB` container to run a website. We
+use Docker Compose 1.6+ for the orchestration.
 
 ### Getting started
 
-This project has 2 parts: the Docker environment and a set of tools for theme development. To quickly get started, you can simply run the following:
+This project has 2 parts: the Docker environment and a set of tools for theme development. To
+quickly get started, you can simply run the following:
 
 ```
 # copy the files
@@ -46,15 +51,17 @@ cd wordpress-starter/example
 docker-compose up -d && docker-compose logs -f wordpress
 ```
 
-**NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to forward the port by running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use another port than `8080`, change it in the command.
+**NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to forward the port by
+running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use
+another port than `8080`, change it in the command.
 
 ### Available Images
 
-| PHP Version | Tags |
-| ----------- | ---- |
+| PHP Version | Tags                                        |
+| ----------- | ------------------------------------------- |
 | **7.1**     | `latest` `latest-php7.1` `<version>-php7.1` |
-| **7.0**     | `latest-php7.0` `<version>-php7.0` |
-| **5.6**     | `latest-php5.6` `<version>-php5.6`|
+| **7.0**     | `latest-php7.0` `<version>-php7.0`          |
+| **5.6**     | `latest-php5.6` `<version>-php5.6`          |
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
 
@@ -62,50 +69,54 @@ If you need a specific version, look at the [Changelog](CHANGELOG.md)
 
 To access the Wordpress Admin at `/wp-admin`, the default values are as follows:
 
-Credential | Value | Notes
---- | --- | ---
-**Username or Email** | `root` or `admin@wordpress.com` | Can be changed with the `ADMIN_EMAIL` environment variable
-**Password** | `root` | Uses the same value as the `DB_PASS` environment variable |
+| Credential            | Value                           | Notes                                                      |
+| --------------------- | ------------------------------- | ---------------------------------------------------------- |
+| **Username or Email** | `root` or `admin@wordpress.com` | Can be changed with the `ADMIN_EMAIL` environment variable |
+| **Password**          | `root`                          | Uses the same value as the `DB_PASS` environment variable  |
 
 ### Default Database Credentials
 
-Credential | Value | Notes
---- | --- | ---
-**Hostname** | `db` | Can be changed with the `DB_HOST` environment variable  **NOTE:**: Must match database service name
-**Username** | `root` | |
-**Password** |  | Must be set using the `DB_PASS` environment variable
-**Database Name** | `wordpress` | Can be changed with the `DB_NAME` environment variable
-**Admin Email** | `admin@${DB_NAME}.com` | |
+| Credential        | Value                  | Notes                                                                                              |
+| ----------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
+| **Hostname**      | `db`                   | Can be changed with the `DB_HOST` environment variable **NOTE:**: Must match database service name |
+| **Username**      | `root`                 |                                                                                                    |
+| **Password**      |                        | Must be set using the `DB_PASS` environment variable                                               |
+| **Database Name** | `wordpress`            | Can be changed with the `DB_NAME` environment variable                                             |
+| **Admin Email**   | `admin@${DB_NAME}.com` |                                                                                                    |
 
 ### Service Environment Variables
+
 **Notes:**
-- Variables marked with ✅ are required
-- Single quotes must surround `boolean` environment variables
+
+* Variables marked with ✅ are required
+* Single quotes must surround `boolean` environment variables
 
 #### `wordpress`
 
-Variable | Default Value | Description
----|---|---
-`DB_PASS`✅ | | Password for the database. Value must match `MYSQL_ROOT_PASSWORD` set in the `db` service
-`DB_HOST` | `db` | Hostname for the database
-`DB_NAME` | `wordpress` | Name of the database
-`DB_PREFIX` | `wp_` | Prefix for the database
-`SERVER_NAME` | `localhost` | Set this to `<your-domain-name>.<your-domain-extension>` if you plan on obtaining SSL certificates
-`ADMIN_EMAIL` | `admin@${DB_NAME}.com` | Administrator email address
-`WP_DEBUG` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG) for more information
-`WP_DEBUG_DISPLAY` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_DISPLAY) for more information
-`WP_DEBUG_LOG` | `'false'` | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_LOG) for more information
-`WP_VERSION` | `latest` | Specify the WordPress version to install. Accepts any valid semver number, `latest`, or `nightly` for beta builds.
-`THEMES` | | Comma-separated list of themes you want to install in either of the following forms<ul><li>`theme-slug`: Used when installing theme direct from WordPress.org</li><li>`[theme-slug]https://themesite.com/theme.zip`: Used when installing theme from URL</li></ul>
-`PLUGINS` | | Comma-separated list of plugins you want to install in either of the following forms:<ul><li>`plugin-slug`: Used when installing plugin direct from WordPress.org.</li><li>`[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.</li></ul>
-`MULTISITE` | `'false'` | Set to `'true'` to enable multisite
-`PERMALINKS` | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags)
-`URL_REPLACE` | | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul>
+| Variable           | Default Value                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DB_USER`          | `root`                           | Username for both the database and the WordPress installation (if not importing existing)                                                                                                                                                                                                                                                                                                                                                |
+| `DB_PASS`✅        |                                  | Password for the database. Value must match `MYSQL_ROOT_PASSWORD` set in the `db` service                                                                                                                                                                                                                                                                                                                                                |
+| `DB_HOST`          | `db`                             | Hostname for the database                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `DB_NAME`          | `wordpress`                      | Name of the database                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `DB_PREFIX`        | `wp_`                            | Prefix for the database                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `SERVER_NAME`      | `localhost`                      | Set this to `<your-domain-name>.<your-domain-extension>` if you plan on obtaining SSL certificates                                                                                                                                                                                                                                                                                                                                       |
+| `ADMIN_EMAIL`      | `admin@${DB_NAME}.com`           | Administrator email address                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `WP_DEBUG`         | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG) for more information                                                                                                                                                                                                                                                                                                                                                                  |
+| `WP_DEBUG_DISPLAY` | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_DISPLAY) for more information                                                                                                                                                                                                                                                                                                                                                 |
+| `WP_DEBUG_LOG`     | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_LOG) for more information                                                                                                                                                                                                                                                                                                                                                     |
+| `WP_VERSION`       | `latest`                         | Specify the WordPress version to install. Accepts any valid semver number, `latest`, or `nightly` for beta builds.                                                                                                                                                                                                                                                                                                                       |
+| `THEMES`           |                                  | Comma-separated list of themes you want to install in either of the following forms<ul><li>`theme-slug`: Used when installing theme direct from WordPress.org</li><li>`[theme-slug]https://themesite.com/theme.zip`: Used when installing theme from URL</li></ul>                                                                                                                                                                       |
+| `PLUGINS`          |                                  | Comma-separated list of plugins you want to install in either of the following forms:<ul><li>`plugin-slug`: Used when installing plugin direct from WordPress.org.</li><li>`[plugin-slug]http://pluginsite.com/plugin.zip`: Used when installing plugin from URL.</li></ul>                                                                                                                                                              |
+| `MULTISITE`        | `'false'`                        | Set to `'true'` to enable multisite                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `PERMALINKS`       | `/%year%/%monthnum%/%postname%/` | A valid WordPress permalink [structure tag](https://codex.wordpress.org/Using_Permalinks#Structure_Tags)                                                                                                                                                                                                                                                                                                                                 |
+| `URL_REPLACE`      |                                  | Comma-separated string in the form of `current-url,replacement-url`<ul><li>When defined, `current-url` will be replaced with `replacement-url` on build (useful for development environments utilizing a database copied from a live site)<li>**Note:** If you are running Docker using Docker Machine, your replacement url MUST be the output of the following command: `echo $(docker-machine ip <your-machine-name>):8080`</li></ul> |
 
 #### `db`
-Variable | Default Value | Description
----|---|---
-`MYSQL_ROOT_PASSWORD`✅ | | Must match `DB_PASS` of the `wordpress` service
+
+| Variable                | Default Value | Description                                     |
+| ----------------------- | ------------- | ----------------------------------------------- |
+| `MYSQL_ROOT_PASSWORD`✅ |               | Must match `DB_PASS` of the `wordpress` service |
 
 ## Workflow Tips
 
@@ -120,7 +131,9 @@ npm run wp db import /data/database.sql
 
 ### Working with Databases
 
-If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder. The first time you run the container, it will detect the SQL dump and use it as a database. If it doesn't find one, it will create a fresh database.
+If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder.
+The first time you run the container, it will detect the SQL dump and use it as a database. If it
+doesn't find one, it will create a fresh database.
 
 If the SQL dump changes for some reason, you can reload the database by running:
 
@@ -134,7 +147,10 @@ If you want to create a dump of your development database, you can run:
 docker-compose exec wordpress /bin/bash 'wp db export /data --allow-root'
 ```
 
-Finally, sometimes your development environment runs on a different domain than your live one. The live will be `example.com` and the development `localhost:8080`. This project does a search and replace for you. You can set the `URL_REPLACE: example.com,localhost:8080` environment variable in the `docker-compose.yml`.
+Finally, sometimes your development environment runs on a different domain than your live one. The
+live will be `example.com` and the development `localhost:8080`. This project does a search and
+replace for you. You can set the `URL_REPLACE: example.com,localhost:8080` environment variable in
+the `docker-compose.yml`.
 
 ## Using in Production
 
@@ -164,9 +180,12 @@ services:
 
 ### SSL Certificates
 
-We highly recommend securing your site with SSL encryption. The Let's Encrypt and Certbot projects have made doing this both free (as in beer) and painless. We've incorporated these projects into this project.
+We highly recommend securing your site with SSL encryption. The Let's Encrypt and Certbot projects
+have made doing this both free (as in beer) and painless. We've incorporated these projects into
+this project.
 
-Assuming your site is running on your production host, follow the below steps to obtain and renew SSL certificates.
+Assuming your site is running on your production host, follow the below steps to obtain and renew
+SSL certificates.
 
 #### Obtaining Certificates
 
@@ -196,4 +215,5 @@ root@4e16c7fe4a10:/app# certbot renew
 
 ## Contributing
 
-You can find Development instructions in the [Wiki](https://github.com/visiblevc/wordpress-starter/wiki/Development).
+You can find Development instructions in the
+[Wiki](https://github.com/visiblevc/wordpress-starter/wiki/Development).
