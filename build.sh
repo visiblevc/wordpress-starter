@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
+set -e
 
 npm_package_version="${npm_package_version?Script must be run using npm}"
 
 docker login
-[ $? -eq 1 ] && exit 0
 
 # NOTE: Not building this stack of images concurrently due to a known issue
 # with docker concurrent builds. https://github.com/moby/moby/issues/9656
-
-set -e
 
 docker build \
   -t "visiblevc/wordpress:latest" \
@@ -17,7 +15,6 @@ docker build \
 ./php7.2/
 
 docker build \
-  -t "visiblevc/wordpress:latest" \
   -t "visiblevc/wordpress:latest-php7.1" \
   -t "visiblevc/wordpress:$npm_package_version-php7.1" \
 ./php7.1/

@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.16.0 - latest
+## 0.17.0 - latest
+
+### Minor
+- Add PHP 7.2 (`latest`, `latest-php7.2`, `0.17.0-php7.2`)
+- Add `DB_USER` config option to environment variables
+
+## 0.16.0
 - **BREAKING CHANGE:** Builds will now exit if any plugin or theme installs fail.
 - Improve logging.
 
