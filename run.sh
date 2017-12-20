@@ -12,6 +12,7 @@ DB_PREFIX=${DB_PREFIX:-wp_}
 PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 SERVER_NAME=${SERVER_NAME:-localhost}
 WP_VERSION=${WP_VERSION:-latest}
+WP_LOCALE=${WP_LOCALE:-en_US}
 URL_REPLACE=${URL_REPLACE:-''}
 BEFORE_URL="${URL_REPLACE%,*}"
 AFTER_URL="${URL_REPLACE#*,}"
@@ -177,7 +178,7 @@ init() {
   # ------------------
   if [[ ! -f /app/wp-settings.php ]]; then
     h2 "Downloading WordPress"
-    _wp core download --version="$WP_VERSION"
+    _wp core download --version="$WP_VERSION" --locale="$WP_LOCALE"
     _log_last_exit_colorize "Success: Wordpress downloaded" "Error: Wordpress download failed!"
   fi
 
