@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+# Ascending order is important here
 declare -a php_versions=(
-	7.2
-	7.1
-	7.0
-	5.6
+    5.6
+    7.0
+    7.1
+    7.2
 )
 declare npm_package_version="${npm_package_version?Script must be run using npm}"
 declare dockerfile_dir
@@ -16,13 +17,13 @@ docker login
 # NOTE: Not building this stack of images concurrently due to a known issue
 # with docker concurrent builds. https://github.com/moby/moby/issues/9656
 for php_version in "${php_versions[@]}"; do
-	docker build \
-		--build-arg PHP_VERSION="$php_version" \
+    docker build \
+        --build-arg PHP_VERSION="$php_version" \
         --build-arg VERSION="$npm_package_version" \
-		-t "visiblevc/wordpress:latest" \
-		-t "visiblevc/wordpress:latest-php7.2" \
-		-t "visiblevc/wordpress:$npm_package_version-php7.2" \
-		"$dockerfile_dir"
+        -t "visiblevc/wordpress:latest" \
+        -t "visiblevc/wordpress:latest-php${php_version}" \
+        -t "visiblevc/wordpress:$npm_package_version-php${php_version}" \
+        "$dockerfile_dir"
 done
 
 echo "

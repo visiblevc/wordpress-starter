@@ -70,6 +70,8 @@ init() {
     declare raw_line
     declare -a keyvalue
 
+    check_volumes
+
     for raw_line in $PLUGINS; do
         mapfile -d$'\n' -t keyvalue < <(
             sed -n '
@@ -119,6 +121,9 @@ check_database() {
 
 # Install / remove plugins based on $PLUGINS in parallel threads
 check_plugins() {
+    declare -a plugin_volumes
+    mapfile -t plugin_volumes < <( check_volumes -p )
+
     (
         declare -a add_list
         mapfile -t add_list < <(comm -23 \
@@ -133,7 +138,7 @@ check_plugins() {
     (
         declare -a remove_list
         mapfile -t remove_list < <(comm -13 \
-            <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort) \
+            <(echo "${!plugin_deps[@]}" "${plugin_volumes[@]}" | tr ' ' '\n' | sort) \
             <(wp plugin list --field=name | sort))
 
         if [[ ${#remove_list[@]} -gt 0 ]]; then
@@ -146,10 +151,13 @@ check_plugins() {
 
 # Install / remove themes based on $THEMES in parallel threads
 check_themes() {
+    declare -a theme_volumes
+    mapfile -t theme_volumes < <( check_volumes -t )
+
     (
         declare -a add_list
         mapfile -t add_list < <(comm -23 \
-            <(echo "${!theme_deps[@]}" | tr ' ' '\n' | sort) \
+            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort) \
             <(wp theme list --field=name | sort))
 
         if [[ "${#add_list[@]}" -gt 0 ]]; then
@@ -171,19 +179,61 @@ check_themes() {
     wait
 }
 
+check_volumes() {
+    if [[ ! -f ~/.dockercache ]]; then
+        {
+            (
+                # for d in /app/wp-content/plugins/*; do
+                #     echo -e "plugin\\t$(basename "$d")"
+                # done
+                find /app/wp-content/plugins/* \
+                    -maxdepth 0 \
+                    -type d \
+                    -printf 'plugin\t%f\n' 2>/dev/null
+            )&
+            (
+                # for d in /app/wp-content/themes/*; do
+                #     echo -e "theme\\t$(basename "$d")"
+                # done
+                find /app/wp-content/plugins/* \
+                    -maxdepth 0 \
+                    -type d \
+                    -printf 'plugin\t%f\n' 2>/dev/null
+            )&
+            wait
+        } > ~/.dockercache
+    fi
+    
+    declare opt OPTIND
+    while getopts 'pt' opt; do
+        case "$opt" in
+            p)
+                awk '/^plugin/{ print $2 }' ~/.dockercache
+                ;;
+            t)
+                awk '/^theme/{ print $2 }' ~/.dockercache
+                ;;
+            *)
+                exit 1
+        esac
+    done
+    shift "$((OPTIND-1))"
+}
+
 configure() {
     # Ensures that this only runs on the initial build
-    [[ -f ~/.wp-cli/config.yml ]] && return
+    if [[ ! -f ~/.wp-cli/config.yml ]]; then
+        # Apache config adustments
+        sudo sed -i \
+            -e "/^[[:blank:]]*.ServerName/{c\\" \
+            -e "\\tServerName ${SERVER_NAME} \\" \
+            -e "\\tServerAlias www.${SERVER_NAME}" \
+            -e '}' /etc/apache2/sites-available/000-default.conf
 
-    # Apache config adustments
-    sudo sed -i \
-        -e "/^[[:blank:]]*.ServerName/{c\\" \
-        -e "\\tServerName ${SERVER_NAME} \\" \
-        -e "\\tServerAlias www.${SERVER_NAME}" \
-        -e '}' /etc/apache2/sites-available/000-default.conf
+        # Source bash completion on login
+        echo '. /etc/bash_completion.d/wp-cli' >>~/.bashrc
+    fi
 
-    # Source bash completion now and on login
-    echo '. /etc/bash_completion.d/wp-cli' >>~/.bashrc
     . /etc/bash_completion.d/wp-cli
 
     # WP-CLI defaults
