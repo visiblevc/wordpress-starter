@@ -183,18 +183,12 @@ check_volumes() {
     if [[ ! -f ~/.dockercache ]]; then
         {
             (
-                # for d in /app/wp-content/plugins/*; do
-                #     echo -e "plugin\\t$(basename "$d")"
-                # done
                 find /app/wp-content/plugins/* \
                     -maxdepth 0 \
                     -type d \
                     -printf 'plugin\t%f\n' 2>/dev/null
             )&
             (
-                # for d in /app/wp-content/themes/*; do
-                #     echo -e "theme\\t$(basename "$d")"
-                # done
                 find /app/wp-content/plugins/* \
                     -maxdepth 0 \
                     -type d \
@@ -203,7 +197,7 @@ check_volumes() {
             wait
         } > ~/.dockercache
     fi
-    
+
     declare opt OPTIND
     while getopts 'pt' opt; do
         case "$opt" in
@@ -261,7 +255,7 @@ core install:
     admin_email: $ADMIN_EMAIL
     skip-email: true
 EOF
-    
+
     # Create wp-config.php file
     wp --color config create --force |& logger
 }
