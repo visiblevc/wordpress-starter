@@ -189,10 +189,10 @@ check_volumes() {
                     -printf 'plugin\t%f\n' 2>/dev/null
             )&
             (
-                find /app/wp-content/plugins/* \
+                find /app/wp-content/themes/* \
                     -maxdepth 0 \
                     -type d \
-                    -printf 'plugin\t%f\n' 2>/dev/null
+                    -printf 'theme\t%f\n' 2>/dev/null
             )&
             wait
         } > ~/.dockercache
