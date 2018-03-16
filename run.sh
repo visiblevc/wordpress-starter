@@ -4,23 +4,60 @@
 # Environment
 # ------------
 declare -x TERM="${TERM:-xterm}"
-declare ADMIN_EMAIL=${ADMIN_EMAIL:-"admin@${DB_NAME:-wordpress}.com"}
-declare AFTER_URL="${URL_REPLACE#*,}"
-declare BEFORE_URL="${URL_REPLACE%,*}"
-declare DB_HOST=${DB_HOST:-db}
-declare DB_NAME=${DB_NAME:-wordpress}
-declare DB_PASS=${DB_PASS:-root}
-declare DB_PREFIX=${DB_PREFIX:-wp_}
-declare DB_USER=${DB_USER:-root}
-declare PERMALINKS=${PERMALINKS:-'/%year%/%monthnum%/%postname%/'}
 declare PLUGINS="${PLUGINS//,/}"
-declare SERVER_NAME=${SERVER_NAME:-localhost}
 declare THEMES="${THEMES//,/}"
-declare URL_REPLACE=${URL_REPLACE:-''}
-declare WP_VERSION=${WP_VERSION:-latest}
-
 declare -A plugin_deps
 declare -A theme_deps
+
+# FIXME: Deprecation of old version of $URL_REPLACE
+if [[ $URL_REPLACE =~ , ]]; then
+    URL_REPLACE=${URL_REPLACE%%,*}
+    printf '\e[1;33;7mDEPRECATED\e[0m %s\n' "URL_REPLACE must only contain AFTER_URL. BEFORE_URL,AFTER_URL form has been deprecated"
+fi
+
+# Configuration
+# -------------
+mkdir -p ~/.wp-cli
+echo -e "
+apache_modules:
+    - mod_rewrite
+
+config create:
+    dbhost: ${DB_HOST:-db}:3306
+    dbname: ${DB_NAME:-wordpress}
+    dbpass: ${DB_PASS:-root}
+    dbprefix: ${DB_PREFIX:-wp_}
+    dbuser: ${DB_USER:-root}
+    extra-php: |
+        define('WP_DEBUG', ${WP_DEBUG:-false});
+        define('WP_DEBUG_LOG', ${WP_DEBUG_LOG:-false});
+        define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY:-true});
+        $(sed '1 ! s/.*/        \0/' < <(echo -e "${EXTRA_PHP:-}"))
+
+core download:
+    locale: ${WP_LOCALE:-en_US}
+    skip-content: true
+    version: ${WP_VERSION:-latest}
+
+core install:
+    admin_email: ${ADMIN_EMAIL:-admin@${SERVER_NAME:-localhost.com}}
+    admin_password: ${DB_PASS:-root}
+    admin_user: ${DB_USER:-root}
+    skip-email: true
+    title: ${DB_NAME:-wordpress}
+    url: ${URL_REPLACE:-localhost:8080}
+
+rewrite structure:
+    hard: true
+
+" >~/.wp-cli/config.yml
+
+# Apache config adustments
+sudo sed -i \
+    -e "/^[[:blank:]]*.ServerName www.example.com/{c\\" \
+    -e "\\tServerName ${SERVER_NAME:-localhost} \\" \
+    -e "\\tServerAlias www.${SERVER_NAME:-localhost}" \
+    -e '}' /etc/apache2/sites-available/000-default.conf
 
 main() {
     h1 'Begin WordPress Installation'
@@ -28,15 +65,15 @@ main() {
 
     h2 'Waiting for MySQL to initialize...'
     while ! mysqladmin ping \
-        --host="$DB_HOST" \
-        --user="$DB_USER" \
-        --password="$DB_PASS" \
+        --host="${DB_HOST:-db}" \
+        --user="${DB_USER:-root}" \
+        --password="${DB_PASS:-root}" \
         --silent >/dev/null; do
         sleep 1
     done
 
     h2 'Configuring WordPress'
-    configure
+    wp --color config create --force |& logger
 
     h2 'Checking database'
     check_database
@@ -54,7 +91,8 @@ main() {
 
     h2 'Finalizing'
     if [[ "$MULTISITE" != 'true' ]]; then
-        wp --color rewrite structure "$PERMALINKS" --hard |& logger
+        wp --color rewrite structure \
+            "${PERMALINKS:-/%year%/%monthnum%/%postname%/}" |& logger
     fi
 
     h1 'WordPress Configuration Complete!'
@@ -94,7 +132,7 @@ init() {
 
     if [[ ! -f /app/wp-settings.php ]]; then
         h2 'Downloading WordPress'
-        wp --color core download --version="$WP_VERSION" --skip-content |& logger
+        wp --color core download |& logger
     fi
 }
 
@@ -113,16 +151,19 @@ check_database() {
     wp --color db import "$data_path" |& logger
 
     if [[ -n "$URL_REPLACE" ]]; then
-        wp --color search-replace --skip-columns=guid "$BEFORE_URL" "$AFTER_URL" \
-            | grep --color 'replacement' \
-            |& logger
+        wp --color search-replace \
+            --skip-columns=guid \
+            --report-changed-only \
+            --no-report \
+            "$(wp option get siteurl)" \
+            "$URL_REPLACE" |& logger
     fi
 }
 
 # Install / remove plugins based on $PLUGINS in parallel threads
 check_plugins() {
     declare -a plugin_volumes
-    mapfile -t plugin_volumes < <( check_volumes -p )
+    mapfile -t plugin_volumes < <(check_volumes -p)
 
     (
         declare -a add_list
@@ -152,7 +193,7 @@ check_plugins() {
 # Install / remove themes based on $THEMES in parallel threads
 check_themes() {
     declare -a theme_volumes
-    mapfile -t theme_volumes < <( check_volumes -t )
+    mapfile -t theme_volumes < <(check_volumes -t)
 
     (
         declare -a add_list
@@ -187,15 +228,15 @@ check_volumes() {
                     -maxdepth 0 \
                     -type d \
                     -printf 'plugin\t%f\n' 2>/dev/null
-            )&
+            ) &
             (
                 find /app/wp-content/themes/* \
                     -maxdepth 0 \
                     -type d \
                     -printf 'theme\t%f\n' 2>/dev/null
-            )&
+            ) &
             wait
-        } > ~/.dockercache
+        } >~/.dockercache
     fi
 
     declare opt OPTIND
@@ -209,55 +250,10 @@ check_volumes() {
                 ;;
             *)
                 exit 1
+                ;;
         esac
     done
-    shift "$((OPTIND-1))"
-}
-
-configure() {
-    # Ensures that this only runs on the initial build
-    if [[ ! -f ~/.wp-cli/config.yml ]]; then
-        # Apache config adustments
-        sudo sed -i \
-            -e "/^[[:blank:]]*.ServerName/{c\\" \
-            -e "\\tServerName ${SERVER_NAME} \\" \
-            -e "\\tServerAlias www.${SERVER_NAME}" \
-            -e '}' /etc/apache2/sites-available/000-default.conf
-
-        # Source bash completion on login
-        echo '. /etc/bash_completion.d/wp-cli' >>~/.bashrc
-    fi
-
-    . /etc/bash_completion.d/wp-cli
-
-    # WP-CLI defaults
-    mkdir -p ~/.wp-cli
-    cat <<EOF >~/.wp-cli/config.yml
-apache_modules:
-    - mod_rewrite
-
-core config:
-    dbuser: $DB_USER
-    dbpass: $DB_PASS
-    dbname: $DB_NAME
-    dbprefix: $DB_PREFIX
-    dbhost: $DB_HOST:3306
-    extra-php: |
-        define('WP_DEBUG', ${WP_DEBUG:-false});
-        define('WP_DEBUG_LOG', ${WP_DEBUG_LOG:-false});
-        define('WP_DEBUG_DISPLAY', ${WP_DEBUG_DISPLAY:-true});
-
-core install:
-    url: ${AFTER_URL:-localhost:8080}
-    title: $DB_NAME
-    admin_user: $DB_USER
-    admin_password: $DB_PASS
-    admin_email: $ADMIN_EMAIL
-    skip-email: true
-EOF
-
-    # Create wp-config.php file
-    wp --color config create --force |& logger
+    shift "$((OPTIND - 1))"
 }
 
 # Helpers
