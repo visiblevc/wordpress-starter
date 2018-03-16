@@ -281,7 +281,7 @@ main() {
   # Wait for MySQL
   # --------------
   h2 "Waiting for MySQL to initialize..."
-  while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --silent; do
+  while ! mysqladmin ping --host="$DB_HOST" --password="$DB_PASS" --user "$DB_USER" --silent; do
     sleep 1
   done
 
