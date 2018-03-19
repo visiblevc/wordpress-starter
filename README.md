@@ -1,8 +1,9 @@
 # Visible Wordpress Starter
 
-A Docker Wordpress development environment by the team at [Visible](https://visible.vc/) and some
-awesome [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors). Our goal
-is to make Wordpress development slightly less frustrating.
+A Docker Wordpress development environment by the team at
+[Visible](https://visible.vc/) and some awesome
+[contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors).
+Our goal is to make Wordpress development slightly less frustrating.
 
 *   [Introduction](#introduction)
 *   [Example](./example/)
@@ -22,7 +23,8 @@ is to make Wordpress development slightly less frustrating.
 
 ### Introduction
 
-We wrote a series of articles explaining in depth the philosophy behind this project:
+We wrote a series of articles explaining in depth the philosophy behind this
+project:
 
 *   [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
 *   [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
@@ -31,14 +33,14 @@ We wrote a series of articles explaining in depth the philosophy behind this pro
 
 ### Requirements
 
-Well, to run a Docker environment, you will need Docker. The Dockerfile is only for an
-Apache+PHP+Wordpress container, you will need a `MySQL` or `MariaDB` container to run a website. We
-use Docker Compose 1.6+ for the orchestration.
+Well, to run a Docker environment, you will need Docker. The Dockerfile is only
+for an Apache+PHP+Wordpress container, you will need a `MySQL` or `MariaDB`
+container to run a website. We use Docker Compose 1.6+ for the orchestration.
 
 ### Getting started
 
-This project has 2 parts: the Docker environment and a set of tools for theme development. To
-quickly get started, you can simply run the following:
+This project has 2 parts: the Docker environment and a set of tools for theme
+development. To quickly get started, you can simply run the following:
 
 ```
 # copy the files
@@ -51,15 +53,17 @@ cd wordpress-starter/example
 docker-compose up -d && docker-compose logs -f wordpress
 ```
 
-**NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to forward the port by
-running this `VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you use
-another port than `8080`, change it in the command.
+**NOTE:** If you run on MacOS with Docker in VirtualBox, you will want to
+forward the port by running this
+`VBoxManage controlvm vm-name natpf1 "tcp8080,tcp,127.0.0.1,8080,,8080"`. If you
+use another port than `8080`, change it in the command.
 
 ### Available Images
 
 | PHP Version | Tags                                        |
 | ----------- | ------------------------------------------- |
-| **7.1**     | `latest` `latest-php7.1` `<version>-php7.1` |
+| **7.2**     | `latest` `latest-php7.2` `<version>-php7.2` |
+| **7.1**     | `latest-php7.1` `<version>-php7.1`          |
 | **7.0**     | `latest-php7.0` `<version>-php7.0`          |
 | **5.6**     | `latest-php5.6` `<version>-php5.6`          |
 
@@ -132,9 +136,10 @@ npm run wp db import /data/database.sql
 
 ### Working with Databases
 
-If you have an exported `.sql` file from an existing website, drop the file into the `data/` folder.
-The first time you run the container, it will detect the SQL dump and use it as a database. If it
-doesn't find one, it will create a fresh database.
+If you have an exported `.sql` file from an existing website, drop the file into
+the `data/` folder. The first time you run the container, it will detect the SQL
+dump and use it as a database. If it doesn't find one, it will create a fresh
+database.
 
 If the SQL dump changes for some reason, you can reload the database by running:
 
@@ -148,10 +153,11 @@ If you want to create a dump of your development database, you can run:
 docker-compose exec wordpress /bin/bash 'wp db export /data --allow-root'
 ```
 
-Finally, sometimes your development environment runs on a different domain than your live one. The
-live will be `example.com` and the development `localhost:8080`. This project does a search and
-replace for you. You can set the `URL_REPLACE: example.com,localhost:8080` environment variable in
-the `docker-compose.yml`.
+Finally, sometimes your development environment runs on a different domain than
+your live one. The live will be `example.com` and the development
+`localhost:8080`. This project does a search and replace for you. You can set
+the `URL_REPLACE: example.com,localhost:8080` environment variable in the
+`docker-compose.yml`.
 
 ## Using in Production
 
@@ -181,12 +187,12 @@ services:
 
 ### SSL Certificates
 
-We highly recommend securing your site with SSL encryption. The Let's Encrypt and Certbot projects
-have made doing this both free (as in beer) and painless. We've incorporated these projects into
-this project.
+We highly recommend securing your site with SSL encryption. The Let's Encrypt
+and Certbot projects have made doing this both free (as in beer) and painless.
+We've incorporated these projects into this project.
 
-Assuming your site is running on your production host, follow the below steps to obtain and renew
-SSL certificates.
+Assuming your site is running on your production host, follow the below steps to
+obtain and renew SSL certificates.
 
 #### Obtaining Certificates
 
