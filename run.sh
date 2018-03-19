@@ -111,7 +111,7 @@ init() {
     check_volumes
 
     for raw_line in $PLUGINS; do
-        mapfile -d$'\n' -t keyvalue < <(
+        mapfile -t keyvalue < <(
             sed -n '
                 s/.*\[\(.*\)\]\([^[:blank:]]*\).*/\1\n\2/p # Matches [key]value form
                 t                                          # If previous match succeeds, skip to end
@@ -121,7 +121,7 @@ init() {
     done
 
     for raw_line in ${THEMES:=twentyseventeen}; do
-        mapfile -d$'\n' -t keyvalue < <(
+        mapfile -t keyvalue < <(
             sed -n '
                 s/.*\[\(.*\)\]\([^[:blank:]]*\).*/\1\n\2/p # Matches [key]value form
                 t                                          # If previous match succeeds, skip to end
