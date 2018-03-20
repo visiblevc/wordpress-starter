@@ -168,8 +168,8 @@ check_plugins() {
     (
         declare -a add_list
         mapfile -t add_list < <(comm -23 \
-            <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort) \
-            <(wp plugin list --field=name | sort))
+            <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort -u) \
+            <(wp plugin list --field=name | sort -u))
 
         if [[ "${#add_list[@]}" -gt 0 ]]; then
             wp --color plugin install --activate "${add_list[@]}" |& logger
@@ -179,8 +179,8 @@ check_plugins() {
     (
         declare -a remove_list
         mapfile -t remove_list < <(comm -13 \
-            <(echo "${!plugin_deps[@]}" "${plugin_volumes[@]}" | tr ' ' '\n' | sort) \
-            <(wp plugin list --field=name | sort))
+            <(echo "${!plugin_deps[@]}" "${plugin_volumes[@]}" | tr ' ' '\n' | sort -u) \
+            <(wp plugin list --field=name | sort -u))
 
         if [[ ${#remove_list[@]} -gt 0 ]]; then
             wp --color plugin uninstall --deactivate "${remove_list[@]}" |& logger
@@ -198,8 +198,8 @@ check_themes() {
     (
         declare -a add_list
         mapfile -t add_list < <(comm -23 \
-            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort) \
-            <(wp theme list --field=name | sort))
+            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
+            <(wp theme list --field=name | sort -u))
 
         if [[ "${#add_list[@]}" -gt 0 ]]; then
             wp --color theme install "${add_list[@]}" |& logger
@@ -209,8 +209,8 @@ check_themes() {
     (
         declare -a remove_list
         mapfile -t remove_list < <(comm -13 \
-            <(echo "${!theme_deps[@]}" | tr ' ' '\n' | sort) \
-            <(wp theme list --field=name | sort))
+            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
+            <(wp theme list --field=name | sort -u))
 
         if [[ ${#remove_list[@]} -gt 0 ]]; then
             wp --color theme delete "${remove_list[@]}" |& logger
