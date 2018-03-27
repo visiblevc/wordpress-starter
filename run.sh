@@ -130,6 +130,8 @@ init() {
         theme_deps[${keyvalue[0]}]="${keyvalue[1]}"
     done
 
+    sudo chown -R admin:www-data /app
+
     if [[ ! -f /app/wp-settings.php ]]; then
         h2 'Downloading WordPress'
         wp --color core download |& logger
