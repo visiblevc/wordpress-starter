@@ -18,7 +18,7 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         sudo \
         vim \
         zip \
-    && DEBIAN_FRONTEND=noninteractive apt-get -t stretch-backports install -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get -t $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/p' /etc/os-release)-backports install -y \
         python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
