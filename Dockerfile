@@ -5,7 +5,8 @@ LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
       version="${VERSION}-php${PHP_VERSION}"
 
 # Install base requirements & sensible defaults + required PHP extensions
-RUN apt-get update \
+RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/p' /etc/os-release)-backports main" >> /etc/apt/sources.list \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         bash-completion \
         less \
@@ -17,6 +18,8 @@ RUN apt-get update \
         sudo \
         vim \
         zip \
+    && DEBIAN_FRONTEND=noninteractive apt-get -t stretch-backports install -y \
+        python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
     && docker-php-ext-install \
