@@ -120,7 +120,7 @@ init() {
         plugin_deps[${keyvalue[0]}]="${keyvalue[1]}"
     done
 
-    for raw_line in ${THEMES:=twentyseventeen}; do
+    for raw_line in $THEMES; do
         mapfile -t keyvalue < <(
             sed -n '
                 s/.*\[\(.*\)\]\([^[:blank:]]*\).*/\1\n\2/p # Matches [key]value form
@@ -129,6 +129,11 @@ init() {
             ' <<<"$raw_line")
         theme_deps[${keyvalue[0]}]="${keyvalue[1]}"
     done
+
+    # If no theme dependencies or volumes exist, fall back to default
+    if [[ ${#theme_deps[@]} == 0 && $(check_volumes -t) == "" ]]; then
+        theme_deps[twentyseventeen]=twentyseventeen
+    fi
 
     sudo chown -R admin:www-data /app
 
