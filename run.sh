@@ -174,20 +174,20 @@ check_plugins() {
 
     (
         # Obtain keys of plugins to install
-        mapfile -t add_list < <(comm -23 \
+        mapfile -t plugin_keys < <(comm -23 \
             <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort -u) \
             <(wp plugin list --field=name | sort -u))
 
         # Transform keys to values
-        mapfile -t add_list < <(
-            for key in "${add_list[@]}"; do
+        mapfile -t plugin_values < <(
+            for key in "${plugin_keys[@]}"; do
                 echo "${plugin_deps[$key]}"
             done)
 
-        if [[ "${#add_list[@]}" -gt 0 ]]; then
-            wp --color plugin install "${add_list[@]}" |& logger
+        if [[ "${#plugin_keys[@]}" -gt 0 ]]; then
+            wp --color plugin install "${plugin_values[@]}" |& logger
             # Silence nonsensical "plugin already activated" warning messages
-            wp plugin activate "${add_list[@]}" --quiet
+            wp plugin activate "${plugin_keys[@]}" --quiet
         fi
     ) &
 
@@ -211,18 +211,18 @@ check_themes() {
 
     (
         # Obtain keys of themes to install
-        mapfile -t add_list < <(comm -23 \
+        mapfile -t theme_keys < <(comm -23 \
             <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
             <(wp theme list --field=name | sort -u))
 
         # Transform keys to values
-        mapfile -t add_list < <(
-            for key in "${add_list[@]}"; do
+        mapfile -t theme_values < <(
+            for key in "${theme_keys[@]}"; do
                 echo "${theme_deps[$key]}"
             done)
 
-        if [[ "${#add_list[@]}" -gt 0 ]]; then
-            wp --color theme install "${add_list[@]}" |& logger
+        if [[ "${#theme_values[@]}" -gt 0 ]]; then
+            wp --color theme install "${theme_values[@]}" |& logger
         fi
     ) &
 
