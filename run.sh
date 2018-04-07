@@ -168,18 +168,25 @@ check_plugins() {
     mapfile -t plugin_volumes < <(check_volumes -p)
 
     (
-        declare -a add_list
+        # Obtain keys of plugins to install
         mapfile -t add_list < <(comm -23 \
             <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort -u) \
             <(wp plugin list --field=name | sort -u))
 
+        # Transform keys to values
+        mapfile -t add_list < <(
+            for key in "${add_list[@]}"; do
+                echo "${plugin_deps[$key]}"
+            done)
+
         if [[ "${#add_list[@]}" -gt 0 ]]; then
-            wp --color plugin install --activate "${add_list[@]}" |& logger
+            wp --color plugin install "${add_list[@]}" |& logger
+            # Silence nonsensical "plugin already activated" warning messages
+            wp plugin activate "${add_list[@]}" --quiet
         fi
     ) &
 
     (
-        declare -a remove_list
         mapfile -t remove_list < <(comm -13 \
             <(echo "${!plugin_deps[@]}" "${plugin_volumes[@]}" | tr ' ' '\n' | sort -u) \
             <(wp plugin list --field=name | sort -u))
@@ -198,10 +205,16 @@ check_themes() {
     mapfile -t theme_volumes < <(check_volumes -t)
 
     (
-        declare -a add_list
+        # Obtain keys of themes to install
         mapfile -t add_list < <(comm -23 \
             <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
             <(wp theme list --field=name | sort -u))
+
+        # Transform keys to values
+        mapfile -t add_list < <(
+            for key in "${add_list[@]}"; do
+                echo "${theme_deps[$key]}"
+            done)
 
         if [[ "${#add_list[@]}" -gt 0 ]]; then
             wp --color theme install "${add_list[@]}" |& logger
@@ -209,7 +222,6 @@ check_themes() {
     ) &
 
     (
-        declare -a remove_list
         mapfile -t remove_list < <(comm -13 \
             <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
             <(wp theme list --field=name | sort -u))
