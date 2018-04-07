@@ -135,7 +135,10 @@ init() {
         theme_deps[twentyseventeen]=twentyseventeen
     fi
 
-    sudo chown -R admin:www-data /app
+    mkdir -p /app/wp-content
+    chgrp -R www-data /app/wp-content
+    chmod g+rw /app/wp-content
+    find /app/wp-content -type d -exec chmod g+s {} +
 
     if [[ ! -f /app/wp-settings.php ]]; then
         h2 'Downloading WordPress'
