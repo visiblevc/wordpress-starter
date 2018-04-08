@@ -52,15 +52,14 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
     && service apache2 restart
 
 # Add admin superuser, create install directory, adjust perms, & add symlink
-COPY --chown=www-data:www-data run.sh /run.sh
+COPY run.sh /run.sh
 RUN useradd -ms /bin/bash -G www-data,sudo admin \
     && echo "admin ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/admin \
     && chmod 0440 /etc/sudoers.d/admin \
     && chmod +x /usr/local/bin/wp /run.sh \
-    && mkdir -p /app \
+    && mkdir /app \
+    && chown -R admin:admin /app \
     && rm -fr /var/www/html \
-    && chown -R www-data:www-data /app /var/www \
-    && chmod g+rw /app /var/www \
     && ln -s /app /var/www/html
 
 USER admin

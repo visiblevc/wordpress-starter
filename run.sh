@@ -95,6 +95,10 @@ main() {
             "${PERMALINKS:-/%year%/%monthnum%/%postname%/}" |& logger
     fi
 
+    chgrp -R www-data /app
+    chmod -R g+rw /app
+    find /app -type d -exec chmod g+s {} +
+
     h1 'WordPress Configuration Complete!'
 
     sudo rm -f /var/run/apache2/apache2.pid
@@ -135,10 +139,7 @@ init() {
         theme_deps[twentyseventeen]=twentyseventeen
     fi
 
-    mkdir -p /app/wp-content
-    chgrp -R www-data /app/wp-content
-    chmod g+rw /app/wp-content
-    find /app/wp-content -type d -exec chmod g+s {} +
+    sudo chown -R admin:admin /app
 
     if [[ ! -f /app/wp-settings.php ]]; then
         h2 'Downloading WordPress'

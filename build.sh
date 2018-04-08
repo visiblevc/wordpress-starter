@@ -12,8 +12,6 @@ declare npm_package_version="${npm_package_version?Script must be run using npm}
 declare dockerfile_dir
 dockerfile_dir="$(dirname "${BASH_SOURCE[0]}")"
 
-docker login
-
 # NOTE: Not building this stack of images concurrently due to a known issue
 # with docker concurrent builds. https://github.com/moby/moby/issues/9656
 for php_version in "${php_versions[@]}"; do
