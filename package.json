@@ -1,6 +1,6 @@
 {
   "name": "visiblevc-wordpress",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "A slightly less shitty wordpress development workflow",
   "main": "index.js",
   "repository": "https://github.com/visiblevc/wordpress-starter.git",
@@ -10,7 +10,6 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "./build.sh",
-    "update-version": "for file in './php7.0/Dockerfile' './php5.6/Dockerfile' './php7.1/Dockerfile' './php7.2/Dockerfile'; do sed -Ei \"s/(version=\\\")(.*)(-)/\\1$npm_package_version\\3/g\" \"$file\"; done && sed -Ei \"s/(wordpress:)(.*)(-)/\\1$npm_package_version\\3/g\" ./example/docker-compose.yml"
+    "build": "./build.sh"
   }
 }

@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.17.0 - latest
+## 0.18.0 - latest
+
+**BREAKING CHANGE:** `URL_REPLACE` environment variable now only accepts `after_url`, rather than `before_url,after_url`. This will gracefully fix itself if it encounters the old format for this version only, but will break on subsequent versions.
+
+## Minor
+- Create and use a non-root user (admin) with passwordless sudo priviledges, rather than using the root user.
+- Plugins and themes can now be space-separated (preferred) or comma-separated (legacy).
+- Readdress #110 to print out logs in a similar, but greatly simplified, format.
+- Install and remove themes and plugins in parallel.
+- Greatly simplify build pipeline.
+
+## 0.17.0
 
 ### Minor
 - Add PHP 7.2 (`latest`, `latest-php7.2`, `0.17.0-php7.2`)

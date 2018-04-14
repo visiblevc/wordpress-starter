@@ -1,7 +1,7 @@
 version: '3'
 services:
   wordpress:
-    image: visiblevc/wordpress:0.17.0-php7.1
+    image: visiblevc/wordpress
     ports:
       - 8080:80
       - 443:443
@@ -11,9 +11,9 @@ services:
       DB_NAME: wordpress
       DB_PASS: root
       PLUGINS: >-
-        academic-bloggers-toolkit,
-        co-authors-plus,
-        [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
+        academic-bloggers-toolkit
+        co-authors-plus
+        [WP-API]https://github.com/WP-API/WP-API/archive/master.zip
   db:
     image: mariadb:10 # or mysql:5.7
     volumes:
