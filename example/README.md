@@ -1,4 +1,3 @@
-
 # Quickstart
 
 Download this example to your current working directory
@@ -31,7 +30,7 @@ services:
         academic-bloggers-toolkit,
         co-authors-plus,
         [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
-      URL_REPLACE: yoursite.com,localhost:8080
+      URL_REPLACE: localhost:8080
       WP_DEBUG: 'true'
   db:
     image: mysql:5.7 # or mariadb:10
@@ -64,10 +63,10 @@ volumes:
 
 ## Running the example
 
-1. Run the following command in the root of the example directory.
+1.  Run the following command in the root of the example directory.
+
 ```sh
 $ docker-compose up -d && docker-compose logs -f wordpress
 ```
 
-2. When the build is finished, hit <kbd>ctrl</kbd>-<kbd>c</kbd> to detach from the logs and visit `localhost:8080` in your browser.
-
+2.  When the build is finished, hit <kbd>ctrl</kbd>-<kbd>c</kbd> to detach from the logs and visit `localhost:8080` in your browser.

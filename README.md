@@ -156,7 +156,7 @@ docker-compose exec wordpress /bin/bash 'wp db export /data --allow-root'
 Finally, sometimes your development environment runs on a different domain than
 your live one. The live will be `example.com` and the development
 `localhost:8080`. This project does a search and replace for you. You can set
-the `URL_REPLACE: example.com,localhost:8080` environment variable in the
+the `URL_REPLACE: localhost:8080` environment variable in the
 `docker-compose.yml`.
 
 ## Using in Production
