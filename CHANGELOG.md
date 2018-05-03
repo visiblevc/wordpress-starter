@@ -1,6 +1,36 @@
 # Changelog
 
-## 0.18.0 - latest
+## 0.19.0 - latest
+
+**BREAKING CHANGE:** The WordPress service must now be configured in one of the following ways:
+
+(preferred)
+```yml
+services:
+    wordpress:
+        cap_add:
+            - SYS_ADMIN
+        devices:
+            - /dev/fuse
+```
+
+**OR**
+
+(try to avoid if possible)
+```yml
+services:
+    wordpress:
+        privileged: true
+```
+
+This configuration allows the wordpress container to mount the WordPress
+directory to the web root with back and forth syncronization using bindfs. This
+configuration ensures that when editing the files/folders manually on your
+system, they have the proper `admin` permissions in the /app directory, and
+when the server edits files/folders from WordPress, the webroot always have the
+proper `www-data` permissions in the web root.
+
+## 0.18.0
 
 **BREAKING CHANGE:** `URL_REPLACE` environment variable now only accepts `after_url`, rather than `before_url,after_url`. This will gracefully fix itself if it encounters the old format for this version only, but will break on subsequent versions.
 

@@ -9,6 +9,7 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         bash-completion \
+        bindfs \
         less \
         libpng-dev \
         libjpeg-dev \
@@ -53,14 +54,26 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
 
 # Add admin superuser, create install directory, adjust perms, & add symlink
 COPY run.sh /run.sh
-RUN useradd -ms /bin/bash -G www-data,sudo admin \
+RUN useradd -ms /bin/bash -G sudo admin \
     && echo "admin ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/admin \
     && chmod 0440 /etc/sudoers.d/admin \
     && chmod +x /usr/local/bin/wp /run.sh \
-    && mkdir /app \
-    && chown -R admin:admin /app \
-    && rm -fr /var/www/html \
-    && ln -s /app /var/www/html
+    && mkdir -m 0700 /app \
+    && chown admin:admin /app \
+    && printf '%s\t%s\t%s\t%s%s%s%s%s%s%s%s\t%d\t%d\n' \
+        '/app' \
+        '/var/www/html' \
+        'fuse.bindfs' \
+            'force-user=www-data,' \
+            'force-group=www-data,' \
+            'create-for-user=admin,' \
+            'create-for-group=admin,' \
+            'create-with-perms=0644:a+X,' \
+            'chgrp-ignore,' \
+            'chown-ignore,' \
+            'chmod-ignore' \
+        0 \
+        0 > /etc/fstab
 
 USER admin
 WORKDIR /app

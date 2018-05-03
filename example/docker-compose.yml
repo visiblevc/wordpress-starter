@@ -2,6 +2,13 @@ version: '3'
 services:
   wordpress:
     image: visiblevc/wordpress
+
+    # required for mounting bindfs
+    cap_add:
+        - SYS_ADMIN
+    devices:
+        - /dev/fuse
+
     ports:
       - 8080:80
       - 443:443

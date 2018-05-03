@@ -1,6 +1,31 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 
+if ! sudo mount -a 2>/dev/null; then
+    printf '\e[1;31mERROR:\e[0m %s' \
+    'Container running with improper privileges.
+
+    Be sure your service is confiured with the following options:
+    ___
+    services:
+    wordpress:
+        cap_add:
+        - SYS_ADMIN
+        devices:
+        - /dev/fuse
+    ___
+
+    OR (use first option if possible)
+    ___
+    services:
+    wordpress:
+        privileged: true
+    ___
+
+    ' | sed 's/^    //'
+    exit 1
+fi
+
 # Environment
 # ------------
 declare -x TERM="${TERM:-xterm}"
@@ -94,10 +119,6 @@ main() {
         wp --color rewrite structure \
             "${PERMALINKS:-/%year%/%monthnum%/%postname%/}" |& logger
     fi
-
-    chgrp -R www-data /app
-    chmod -R g+rw /app
-    find /app -type d -exec chmod g+s {} +
 
     h1 'WordPress Configuration Complete!'
 
