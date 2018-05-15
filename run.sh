@@ -5,7 +5,7 @@ if ! sudo mount -a 2>/dev/null; then
     printf '\e[1;31mERROR:\e[0m %s' \
     'Container running with improper privileges.
 
-    Be sure your service is confiured with the following options:
+    Be sure your service is configured with the following options:
     ___
     services:
     wordpress:
