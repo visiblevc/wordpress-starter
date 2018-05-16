@@ -2,7 +2,7 @@
   "name": "example",
   "version": "0.1.0",
   "scripts": {
-    "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd "
+    "wp": "docker-compose exec wordpress bash"
   },
   "dependencies": {},
   "devDependencies": {
