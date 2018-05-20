@@ -53,6 +53,7 @@ config create:
     dbpass: ${DB_PASS:-root}
     dbprefix: ${DB_PREFIX:-wp_}
     dbuser: ${DB_USER:-root}
+    dbcharset: ${DB_CHARSET:-utf8}
     extra-php: |
         define('WP_DEBUG', ${WP_DEBUG:-false});
         define('WP_DEBUG_LOG', ${WP_DEBUG_LOG:-false});
