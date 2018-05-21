@@ -8,6 +8,8 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/fuse
+    security_opt:  # May not be required on non-ubuntu-based systems.
+      - apparmor:unconfined
 
     ports:
       - 8080:80

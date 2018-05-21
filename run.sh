@@ -13,6 +13,9 @@ if ! sudo mount -a 2>/dev/null; then
         - SYS_ADMIN
         devices:
         - /dev/fuse
+        # ubuntu-based machines may require the following setting:
+        security_opt:
+          - apparmor:unconfined
     ___
 
     OR (use first option if possible)
