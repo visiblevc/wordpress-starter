@@ -11,18 +11,21 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         bash-completion \
         bindfs \
         less \
-        libpng-dev \
         libjpeg-dev \
+        libpng-dev \
         libxml2-dev \
+        libzip-dev \
         mariadb-client \
-        unzip \
         sudo \
+        unzip \
         vim \
         zip \
     && DEBIAN_FRONTEND=noninteractive apt-get -t $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/p' /etc/os-release)-backports install -y \
         python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+    && docker-php-ext-configure zip --with-libzip \
+    && yes no | pecl install redis \
     && docker-php-ext-install \
         exif \
         gd \
@@ -30,6 +33,7 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         opcache \
         soap \
         zip \
+    && docker-php-ext-enable redis \
     # See https://secure.php.net/manual/en/opcache.installation.php
     && echo 'memory_limit = 512M' > /usr/local/etc/php/php.ini \
     && { \

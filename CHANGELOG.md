@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.19.0 - latest
+## 0.20.0 - latest
+
+### Minor
+
+- Add support for Redis object caching.
+- Allow user to specify a different database charset via environment variable (#137)
+
+## 0.19.0
 
 **BREAKING CHANGE:** The WordPress service must now be configured in one of the following ways:
 
