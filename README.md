@@ -152,7 +152,7 @@ docker-compose exec wordpress /bin/bash "wp db import $(find /data/*.sql | head 
 If you want to create a dump of your development database, you can run:
 
 ```sh
-docker-compose exec wordpress /bin/bash 'wp db export /data --allow-root'
+docker-compose exec wordpress /bin/bash -c 'wp db export /data/dump.sql --allow-root'
 ```
 
 Finally, sometimes your development environment runs on a different domain than
