@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.20.0 - latest
+## 0.21.0 - latest
+
+### Minor
+
+- Automatically perform a WordPress database update after importing, if needed.
+
+### Chore
+
+- Update example files and error messages related to bindfs.
+
+## 0.20.0
 
 ### Minor
 
