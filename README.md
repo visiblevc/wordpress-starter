@@ -198,6 +198,8 @@ obtain and renew SSL certificates.
 
 #### Obtaining Certificates
 
+You should first [set `SERVER_NAME` to `<your-domain-name>.<your-top-level-domain>` in your `docker-compose.yml`](#wordpress)
+
 ```sh
 $ docker-compose ps
 Name                   Command                        State
