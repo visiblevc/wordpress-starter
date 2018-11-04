@@ -8,11 +8,14 @@ if ! sudo mount -a 2>/dev/null; then
     Be sure your service is configured with the following options:
     ___
     services:
-    wordpress:
+      wordpress:
         cap_add:
-        - SYS_ADMIN
+          - SYS_ADMIN
         devices:
-        - /dev/fuse
+          - /dev/fuse
+        # needed on certain cloud hosts
+        security_opt:
+          - apparmor:unconfined
     ___
 
     OR (use first option if possible)
@@ -191,6 +194,8 @@ check_database() {
             "$(wp option get siteurl)" \
             "$URL_REPLACE" |& logger
     fi
+
+    wp --color core update-db |& logger
 }
 
 # Install / remove plugins based on $PLUGINS in parallel threads
