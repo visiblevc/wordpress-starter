@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.21.0 - latest
+## 0.22.0 - latest
+
+### Minor
+
+- Add `/docker-entrypoint-initwp.d/` directory check to allow users to mount and run arbitrary scripts on build.
+- Use `twentynineteen` theme by default.
+
+## 0.21.0
 
 ### Minor
 
