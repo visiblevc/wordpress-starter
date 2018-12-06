@@ -127,7 +127,7 @@ main() {
 
     if [[ -e /docker-entrypoint-initwp.d ]]; then
         h2 'Executing user init scripts'
-        for file in /docker-entrypoint-initwp/*; do
+        for file in /docker-entrypoint-initwp.d/*; do
             [[ -x $file ]] && "$file"
         done
     fi
