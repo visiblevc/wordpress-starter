@@ -1,6 +1,6 @@
 {
   "name": "visiblevc-wordpress",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "A slightly less shitty wordpress development workflow",
   "main": "index.js",
   "repository": "https://github.com/visiblevc/wordpress-starter.git",

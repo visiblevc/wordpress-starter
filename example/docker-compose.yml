@@ -17,6 +17,7 @@ services:
             - 443:443
         volumes:
             - ./data:/data
+            - ./scripts:/docker-entrypoint-initwp.d
         environment:
             DB_NAME: wordpress
             DB_PASS: root

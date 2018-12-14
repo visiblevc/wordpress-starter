@@ -47,6 +47,7 @@ fi
 # -------------
 mkdir -p ~/.wp-cli
 echo -e "
+path: /app
 apache_modules:
     - mod_rewrite
 
@@ -124,6 +125,13 @@ main() {
             "${PERMALINKS:-/%year%/%monthnum%/%postname%/}" |& logger
     fi
 
+    if [[ -e /docker-entrypoint-initwp.d ]]; then
+        h2 'Executing user init scripts'
+        for file in /docker-entrypoint-initwp.d/*; do
+            [[ -x $file ]] && "$file"
+        done
+    fi
+
     h1 'WordPress Configuration Complete!'
 
     sudo rm -f /var/run/apache2/apache2.pid
@@ -161,7 +169,7 @@ init() {
 
     # If no theme dependencies or volumes exist, fall back to default
     if [[ ${#theme_deps[@]} == 0 && $(check_volumes -t) == "" ]]; then
-        theme_deps[twentyseventeen]=twentyseventeen
+        theme_deps[twentynineteen]=twentynineteen
     fi
 
     sudo chown -R admin:admin /app
