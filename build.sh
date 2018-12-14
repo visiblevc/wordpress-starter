@@ -3,10 +3,10 @@ set -e
 
 # Ascending order is important here
 declare -a php_versions=(
-    5.6
     7.0
     7.1
     7.2
+    7.3
 )
 declare npm_package_version="${npm_package_version?Script must be run using npm}"
 declare dockerfile_dir
