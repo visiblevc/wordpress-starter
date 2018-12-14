@@ -5,31 +5,31 @@ A Docker Wordpress development environment by the team at
 [contributors](https://github.com/visiblevc/wordpress-starter/graphs/contributors).
 Our goal is to make Wordpress development slightly less frustrating.
 
-*   [Introduction](#introduction)
-*   [Example](./example/)
-*   [Requirements](#requirements)
-*   [Getting Started](#getting-started)
-*   [Available Images](#available-images)
-*   [Default Wordpress Admin Credentials](#default-wordpress-admin-credentials)
-*   [Default Database Credentials](#default-database-credentials)
-*   [Service Environment Variables](#service-environment-variables)
-    *   [`wordpress`](#wordpress)
-    *   [`db`](#db)
-*   [Workflow Tips](#workflow-tips)
-    *   [Using `wp-cli`](#using-wp-cli)
-    *   [Working with Databases](#working-with-databases)
-*   [Using in Production](#using-in-production)
-*   [Contributing](#contributing)
+-   [Introduction](#introduction)
+-   [Example](./example/)
+-   [Requirements](#requirements)
+-   [Getting Started](#getting-started)
+-   [Available Images](#available-images)
+-   [Default Wordpress Admin Credentials](#default-wordpress-admin-credentials)
+-   [Default Database Credentials](#default-database-credentials)
+-   [Service Environment Variables](#service-environment-variables)
+    -   [`wordpress`](#wordpress)
+    -   [`db`](#db)
+-   [Workflow Tips](#workflow-tips)
+    -   [Using `wp-cli`](#using-wp-cli)
+    -   [Working with Databases](#working-with-databases)
+-   [Using in Production](#using-in-production)
+-   [Contributing](#contributing)
 
 ### Introduction
 
 We wrote a series of articles explaining in depth the philosophy behind this
 project:
 
-*   [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
-*   [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
-*   [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
-*   [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
+-   [Intro: A slightly less shitty WordPress developer workflow](https://visible.vc/engineering/wordpress-developer-workflow/)
+-   [Part 1: Setup a local development environment for WordPress with Docker](https://visible.vc/engineering/docker-environment-for-wordpress/)
+-   [Part 2: Setup an asset pipeline for WordPress theme development](https://visible.vc/engineering/asset-pipeline-for-wordpress-theme-development/)
+-   [Part 3: Optimize your wordpress theme assets and deploy to S3](https://visible.vc/engineering/optimize-wordpress-theme-assets-and-deploy-to-s3-cloudfront/)
 
 ### Requirements
 
@@ -62,7 +62,8 @@ use another port than `8080`, change it in the command.
 
 | PHP Version | Tags                                        |
 | ----------- | ------------------------------------------- |
-| **7.2**     | `latest` `latest-php7.2` `<version>-php7.2` |
+| **7.3**     | `latest` `latest-php7.3` `<version>-php7.3` |
+| **7.2**     | `latest-php7.2` `<version>-php7.2`          |
 | **7.1**     | `latest-php7.1` `<version>-php7.1`          |
 | **7.0**     | `latest-php7.0` `<version>-php7.0`          |
 | **5.6**     | `latest-php5.6` `<version>-php5.6`          |
@@ -92,8 +93,8 @@ To access the Wordpress Admin at `/wp-admin`, the default values are as follows:
 
 **Notes:**
 
-*   Variables marked with ✅ are required
-*   Single quotes must surround `boolean` environment variables
+-   Variables marked with ✅ are required
+-   Single quotes must surround `boolean` environment variables
 
 #### `wordpress`
 
@@ -104,10 +105,10 @@ To access the Wordpress Admin at `/wp-admin`, the default values are as follows:
 | `DB_HOST`          | `db`                             | Hostname for the database                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `DB_NAME`          | `wordpress`                      | Name of the database                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `DB_PREFIX`        | `wp_`                            | Prefix for the database                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `DB_CHARSET`       | `utf8`                           | Select a charset for the wordpress database (legacy versions might not be utf8)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `DB_CHARSET`       | `utf8`                           | Select a charset for the wordpress database (legacy versions might not be utf8)                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `SERVER_NAME`      | `localhost`                      | Set this to `<your-domain-name>.<your-top-level-domain>` if you plan on obtaining SSL certificates                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `ADMIN_EMAIL`      | `admin@${DB_NAME}.com`           | Administrator email address                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `WP_LOCALE`        | `en_US`                          | Set the site language                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `WP_LOCALE`        | `en_US`                          | Set the site language                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `WP_DEBUG`         | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG) for more information                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `WP_DEBUG_DISPLAY` | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_DISPLAY) for more information                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `WP_DEBUG_LOG`     | `'false'`                        | [Click here](https://codex.wordpress.org/WP_DEBUG#WP_DEBUG_LOG) for more information                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -167,24 +168,24 @@ the `URL_REPLACE: localhost:8080` environment variable in the
 
 ```yml
 # If something isn't shown, assume it's the same as the examples above
-version: '3'
+version: "3"
 services:
-  wordpress:
-    ports:
-      - 80:80
-      - 443:443
-    restart: always
-    environment:
-      SERVER_NAME: mysite.com
-      DB_PASS: ${SECURE_PASSWORD} # Stored in .env file
-    volumes:
-      - ./letsencrypt:/etc/letsencrypt
-      - ./data:/data
-      # anything else you'd like to be able to back up
-  db:
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${SECURE_PASSWORD} # Stored in .env file
+    wordpress:
+        ports:
+            - 80:80
+            - 443:443
+        restart: always
+        environment:
+            SERVER_NAME: mysite.com
+            DB_PASS: ${SECURE_PASSWORD} # Stored in .env file
+        volumes:
+            - ./letsencrypt:/etc/letsencrypt
+            - ./data:/data
+            # anything else you'd like to be able to back up
+    db:
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${SECURE_PASSWORD} # Stored in .env file
 ```
 
 ### SSL Certificates
