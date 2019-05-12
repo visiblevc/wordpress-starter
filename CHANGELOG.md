@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.22.0 - latest
+## 0.23.0 - latest
+
+### Minor 
+
+- Add missing `bcmath` and `imagick` PHP extensions recommended by WordPress 5.2's Health Check.
+
+## 0.22.0
 
 ### Minor
 
