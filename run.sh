@@ -169,7 +169,7 @@ init() {
 
     # If no theme dependencies or volumes exist, fall back to default
     if [[ ${#theme_deps[@]} == 0 && $(check_volumes -t) == "" ]]; then
-        theme_deps[twentynineteen]=twentynineteen
+        theme_deps[twentytwenty]=twentytwenty
     fi
 
     sudo chown -R admin:admin /app
