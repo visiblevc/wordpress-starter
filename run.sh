@@ -282,7 +282,7 @@ check_volumes() {
     if [[ ! -f ~/.dockercache ]]; then
         {
             (
-                find /app/wp-content/plugins/* \
+                find /app/wp-content/{plugins,mu-plugins}/* \
                     -maxdepth 0 \
                     -type d \
                     -printf 'plugin\t%f\n' 2>/dev/null
