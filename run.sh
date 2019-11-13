@@ -1,9 +1,9 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 
-if ! sudo mount -a 2>/dev/null; then
+if ! sudo mount -a 2> /dev/null; then
     printf '\e[1;31mERROR:\e[0m %s' \
-    'Container running with improper privileges.
+        'Container running with improper privileges.
 
     Be sure your service is configured with the following options:
     ___
@@ -80,7 +80,7 @@ core install:
 rewrite structure:
     hard: true
 
-" >~/.wp-cli/config.yml
+" > ~/.wp-cli/config.yml
 
 # Apache config adustments
 sudo sed -i \
@@ -98,7 +98,7 @@ main() {
         --host="${DB_HOST:-db}" \
         --user="${DB_USER:-root}" \
         --password="${DB_PASS:-root}" \
-        --silent >/dev/null; do
+        --silent > /dev/null; do
         sleep 1
     done
 
@@ -153,7 +153,8 @@ init() {
                 s/.*\[\(.*\)\]\([^[:blank:]]*\).*/\1\n\2/p # Matches [key]value form
                 t                                          # If previous match succeeds, skip to end
                 {p; p;}                                    # Assumes normal form
-            ' <<<"$raw_line")
+            ' <<< "$raw_line"
+        )
         plugin_deps[${keyvalue[0]}]="${keyvalue[1]}"
     done
 
@@ -163,7 +164,8 @@ init() {
                 s/.*\[\(.*\)\]\([^[:blank:]]*\).*/\1\n\2/p # Matches [key]value form
                 t                                          # If previous match succeeds, skip to end
                 {p; p;}                                    # Assumes normal form
-            ' <<<"$raw_line")
+            ' <<< "$raw_line"
+        )
         theme_deps[${keyvalue[0]}]="${keyvalue[1]}"
     done
 
@@ -181,12 +183,12 @@ init() {
 }
 
 check_database() {
-    wp core is-installed 2>/dev/null && return
+    wp core is-installed 2> /dev/null && return
 
     wp --color db create |& logger
 
     declare data_path
-    data_path=$(find /data -name '*.sql' -print -quit 2>/dev/null)
+    data_path=$(find /data -name '*.sql' -print -quit 2> /dev/null)
     if [[ ! "$data_path" ]]; then
         wp --color core install |& logger
         return
@@ -221,7 +223,8 @@ check_plugins() {
         mapfile -t plugin_values < <(
             for key in "${plugin_keys[@]}"; do
                 echo "${plugin_deps[$key]}"
-            done)
+            done
+        )
 
         if [[ "${#plugin_keys[@]}" -gt 0 ]]; then
             wp --color plugin install "${plugin_values[@]}" |& logger
@@ -258,7 +261,8 @@ check_themes() {
         mapfile -t theme_values < <(
             for key in "${theme_keys[@]}"; do
                 echo "${theme_deps[$key]}"
-            done)
+            done
+        )
 
         if [[ "${#theme_values[@]}" -gt 0 ]]; then
             wp --color theme install "${theme_values[@]}" |& logger
@@ -285,16 +289,16 @@ check_volumes() {
                 find /app/wp-content/{plugins,mu-plugins}/* \
                     -maxdepth 0 \
                     -type d \
-                    -printf 'plugin\t%f\n' 2>/dev/null
+                    -printf 'plugin\t%f\n' 2> /dev/null
             ) &
             (
                 find /app/wp-content/themes/* \
                     -maxdepth 0 \
                     -type d \
-                    -printf 'theme\t%f\n' 2>/dev/null
+                    -printf 'theme\t%f\n' 2> /dev/null
             ) &
             wait
-        } >~/.dockercache
+        } > ~/.dockercache
     fi
 
     declare opt OPTIND
@@ -322,7 +326,7 @@ declare -i term_width=70
 h1() {
     declare border padding text
     border='\e[1;34m'"$(printf '=%.0s' $(seq 1 "$term_width"))"'\e[0m'
-    padding="$(printf ' %.0s' $(seq 1 $(((term_width - $(wc -m <<<"$*")) / 2))))"
+    padding="$(printf ' %.0s' $(seq 1 $(((term_width - $(wc -m <<< "$*")) / 2))))"
     text="\\e[1m$*\\e[0m"
     echo -e "$border"
     echo -e "${padding}${text}${padding}"
