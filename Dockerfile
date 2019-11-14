@@ -42,7 +42,6 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         zip \
     && docker-php-ext-enable imagick \
     && docker-php-ext-enable redis \
-    && echo 'memory_limit = 512M' >> /usr/local/etc/php/php.ini \
     && { \
         echo 'memory_limit = 512M'; \
         # See https://github.com/visiblevc/wordpress-starter/issues/160#issuecomment-544561961
@@ -62,7 +61,7 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
     # fully qualified domain name
     && echo 'ServerName localhost' > /etc/apache2/conf-available/fqdn.conf \
     # Grab and install wp-cli from remote
-    && curl \
+    && curl --create-dirs \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
         -o /etc/bash_completion.d/wp-cli https://raw.githubusercontent.com/wp-cli/wp-cli/master/utils/wp-completion.bash \
     && a2enconf fqdn \
