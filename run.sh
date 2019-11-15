@@ -286,8 +286,8 @@ check_volumes() {
     if [[ ! -f ~/.dockercache ]]; then
         {
             (
-                find /app/wp-content/{plugins,mu-plugins} \
-                    -maxdepth 1 \
+                find /app/wp-content/{plugins,mu-plugins}/* \
+                    -maxdepth 0 \
                     -type d \
                     -printf 'plugin\t%f\n' 2> /dev/null
             ) &
@@ -300,8 +300,8 @@ check_volumes() {
                     | awk '{ print "plugin\t" $0 }'
             ) &
             (
-                find /app/wp-content/themes \
-                    -maxdepth 1 \
+                find /app/wp-content/themes/* \
+                    -maxdepth 0 \
                     -type d \
                     -printf 'theme\t%f\n' 2> /dev/null
             ) &
