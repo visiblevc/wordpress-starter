@@ -11,35 +11,46 @@ The only thing you need to get started is a `docker-compose.yml` file:
 ```yml
 version: '3'
 services:
-  wordpress:
-    image: visiblevc/wordpress:latest
-    ports:
-      - 8080:80
-      - 443:443
-    volumes:
-      - ./data:/data # Required if importing an existing database
-      - ./tweaks.ini:/usr/local/etc/php/conf.d/tweaks.ini # Optional tweaks to the php.ini config
-      - ./wp-content/uploads:/app/wp-content/uploads
-      - ./yourplugin:/app/wp-content/plugins/yourplugin # Plugin development
-      - ./yourtheme:/app/wp-content/themes/yourtheme   # Theme development
-    environment:
-      DB_HOST: db # must match db service name below
-      DB_NAME: wordpress
-      DB_PASS: root # must match below
-      PLUGINS: >-
-        academic-bloggers-toolkit,
-        co-authors-plus,
-        [WP-API]https://github.com/WP-API/WP-API/archive/master.zip,
-      URL_REPLACE: localhost:8080
-      WP_DEBUG: 'true'
-  db:
-    image: mysql:5.7 # or mariadb:10
-    volumes:
-      - data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
+    wordpress:
+        image: visiblevc/wordpress
+
+        # required for mounting bindfs
+        cap_add:
+            - SYS_ADMIN
+        devices:
+            - /dev/fuse
+        # required on certain cloud hosts
+        security_opt:
+            - apparmor:unconfined
+
+        ports:
+            - 8080:80
+            - 443:443
+        volumes:
+            - ./data:/data
+            - ./scripts:/docker-entrypoint-initwp.d
+        environment:
+            DB_NAME: wordpress
+            DB_PASS: root
+            PLUGINS: >-
+                academic-bloggers-toolkit
+                co-authors-plus
+                [WP-API]https://github.com/WP-API/WP-API/archive/master.zip
+
+    db:
+        image: mariadb:10 # or mysql:5.7
+        volumes:
+            - data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - 22222:80
+
 volumes:
-  data: {}
+    data:
 ```
 
 **Need PHPMyAdmin? Add it as a service**

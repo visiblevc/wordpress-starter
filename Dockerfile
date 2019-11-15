@@ -42,22 +42,26 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         zip \
     && docker-php-ext-enable imagick \
     && docker-php-ext-enable redis \
-    # See https://secure.php.net/manual/en/opcache.installation.php
-    && echo 'memory_limit = 512M' >> /usr/local/etc/php/php.ini \
     && { \
-        echo 'opcache.memory_consumption=128'; \
-        echo 'opcache.interned_strings_buffer=8'; \
-        echo 'opcache.max_accelerated_files=4000'; \
-        echo 'opcache.revalidate_freq=2'; \
-        echo 'opcache.fast_shutdown=1'; \
-        echo 'opcache.enable_cli=1'; \
+        echo 'memory_limit = 512M'; \
+        # See https://github.com/visiblevc/wordpress-starter/issues/160#issuecomment-544561961
+        echo 'upload_max_filesize = 50M'; \
+    } > /usr/local/etc/php/php.ini \
+    # See https://secure.php.net/manual/en/opcache.installation.php
+    && { \
+        echo 'opcache.memory_consumption = 128'; \
+        echo 'opcache.interned_strings_buffer = 8'; \
+        echo 'opcache.max_accelerated_files = 4000'; \
+        echo 'opcache.revalidate_freq = 2'; \
+        echo 'opcache.fast_shutdown = 1'; \
+        echo 'opcache.enable_cli = 1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini \
     && sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
     # Fixes issue where error is logged stating apache could not resolve the
     # fully qualified domain name
     && echo 'ServerName localhost' > /etc/apache2/conf-available/fqdn.conf \
     # Grab and install wp-cli from remote
-    && curl \
+    && curl --create-dirs \
         -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
         -o /etc/bash_completion.d/wp-cli https://raw.githubusercontent.com/wp-cli/wp-cli/master/utils/wp-completion.bash \
     && a2enconf fqdn \
