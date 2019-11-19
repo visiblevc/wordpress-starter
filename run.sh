@@ -34,20 +34,19 @@ fi
 declare -x TERM="${TERM:-xterm}"
 declare PLUGINS="${PLUGINS//,/}"
 declare THEMES="${THEMES//,/}"
+
+# Runtime
+# ------------
+declare default_theme=twentytwenty
 declare -A plugin_deps
 declare -A theme_deps
-
-# FIXME: Deprecation of old version of $URL_REPLACE
-if [[ $URL_REPLACE =~ , ]]; then
-    URL_REPLACE=${URL_REPLACE%%,*}
-    printf '\e[1;33;7mDEPRECATED\e[0m %s\n' "URL_REPLACE must only contain AFTER_URL. BEFORE_URL,AFTER_URL form has been deprecated"
-fi
 
 # Configuration
 # -------------
 mkdir -p ~/.wp-cli
 echo -e "
 path: /app
+color: true
 apache_modules:
     - mod_rewrite
 
@@ -82,13 +81,6 @@ rewrite structure:
 
 " > ~/.wp-cli/config.yml
 
-# Apache config adustments
-sudo sed -i \
-    -e "/^[[:blank:]]*.ServerName www.example.com/{c\\" \
-    -e "\\tServerName ${SERVER_NAME:-localhost} \\" \
-    -e "\\tServerAlias www.${SERVER_NAME:-localhost}" \
-    -e '}' /etc/apache2/sites-available/000-default.conf
-
 main() {
     h1 'Begin WordPress Installation'
     init
@@ -103,14 +95,14 @@ main() {
     done
 
     h2 'Configuring WordPress'
-    wp --color config create --force |& logger
+    wp config create --force |& logger
 
     h2 'Checking database'
     check_database
 
     if [[ "$MULTISITE" == 'true' ]]; then
         h2 'Enabling Multisite'
-        wp --color core multisite-convert |& logger
+        wp core multisite-convert |& logger
     fi
 
     h2 'Checking themes'
@@ -120,8 +112,8 @@ main() {
     check_plugins
 
     h2 'Finalizing'
-    if [[ "$MULTISITE" != 'true' ]]; then
-        wp --color rewrite structure \
+    if [[ $MULTISITE != true ]]; then
+        wp rewrite structure \
             "${PERMALINKS:-/%year%/%monthnum%/%postname%/}" |& logger
     fi
 
@@ -132,7 +124,7 @@ main() {
         done
     fi
 
-    h1 'WordPress Configuration Complete!'
+    h1 'WordPress Installation Complete!'
 
     sudo rm -f /var/run/apache2/apache2.pid
     sudo apache2-foreground
@@ -144,8 +136,6 @@ main() {
 init() {
     declare raw_line
     declare -a keyvalue
-
-    check_volumes
 
     for raw_line in $PLUGINS; do
         mapfile -t keyvalue < <(
@@ -170,160 +160,69 @@ init() {
     done
 
     # If no theme dependencies or volumes exist, fall back to default
-    if [[ ${#theme_deps[@]} == 0 && $(check_volumes -t) == "" ]]; then
-        theme_deps[twentytwenty]=twentytwenty
+    if [[ ${#theme_deps[@]} == 0 && -d /app/wp-content/themes && $(find /app/wp-content/themes/* -maxdepth 0 -t d | wc -l) == 0 ]]; then
+        theme_deps["$default_theme"]="$default_theme"
     fi
+
+    # Apache config adustments
+    sudo sed -i \
+        -e "/^[[:blank:]]*.ServerName www.example.com/{c\\" \
+        -e "\\tServerName ${SERVER_NAME:-localhost} \\" \
+        -e "\\tServerAlias www.${SERVER_NAME:-localhost}" \
+        -e '}' /etc/apache2/sites-available/000-default.conf
 
     sudo chown -R admin:admin /app
 
     if [[ ! -f /app/wp-settings.php ]]; then
         h2 'Downloading WordPress'
-        wp --color core download |& logger
+        wp core download |& logger
     fi
 }
 
 check_database() {
+    declare file
+    declare -i num_imported=0
+
     wp core is-installed 2> /dev/null && return
 
-    wp --color db create |& logger
+    wp db create |& logger
 
-    declare data_path
-    data_path=$(find /data -name '*.sql' -print -quit 2> /dev/null)
-    if [[ ! "$data_path" ]]; then
-        wp --color core install |& logger
-        return
-    fi
-
-    wp --color db import "$data_path" |& logger
-
-    if [[ -n "$URL_REPLACE" ]]; then
-        wp --color search-replace \
-            --skip-columns=guid \
-            --report-changed-only \
-            --no-report \
-            "$(wp option get siteurl)" \
-            "$URL_REPLACE" |& logger
-    fi
-
-    wp --color core update-db |& logger
-}
-
-# Install / remove plugins based on $PLUGINS in parallel threads
-check_plugins() {
-    declare -a plugin_volumes
-    mapfile -t plugin_volumes < <(check_volumes -p)
-
-    (
-        # Obtain keys of plugins to install
-        mapfile -t plugin_keys < <(comm -23 \
-            <(echo "${!plugin_deps[@]}" | tr ' ' '\n' | sort -u) \
-            <(wp plugin list --field=name | sort -u))
-
-        # Transform keys to values
-        mapfile -t plugin_values < <(
-            for key in "${plugin_keys[@]}"; do
-                echo "${plugin_deps[$key]}"
-            done
-        )
-
-        if [[ "${#plugin_keys[@]}" -gt 0 ]]; then
-            wp --color plugin install "${plugin_values[@]}" |& logger
-            # Silence nonsensical "plugin already activated" warning messages
-            wp plugin activate "${plugin_keys[@]}" --quiet
-        fi
-    ) &
-
-    (
-        mapfile -t remove_list < <(comm -13 \
-            <(echo "${!plugin_deps[@]}" "${plugin_volumes[@]}" | tr ' ' '\n' | sort -u) \
-            <(wp plugin list --field=name | sort -u))
-
-        if [[ ${#remove_list[@]} -gt 0 ]]; then
-            wp --color plugin uninstall --deactivate "${remove_list[@]}" |& logger
-        fi
-    ) &
-
-    wait
-}
-
-# Install / remove themes based on $THEMES in parallel threads
-check_themes() {
-    declare -a theme_volumes
-    mapfile -t theme_volumes < <(check_volumes -t)
-
-    (
-        # Obtain keys of themes to install
-        mapfile -t theme_keys < <(comm -23 \
-            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
-            <(wp theme list --field=name | sort -u))
-
-        # Transform keys to values
-        mapfile -t theme_values < <(
-            for key in "${theme_keys[@]}"; do
-                echo "${theme_deps[$key]}"
-            done
-        )
-
-        if [[ "${#theme_values[@]}" -gt 0 ]]; then
-            wp --color theme install "${theme_values[@]}" |& logger
-        fi
-    ) &
-
-    (
-        mapfile -t remove_list < <(comm -13 \
-            <(echo "${!theme_deps[@]}" "${theme_volumes[@]}" | tr ' ' '\n' | sort -u) \
-            <(wp theme list --field=name | sort -u))
-
-        if [[ ${#remove_list[@]} -gt 0 ]]; then
-            wp --color theme delete "${remove_list[@]}" |& logger
-        fi
-    ) &
-
-    wait
-}
-
-check_volumes() {
-    if [[ ! -f ~/.dockercache ]]; then
-        {
-            (
-                find /app/wp-content/{plugins,mu-plugins}/* \
-                    -maxdepth 0 \
-                    -type d \
-                    -printf 'plugin\t%f\n' 2> /dev/null
-            ) &
-            (
-                find /app/wp-content/{plugins,mu-plugins} \
-                    -maxdepth 1 \
-                    -type f \
-                    -name '*.php' \
-                    -exec basename '{}' .php \; \
-                    | awk '{ print "plugin\t" $0 }'
-            ) &
-            (
-                find /app/wp-content/themes/* \
-                    -maxdepth 0 \
-                    -type d \
-                    -printf 'theme\t%f\n' 2> /dev/null
-            ) &
-            wait
-        } > ~/.dockercache
-    fi
-
-    declare opt OPTIND
-    while getopts 'pt' opt; do
-        case "$opt" in
-            p)
-                awk '/^plugin/{ print $2 }' ~/.dockercache
-                ;;
-            t)
-                awk '/^theme/{ print $2 }' ~/.dockercache
-                ;;
-            *)
-                exit 1
-                ;;
-        esac
+    for file in /data/*.sql; do
+        wp db import "$file" |& logger
+        ((num_imported++))
     done
-    shift "$((OPTIND - 1))"
+
+    if ((num_imported < 0)); then
+        wp core install |& logger
+    else
+        [[ -n $URL_REPLACE ]] \
+            && wp search-replace \
+                --skip-columns=guid \
+                --report-changed-only \
+                --no-report \
+                "$(wp option get siteurl)" \
+                "$URL_REPLACE" |& logger
+
+        wp core update-db |& logger
+    fi
+}
+
+check_plugins() {
+    declare key
+
+    for key in "${!plugin_deps[@]}"; do
+        wp plugin is-installed "$key" || wp plugin install "${plugin_deps[$key]}" |& logger
+        wp plugin is-active "$key" || wp plugin activate "${plugin_deps[$key]}" |& logger
+    done
+}
+
+check_themes() {
+    declare key
+
+    for key in "${!theme_deps[@]}"; do
+        wp theme is-installed "$key" || wp theme install "${theme_deps[$key]}" |& logger
+        wp theme is-active "$key" || wp theme activate "${theme_deps[$key]}" |& logger
+    done
 }
 
 # Helpers
