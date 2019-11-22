@@ -187,22 +187,26 @@ check_database() {
 
     wp db create |& logger
 
+    wp core install |& logger
+
     for file in /data/*.sql; do
+        h2 "Importing $file (this might take a while)..."
         wp db import "$file" |& logger
         ((num_imported++))
     done
 
-    if ((num_imported < 0)); then
-        wp core install |& logger
-    else
-        [[ -n $URL_REPLACE ]] \
-            && wp search-replace \
+    if ((num_imported > 0)); then
+        if [[ -n $URL_REPLACE ]]; then
+            h2 "Replacing URLs in database (this might take a while)..."
+            wp search-replace \
                 --skip-columns=guid \
                 --report-changed-only \
                 --no-report \
                 "$(wp option get siteurl)" \
                 "$URL_REPLACE" |& logger
+        fi
 
+        h2 'Updating database...'
         wp core update-db |& logger
     fi
 }
