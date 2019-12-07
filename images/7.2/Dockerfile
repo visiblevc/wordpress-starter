@@ -1,8 +1,7 @@
-ARG PHP_VERSION=7.3
-FROM php:${PHP_VERSION}-apache
+FROM php:7.2-apache
 ARG VERSION=latest
 LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
-      version="${VERSION}-php${PHP_VERSION}"
+      version="${VERSION}-php7.2"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
