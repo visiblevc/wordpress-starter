@@ -62,11 +62,9 @@ use another port than `8080`, change it in the command.
 
 | PHP Version | Tags                                        |
 | ----------- | ------------------------------------------- |
+| **7.4**     | `latest` `latest-php7.4` `<version>-php7.4` |
 | **7.3**     | `latest` `latest-php7.3` `<version>-php7.3` |
 | **7.2**     | `latest-php7.2` `<version>-php7.2`          |
-| **7.1**     | `latest-php7.1` `<version>-php7.1`          |
-| **7.0**     | `latest-php7.0` `<version>-php7.0`          |
-| **5.6**     | `latest-php5.6` `<version>-php5.6`          |
 
 If you need a specific version, look at the [Changelog](CHANGELOG.md)
 

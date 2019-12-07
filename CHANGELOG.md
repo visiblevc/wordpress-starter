@@ -1,6 +1,37 @@
 # Changelog
 
-## 0.23.0 - latest
+## 0.25.1 - latest
+
+### Minor
+
+- Drop PHP 7.0 and 7.1 images.
+- Add PHP 7.4 image.
+
+### Patch
+
+- Fix bug in run.sh resulting from an invalid flag given to `find`
+
+## 0.25.0
+
+### Minor
+
+- Make runtime script much simpler and more reliable. #165 
+- Increase verbosity of logging related to database interactions. #165 
+
+## 0.24.0
+
+### Minor
+
+* feat: bump default theme install to "twentytwenty"
+* feat: increase `upload_max_filesize` to `50M`
+
+### Patch
+
+* fix: include "must-use" plugins in plugin volume check
+* fix: add --create-dirs to curl in dockerfile
+* fix: improve plugin volumes check to also include plugins that are a single php file
+
+## 0.23.0
 
 ### Minor 
 
