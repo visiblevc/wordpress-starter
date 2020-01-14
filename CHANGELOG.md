@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.25.1 - latest
+## 0.25.2 - latest
+
+### Patch
+
+- Fix bug in plugin/theme activation caused by attempting to activate using a URL rather than the slug in cases where plugins/themes are installed using zip URL.
+
+## 0.25.1
 
 ### Minor
 
