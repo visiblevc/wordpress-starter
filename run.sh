@@ -216,7 +216,7 @@ check_plugins() {
 
     for key in "${!plugin_deps[@]}"; do
         wp plugin is-installed "$key" || wp plugin install "${plugin_deps[$key]}" |& logger
-        wp plugin is-active "$key" || wp plugin activate "${plugin_deps[$key]}" |& logger
+        wp plugin is-active "$key" || wp plugin activate "$key" |& logger
     done
 }
 
@@ -225,7 +225,7 @@ check_themes() {
 
     for key in "${!theme_deps[@]}"; do
         wp theme is-installed "$key" || wp theme install "${theme_deps[$key]}" |& logger
-        wp theme is-active "$key" || wp theme activate "${theme_deps[$key]}" |& logger
+        wp theme is-active "$key" || wp theme activate "$key" |& logger
     done
 }
 
