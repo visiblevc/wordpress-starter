@@ -14,6 +14,7 @@ Thumbs.db
 .c9
 .sass-cache/
 .vscode
+.history
 
 # Wordpress
 wp-content/*

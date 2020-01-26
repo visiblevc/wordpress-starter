@@ -39,6 +39,8 @@ services:
 
     db:
         image: mariadb:10 # or mysql:5.7
+        ports:
+            - 3307:3306 # change ip if required
         volumes:
             - data:/var/lib/mysql
         environment:
