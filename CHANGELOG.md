@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.25.2 - latest
+## 0.25.3 - latest
+
+### Patch
+
+- Fix bug preventing a default theme from being installed when no theme dependencies or volumes exist. #172
+- Fix small bug that occurred when no volumes were included in `/data` due to not having nullglob set.
+
+## 0.25.2
 
 ### Patch
 
