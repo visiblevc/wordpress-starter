@@ -160,7 +160,7 @@ init() {
     done
 
     # If no theme dependencies or volumes exist, fall back to default
-    if [[ ${#theme_deps[@]} == 0 && -d /app/wp-content/themes && $(find /app/wp-content/themes/* -maxdepth 0 -type d | wc -l) == 0 ]]; then
+    if [[ (${#theme_deps[@]} == 0 && ! -d /app/wp-content/themes) ]]; then
         theme_deps["$default_theme"]="$default_theme"
     fi
 
