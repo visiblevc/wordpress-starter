@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1091
+shopt -s nullglob
 
 if ! sudo mount -a 2> /dev/null; then
     printf '\e[1;31mERROR:\e[0m %s' \
@@ -160,7 +160,7 @@ init() {
     done
 
     # If no theme dependencies or volumes exist, fall back to default
-    if [[ (${#theme_deps[@]} == 0 && ! -d /app/wp-content/themes) ]]; then
+    if [[ ${#theme_deps[@]} == 0 && ! -d /app/wp-content/themes ]]; then
         theme_deps["$default_theme"]="$default_theme"
     fi
 
