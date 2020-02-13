@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.25.3 - latest
+## 0.25.4 - latest
+
+### Patch
+
+- Fix bug that prevented url form of plugins/themes to fail due to nullglob interacting with the parsing. #176
+
+## 0.25.3
 
 ### Patch
 

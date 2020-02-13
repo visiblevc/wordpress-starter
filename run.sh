@@ -1,5 +1,4 @@
 #!/bin/bash
-shopt -s nullglob
 
 if ! sudo mount -a 2> /dev/null; then
     printf '\e[1;31mERROR:\e[0m %s' \
@@ -179,7 +178,11 @@ init() {
     fi
 }
 
-check_database() {
+# this is ran in a subshell to isolate nullglob as it for whatever reason
+# interacts with our $PLUGINS and $THEMES variables.
+# See: https://github.com/visiblevc/wordpress-starter/issues/176
+check_database() (
+    shopt -s nullglob
     declare file
     declare -i num_imported=0
 
@@ -209,7 +212,7 @@ check_database() {
         h2 'Updating database...'
         wp core update-db |& logger
     fi
-}
+)
 
 check_plugins() {
     declare key
