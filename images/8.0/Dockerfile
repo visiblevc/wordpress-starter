@@ -28,7 +28,8 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         python-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && pecl install imagick \
+    # TODO: uncomment this when imagick supports php8
+    # && pecl install imagick \
     && pecl install redis \
     && docker-php-ext-install \
         bcmath \
@@ -38,7 +39,8 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         opcache \
         soap \
         zip \
-    && docker-php-ext-enable imagick \
+    # TODO: uncomment this when imagick supports php8
+    # && docker-php-ext-enable imagick \
     && docker-php-ext-enable redis \
     && { \
         echo 'memory_limit = 512M'; \
