@@ -44,6 +44,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: root
 
+    # if you want phpMyAdmin
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         ports:
@@ -51,25 +52,6 @@ services:
 
 volumes:
     data:
-```
-
-**Need PHPMyAdmin? Add it as a service**
-
-```yml
-version: '3'
-services:
-  wordpress:
-    # same as above
-  db:
-    # same as above
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - 22222:80
-volumes:
-  data:
 ```
 
 ## Running the example
