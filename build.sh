@@ -7,9 +7,10 @@ for dir in ./images/*; do
     docker build \
         -f "$dir/Dockerfile" \
         --build-arg VERSION="$npm_package_version" \
-        -t "visiblevc/wordpress:latest" \
-        -t "visiblevc/wordpress:latest-php${dir##*/}" \
-        -t "visiblevc/wordpress:$npm_package_version-php${dir##*/}" \
+        --platform linux/arm64 \
+        -t "hanneshapke/wordpress:latest" \
+        -t "hanneshapke/wordpress:latest-php${dir##*/}" \
+        -t "hanneshapke/wordpress:$npm_package_version-php${dir##*/}" \
         .
 done
 

@@ -1,6 +1,6 @@
-FROM php:8.0-apache
+FROM tobi312/php:8.0-apache-arm
 ARG VERSION=latest
-LABEL maintainer="Derek P Sifford <dereksifford@gmail.com>" \
+LABEL maintainer="Not maintained" \
       version="${VERSION}-php8.0"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -25,7 +25,7 @@ RUN echo "deb http://ftp.debian.org/debian $(sed -n 's/^VERSION=.*(\(.*\)).*/\1/
         vim \
         zip \
     && apt-get -t "$(sed -n 's/^VERSION=.*(\(.*\)).*/\1/p' /etc/os-release)-backports" install -y --no-install-recommends \
-        python-certbot-apache \
+        certbot python3-certbot-apache \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     # TODO: uncomment this when imagick supports php8
@@ -90,6 +90,7 @@ RUN useradd -ms /bin/bash -G sudo admin \
         0 \
         0 > /etc/fstab
 
+RUN chmod 777 /usr/local/etc/php/conf.d/
 USER admin
 WORKDIR /app
 EXPOSE 80 443
